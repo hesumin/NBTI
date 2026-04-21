@@ -1,431 +1,693 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatTI - 我的猫咪性格测试</title>
-    <style>
-        :root {
-            --primary-color: #ff9f43;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --accent-color: #ff6b6b;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatTI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-        }
+    body {
+      background: #fff;
+      font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    #app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
 
-        #app {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-        }
+    /* ===================== 首页 ===================== */
+    #start-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px 32px;
+      background: #fff;
+    }
 
-        /* 首页样式 */
-        .page {
-            flex: 1;
-            padding: 2rem;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
+    /* 像素风大标题 */
+    .pixel-title {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      color: #111;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 28px;
+      /* 像素化效果：使用 text-shadow 模拟像素块感 */
+      image-rendering: pixelated;
+    }
 
-        .page.active {
-            display: flex;
-        }
+    /* 像素猫咪图阵 */
+    .cat-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-bottom: 32px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .cat-pixel {
+      aspect-ratio: 1;
+      background: #f5f5f5;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      /* 像素感动画 */
+      animation: float 3s ease-in-out infinite;
+    }
 
-        .header-img {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 20px rgba(255, 159, 67, 0.2);
-        }
+    .cat-pixel:nth-child(2n) { animation-delay: 0.3s; }
+    .cat-pixel:nth-child(3n) { animation-delay: 0.6s; }
+    .cat-pixel:nth-child(4n) { animation-delay: 0.9s; }
+    .cat-pixel:nth-child(5n) { animation-delay: 1.2s; }
 
-        h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
 
-        .desc {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 3rem;
-        }
+    /* 主标语 */
+    .main-slogan {
+      font-size: 22px;
+      font-weight: 900;
+      color: #111;
+      margin-bottom: 8px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
 
-        .btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 1rem 3rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-weight: bold;
-        }
+    .sub-slogan {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 36px;
+      text-align: center;
+      font-style: italic;
+    }
+    .sub-slogan::before { content: '"'; }
+    .sub-slogan::after { content: '"'; }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
+    /* 大黑按钮 */
+    .start-btn {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s;
+      margin-bottom: 28px;
+    }
 
-        /* 题目样式 */
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #eee;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+    .start-btn:active { transform: scale(0.97); }
 
-        .progress-inner {
-            height: 100%;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
-        }
+    .start-btn .play-icon {
+      width: 26px;
+      height: 26px;
+      border: 2.5px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .q-number {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
+    .start-btn .play-icon::after {
+      content: '';
+      border-left: 9px solid #fff;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      margin-left: 2px;
+    }
 
-        .question-text {
-            font-size: 1.4rem;
-            margin: 2rem 0;
-            font-weight: 600;
-        }
+    .footer-note {
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+    }
 
-        .options-list {
-            width: 100%;
-            display: grid;
-            gap: 1rem;
-        }
+    .footer-note span { color: #ff6b6b; }
 
-        .option-item {
-            background: #f1f2f6;
-            padding: 1.2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: left;
-            border: 2px solid transparent;
-        }
+    /* ===================== 题目页 ===================== */
+    #quiz-page {
+      display: none;
+      flex-direction: column;
+      padding: 0;
+      min-height: 100vh;
+      background: #fff;
+    }
 
-        .option-item:hover {
-            background: #e1e2e6;
-        }
+    /* 顶部导航 */
+    .quiz-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid #eee;
+    }
 
-        .option-item.selected {
-            border-color: var(--primary-color);
-            background: #fff3e6;
-        }
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      background: #f5f5f5;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #333;
+    }
 
-        /* 结果样式 */
-        .result-card {
-            background: linear-gradient(135deg, #fff3e6 0%, #ffffff 100%);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 1rem;
-            width: 100%;
-        }
+    .q-progress-text {
+      font-size: 15px;
+      color: #999;
+      font-weight: 500;
+    }
 
-        .breed-name {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin: 1rem 0;
-        }
+    .nav-placeholder { width: 38px; }
 
-        .breed-img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+    /* 进度条 */
+    .progress-track {
+      width: 100%;
+      height: 3px;
+      background: #f0f0f0;
+    }
 
-        .traits {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
+    .progress-fill {
+      height: 100%;
+      background: #111;
+      transition: width 0.4s ease;
+    }
 
-        .trait-tag {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
+    /* 题目内容区 */
+    .quiz-body {
+      padding: 24px 20px 0;
+      flex: 1;
+    }
 
-        .result-desc {
-            text-align: justify;
-            color: #444;
-            font-size: 1rem;
-            margin-bottom: 2rem;
-        }
+    /* 题目角色提示气泡 */
+    .q-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-        .footer {
-            margin-top: auto;
-            padding: 1rem;
-            font-size: 0.8rem;
-            color: #999;
-        }
-    </style>
+    .q-hint-avatar {
+      font-size: 32px;
+      background: #f5f5f5;
+      border-radius: 12px;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .q-hint-bubble {
+      background: #f5f5f5;
+      border-radius: 0 12px 12px 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #999;
+      flex: 1;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    /* 选项列表 */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 18px;
+      border: 2px solid #e8e8e8;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+    }
+
+    .option-item:hover {
+      border-color: #bbb;
+      background: #fafafa;
+    }
+
+    .option-item.selected {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .option-item.selected .option-label {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .option-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #bbb;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .option-text {
+      font-size: 15px;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    /* 继续按钮 */
+    .continue-btn {
+      width: calc(100% - 40px);
+      margin: 0 20px 32px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 17px 0;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+
+    .continue-btn:active { transform: scale(0.97); }
+    .continue-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ===================== 结果页 ===================== */
+    #result-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px 40px;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    .result-label {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .result-breed {
+      font-size: 36px;
+      font-weight: 900;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .result-en {
+      font-size: 14px;
+      color: #bbb;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    .result-avatar {
+      font-size: 100px;
+      background: #f5f5f5;
+      border-radius: 28px;
+      width: 160px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .result-traits {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .result-trait {
+      background: #111;
+      color: #fff;
+      font-size: 13px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .result-desc {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.8;
+      text-align: justify;
+      margin-bottom: 36px;
+      background: #f8f8f8;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .retry-btn {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 17px 0;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .result-footer {
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    /* 页面切换动画 */
+    .page-in {
+      animation: slideIn 0.35s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
 </head>
 <body>
-
 <div id="app">
-    <div class="progress-bar"><div id="progress" class="progress-inner" style="width: 0%"></div></div>
 
-    <!-- 首页 -->
-    <div id="start-page" class="page active">
-        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=800" alt="Cat" class="header-img">
-        <h1>CatTI</h1>
-        <p class="desc">发现你的“猫格”类型<br>参考 MBTI 逻辑设计的猫咪性格测试</p>
-        <button class="btn" onclick="startTest()">立即开始</button>
-        <div class="footer">Inspired by DogTI • Created for 禾苏</div>
+  <!-- ===== 首页 ===== -->
+  <div id="start-page">
+    <div class="pixel-title">CATTI</div>
+
+    <div class="cat-grid">
+      <div class="cat-pixel">🐱</div>
+      <div class="cat-pixel">🐈</div>
+      <div class="cat-pixel">😸</div>
+      <div class="cat-pixel">🐈‍⬛</div>
+      <div class="cat-pixel">😺</div>
+      <div class="cat-pixel">🐱</div>
+      <div class="cat-pixel">😻</div>
+      <div class="cat-pixel">🐈</div>
+      <div class="cat-pixel">😽</div>
+      <div class="cat-pixel">🐈‍⬛</div>
+      <div class="cat-pixel">😸</div>
+      <div class="cat-pixel">😺</div>
     </div>
 
-    <!-- 题目页 -->
-    <div id="quiz-page" class="page">
-        <div class="q-number" id="q-count">1 / 10</div>
-        <div class="question-text" id="q-text">如果你醒来发现主人还没起，你会？</div>
-        <div class="options-list" id="options">
-            <!-- 选项将通过 JS 生成 -->
-        </div>
+    <div class="main-slogan">重生之我变成了一只猫</div>
+    <div class="sub-slogan">这一次，我要活出自己的猫生</div>
+
+    <button class="start-btn" onclick="startTest()">
+      <div class="play-icon"></div>
+      开 始 测 试
+    </button>
+
+    <div class="footer-note">来小红书找我玩 <span>@禾苏</span> · DogTI也来啦🐶</div>
+  </div>
+
+  <!-- ===== 题目页 ===== -->
+  <div id="quiz-page">
+    <div class="quiz-nav">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="q-progress-text" id="q-count">1 / 10</div>
+      <div class="nav-placeholder"></div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:10%"></div>
     </div>
 
-    <!-- 结果页 -->
-    <div id="result-page" class="page">
-        <h2>你的测试结果是</h2>
-        <div class="result-card">
-            <img id="res-img" src="" alt="Cat Breed" class="breed-img">
-            <h3 class="breed-name" id="res-name">布偶猫</h3>
-            <div class="traits" id="res-traits">
-                <!-- 标签 -->
-            </div>
-            <p class="result-desc" id="res-desc">
-                你是典型的“仙女猫”。性格极其温柔，对人类充满信任和依赖。在社交中你总是那个最优雅、最从容的存在。
-            </p>
-        </div>
-        <button class="btn" style="margin-top: 2rem;" onclick="location.reload()">再测一次</button>
-        <div class="footer">分享你的猫格，寻找同类</div>
+    <div class="quiz-body">
+      <div class="q-hint">
+        <div class="q-hint-avatar" id="q-avatar">🐱</div>
+        <div class="q-hint-bubble" id="q-hint-text">题目维度提示</div>
+      </div>
+      <div class="question-text" id="q-text">题目加载中...</div>
+      <div class="options-list" id="options"></div>
     </div>
+
+    <button class="continue-btn" id="continue-btn" onclick="nextQuestion()" disabled>继续 →</button>
+  </div>
+
+  <!-- ===== 结果页 ===== -->
+  <div id="result-page">
+    <div class="result-label">你的猫格是</div>
+    <div class="result-breed" id="res-name">布偶猫</div>
+    <div class="result-en" id="res-en">Ragdoll</div>
+    <div class="result-avatar" id="res-avatar">🐱</div>
+    <div class="result-traits" id="res-traits"></div>
+    <div class="result-desc" id="res-desc"></div>
+    <button class="retry-btn" onclick="location.reload()">再测一次</button>
+    <div class="result-footer">分享你的猫格，寻找同类 🐾</div>
+  </div>
+
 </div>
 
 <script>
-    const breeds = [
-        { id: 'ragdoll', name: '布偶猫', traits: ['温柔', '粘人', '优雅'], desc: '你是猫界的小仙女/小王子。你极其依赖亲密关系，性格温顺，总是能让周围的人感到治愈和安宁。', img: 'https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&q=80&w=400' },
-        { id: 'british', name: '英短', traits: ['佛系', '独立', '淡定'], desc: '你是一个内心强大的“稳健派”。你喜欢安静地观察世界，不过度社交，也不过分纠结。这种佛系心态让你活得很透彻。', img: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&q=80&w=400' },
-        { id: 'siamese', name: '暹罗猫', traits: ['活泼', '话痨', '社交达人'], desc: '你就是传说中的“社交恐怖分子”。你有着无穷的精力和表达欲，渴望成为所有人的焦点，生活中从不缺少刺激。', img: 'https://images.unsplash.com/photo-1557406135-c8203004816a?auto=format&fit=crop&q=80&w=400' },
-        { id: 'mainecoon', name: '缅因猫', traits: ['稳重', '忠诚', '大器'], desc: '你是“温柔的巨兽”。外表看起来可能有点酷或者高大，但内心极度温柔且富有责任感，是朋友们最信赖的避风港。', img: 'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&q=80&w=400' },
-        { id: 'russianblue', name: '俄罗斯蓝猫', traits: ['高冷', '细腻', '谨慎'], desc: '你拥有极高的审美和细腻的情感。虽然在生人面前有些害羞，但一旦认定了一个人，就会展现出百分之百的忠诚。', img: 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&q=80&w=400' },
-        { id: 'bengal', name: '孟加拉豹猫', traits: ['勇敢', '好奇', '野性'], desc: '你天生属于大自然。你渴望冒险，拒绝平庸。你的每一个动作都充满力量感，生命力是你最大的标签。', img: 'https://images.unsplash.com/photo-1513245543132-31f507417b26?auto=format&fit=crop&q=80&w=400' },
-        { id: 'persian', name: '波斯猫', traits: ['富贵', '甜美', '宅家'], desc: '你追求极致的生活品质。你喜欢舒适的环境，慢节奏的生活。你是那个在下午茶时光里最懂得享受孤独的人。', img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=400' },
-        { id: 'abyssinian', name: '阿比西尼亚猫', traits: ['极客', '聪明', '敏捷'], desc: '你是一个典型的“行动派”。你对世界充满了求知欲，喜欢动手解决问题，聪明才智是你在这个世界上游刃有余的武器。', img: 'https://images.unsplash.com/photo-1511497619671-434f2958c2a4?auto=format&fit=crop&q=80&w=400' },
-        { id: 'scottish', name: '苏格兰折耳猫', traits: ['乖巧', '平和', '知足'], desc: '你是一个温和的理想主义者。你不需要惊天动地的生活，只要有一个温暖的小窝和爱的人在身边，你就是最幸福的。', img: 'https://images.unsplash.com/photo-1592194996308-7b43878e84a6?auto=format&fit=crop&q=80&w=400' },
-        { id: 'sphynx', name: '加拿大无毛猫', traits: ['独特', '热情', '先锋'], desc: '你拒绝被定义。你独特的个性和热情的态度总能打破僵局。虽然有些人一开始不理解你，但了解之后都会被你的魅力折服。', img: 'https://images.unsplash.com/photo-1520315342629-6ea920342248?auto=format&fit=crop&q=80&w=400' }
-    ];
+const breeds = [
+  { id:'ragdoll',    name:'布偶猫',      en:'Ragdoll',           emoji:'😻', traits:['温柔','粘人','优雅'],      desc:'你是猫界的小仙女/小王子。极其依赖亲密关系，性格温顺，走到哪里都自带治愈光环。你不需要刻意讨好任何人，温柔本身就是你最大的魔力。' },
+  { id:'british',   name:'英国短毛猫',  en:'British Shorthair', emoji:'😼', traits:['佛系','独立','淡定'],      desc:'你是一个内心极其强大的"稳健派"。喜欢安静地观察世界，不过度社交，也不过分纠结。佛系哲学让你活得比大多数人都通透，旁观者清说的就是你。' },
+  { id:'siamese',   name:'暹罗猫',      en:'Siamese',           emoji:'😸', traits:['活泼','话痨','自来熟'],    desc:'你就是传说中的"社交恐怖分子"。有着无穷的精力和表达欲，天生渴望成为焦点。沉默对你来说是一种折磨，你的存在就是为了让世界更热闹。' },
+  { id:'mainecoon', name:'缅因猫',      en:'Maine Coon',        emoji:'🐈', traits:['稳重','忠诚','有担当'],    desc:'你是"温柔的巨兽"。外表可能有些沉默，但内心极度温柔且富有责任感。朋友们遇到困难第一个想到的永远是你，因为你从来不会让人失望。' },
+  { id:'russian',   name:'俄罗斯蓝猫',  en:'Russian Blue',      emoji:'😾', traits:['高冷','细腻','忠诚'],      desc:'你拥有极高的审美和细腻的情感。在陌生人面前你总是那个最冷静的存在，但一旦认定了一个人，就会默默守护他/她到底，这种深情藏得太深，懂的人才懂。' },
+  { id:'bengal',    name:'孟加拉豹猫',  en:'Bengal',            emoji:'🐆', traits:['冒险','野性','精力旺'],    desc:'你天生不甘平凡。你渴望打破规则、探索边界，每一个动作都充满力量感。对你来说，安稳是一种慢性窒息，冒险才叫活着。' },
+  { id:'persian',   name:'波斯猫',      en:'Persian',           emoji:'😺', traits:['精致','享乐','富贵命'],    desc:'你对生活品质有着极致的追求。舒适的环境、慢节奏的生活、精致的小物件——这就是你的日常。你不是懒，你是对庸俗的生活方式免疫。' },
+  { id:'aby',       name:'阿比西尼亚猫', en:'Abyssinian',        emoji:'🐈‍⬛', traits:['聪明','好奇','行动派'],  desc:'你是一个天生的"极客"。对世界充满了永不熄灭的好奇心，喜欢动手解决一切问题。别人还在想的时候你已经开始干了，这就是你的节奏。' },
+  { id:'scottish',  name:'苏格兰折耳猫', en:'Scottish Fold',    emoji:'😽', traits:['乖巧','平和','知足'],      desc:'你是一个温和的理想主义者。不需要大风大浪，一个温暖的角落、几个真心的朋友，就是你全部的幸福。你的满足感来得很容易，这是一种天赋。' },
+  { id:'sphynx',    name:'无毛猫',      en:'Sphynx',            emoji:'🙀', traits:['独特','热情','不走寻常路'],'desc':'你拒绝被任何标签定义。独特的外表下藏着一颗比任何人都热情的心。很多人第一眼不懂你，但了解之后都会被你彻底圈粉——因为世界上再找不出第二个你。' },
+];
 
-    const questions = [
-        {
-            text: "周末终于休息了，你最理想的状态是？",
-            options: [
-                { text: "在家宅一天，看看书或发呆", scores: { british: 3, persian: 3, russianblue: 2 } },
-                { text: "和朋友出去狂欢，热闹一下", scores: { siamese: 3, sphynx: 3, bengal: 2 } },
-                { text: "去尝试一项没玩过的新运动", scores: { bengal: 3, abyssinian: 3 } },
-                { text: "陪伴家人或恋人，做点温馨的事", scores: { ragdoll: 3, mainecoon: 3, scottish: 3 } }
-            ]
-        },
-        {
-            text: "遇到一个很久没见的熟人，你会？",
-            options: [
-                { text: "热情地扑过去打招呼", scores: { siamese: 3, sphynx: 3 } },
-                { text: "礼貌微笑，等对方先开口", scores: { ragdoll: 2, mainecoon: 2, scottish: 2 } },
-                { text: "默默点个头，然后迅速走开", scores: { russianblue: 3, british: 2 } },
-                { text: "调侃一下对方的变化", scores: { bengal: 2, abyssinian: 2 } }
-            ]
-        },
-        {
-            text: "在工作中，你更倾向于？",
-            options: [
-                { text: "独自钻研，把事情做到极致", scores: { abyssinian: 3, russianblue: 2, british: 2 } },
-                { text: "组织大家一起协作，带节奏", scores: { mainecoon: 3, siamese: 2 } },
-                { text: "听从安排，稳扎稳打", scores: { scottish: 3, ragdoll: 2, persian: 2 } },
-                { text: "总是能想出出其不意的点子", scores: { sphynx: 3, bengal: 3 } }
-            ]
-        },
-        {
-            text: "如果有人让你生气了，你的第一反应是？",
-            options: [
-                { text: "直接怼回去，不留情面", scores: { bengal: 3, sphynx: 2, siamese: 2 } },
-                { text: "冷战，看对方什么时候发现", scores: { russianblue: 3, british: 2 } },
-                { text: "先讲道理，试图解决冲突", scores: { mainecoon: 3, abyssinian: 2 } },
-                { text: "感到难过，甚至想回避", scores: { ragdoll: 3, scottish: 3, persian: 2 } }
-            ]
-        },
-        {
-            text: "对于“变动”和“新鲜事物”，你的态度是？",
-            options: [
-                { text: "非常兴奋，主动寻找改变", scores: { bengal: 3, abyssinian: 3, sphynx: 2 } },
-                { text: "顺其自然，怎样都行", scores: { british: 3, mainecoon: 2, scottish: 2 } },
-                { text: "有些焦虑，更喜欢待在舒适区", scores: { persian: 3, russianblue: 2, ragdoll: 2 } },
-                { text: "会先观察研究，再做决定", scores: { abyssinian: 2, mainecoon: 2 } }
-            ]
-        },
-        {
-            text: "当你获得一笔意外之财，你会？",
-            options: [
-                { text: "买一套心仪已久的高档奢侈品", scores: { persian: 3, ragdoll: 2 } },
-                { text: "存起来，规划未来的保障", scores: { british: 3, mainecoon: 2 } },
-                { text: "用来请所有朋友大吃一顿", scores: { siamese: 3, sphynx: 3 } },
-                { text: "立刻来一场说走就走的旅行", scores: { bengal: 3, abyssinian: 3 } }
-            ]
-        },
-        {
-            text: "朋友们通常怎么形容你？",
-            options: [
-                { text: "开心果，有你在绝对不冷场", scores: { siamese: 3, sphynx: 3 } },
-                { text: "靠谱大哥/大姐，有事找你准没错", scores: { mainecoon: 3, british: 2 } },
-                { text: "精致派，对生活很有追求", scores: { persian: 3, ragdoll: 3 } },
-                { text: "独行侠，很有自己的想法", scores: { russianblue: 3, bengal: 2, abyssinian: 2 } }
-            ]
-        },
-        {
-            text: "当你感到压力很大时，你会选择？",
-            options: [
-                { text: "找最亲近的人撒个娇/求安慰", scores: { ragdoll: 3, scottish: 3 } },
-                { text: "疯狂运动或打游戏发泄", scores: { bengal: 3, abyssinian: 2 } },
-                { text: "大吃一顿，然后美美睡一觉", scores: { british: 3, persian: 2 } },
-                { text: "躲进自己的角落，谁也不理", scores: { russianblue: 3, british: 2 } }
-            ]
-        },
-        {
-            text: "你对“规则”的看法是？",
-            options: [
-                { text: "规则就是用来被打破的", scores: { bengal: 3, sphynx: 3, abyssinian: 2 } },
-                { text: "遵守规则能让生活更高效", scores: { mainecoon: 2, british: 2 } },
-                { text: "无所谓，只要不碍着我就行", scores: { british: 3, siamese: 2 } },
-                { text: "规则能给我带来安全感", scores: { scottish: 3, ragdoll: 2, persian: 2 } }
-            ]
-        },
-        {
-            text: "你最喜欢的颜色偏向于？",
-            options: [
-                { text: "热情的红色或亮眼的橙色", scores: { siamese: 2, sphynx: 3, bengal: 3 } },
-                { text: "宁静的蓝色或深沉的灰色", scores: { russianblue: 3, british: 3, mainecoon: 2 } },
-                { text: "温柔的粉色或纯洁的白色", scores: { ragdoll: 3, scottish: 3, persian: 3 } },
-                { text: "极具科技感的金属色或亮色", scores: { abyssinian: 3, bengal: 2 } }
-            ]
-        }
-    ];
+const questions = [
+  { hint:'社交还是不社交，这是个问题', avatar:'😸',
+    text:'在外面遇到了一只从没见过的陌生猫，你怎么做？',
+    options:[
+      { text:'直接冲上去，先蹭为敬，交朋友这件事从不犹豫', scores:{ siamese:3, sphynx:3, bengal:2 } },
+      { text:'在旁边观望，确认对方没问题再慢慢靠近', scores:{ mainecoon:2, scottish:2, british:2 } },
+      { text:'绕开走，今天不想社交', scores:{ russian:3, british:3 } },
+      { text:'装作没看见，但眼角一直瞄着', scores:{ aby:2, russian:2 } },
+    ]},
+  { hint:'主权意识 vs 随遇而安', avatar:'😼',
+    text:'你最喜欢待的地方是？',
+    options:[
+      { text:'最高的那个地方，必须全场尽在眼底', scores:{ bengal:3, aby:3 } },
+      { text:'主人怀里，哪里都不去', scores:{ ragdoll:3, scottish:3 } },
+      { text:'自己的那个角落，谁来了都烦', scores:{ russian:3, british:3 } },
+      { text:'哪里有阳光晒哪里，无所谓', scores:{ persian:3, british:2 } },
+    ]},
+  { hint:'压力处理方式大不同', avatar:'😾',
+    text:'你今天心情不好，会怎么排解？',
+    options:[
+      { text:'找最亲近的人撒娇，求抱抱', scores:{ ragdoll:3, scottish:3 } },
+      { text:'疯狂破坏东西，发泄完就好了', scores:{ bengal:3, siamese:2 } },
+      { text:'躲起来，谁也不见，静静待着', scores:{ russian:3, british:3 } },
+      { text:'大吃一顿，睡一觉，明天又是好猫', scores:{ persian:3, scottish:2 } },
+    ]},
+  { hint:'领地感与独立性', avatar:'🐈',
+    text:'主人带了一只新猫回家，你的第一反应是？',
+    options:[
+      { text:'冲过去，先声夺人，告诉它谁是老大', scores:{ bengal:3, siamese:3 } },
+      { text:'冷静观察，慢慢决定要不要接纳', scores:{ mainecoon:3, aby:2 } },
+      { text:'立刻躲起来，三天不出来', scores:{ russian:3, british:2 } },
+      { text:'无所谓，多一个玩伴也挺好的', scores:{ ragdoll:2, scottish:3 } },
+    ]},
+  { hint:'对"规则"的态度', avatar:'😽',
+    text:'桌上放了一杯水，主人说不能碰，你会？',
+    options:[
+      { text:'等主人走立刻去推，这才是生活的意义', scores:{ bengal:3, sphynx:3, aby:2 } },
+      { text:'忍住，遵守规则让关系更稳定', scores:{ mainecoon:2, scottish:2 } },
+      { text:'压根就没想去碰，杯水对我没有吸引力', scores:{ russian:3, british:3 } },
+      { text:'闻一闻，但最终还是没推，自律是美德', scores:{ persian:2, ragdoll:2 } },
+    ]},
+  { hint:'享乐主义 vs 成就感', avatar:'😸',
+    text:'对你来说最幸福的瞬间是？',
+    options:[
+      { text:'日光浴 + 软乎乎的床，生活不需要别的', scores:{ persian:3, british:3 } },
+      { text:'终于抓到那只红点，成就感爆棚', scores:{ aby:3, bengal:3 } },
+      { text:'被喜欢的人轻轻挠下巴', scores:{ ragdoll:3, scottish:3 } },
+      { text:'全家人都在，我坐在最中间', scores:{ siamese:3, sphynx:2 } },
+    ]},
+  { hint:'沟通风格各不同', avatar:'🐱',
+    text:'你想要吃饭了，但主人没注意到你，你会？',
+    options:[
+      { text:'大声喵喵叫，直到他/她来喂为止', scores:{ siamese:3, sphynx:3 } },
+      { text:'走过去轻轻碰一下他/她的手', scores:{ ragdoll:2, scottish:3, mainecoon:2 } },
+      { text:'坐在旁边用眼神盯着，等他/她自己发现', scores:{ russian:3, british:2 } },
+      { text:'干脆自己想办法，我不等任何人', scores:{ aby:3, bengal:2 } },
+    ]},
+  { hint:'对新事物的好奇程度', avatar:'😺',
+    text:'主人带了一个从没见过的纸箱回来，你会？',
+    options:[
+      { text:'立刻冲进去探索，什么都要先我来', scores:{ aby:3, bengal:3, siamese:2 } },
+      { text:'在旁边观察一会儿，确认安全再进', scores:{ mainecoon:2, russian:2 } },
+      { text:'等主人走了再偷偷去闻一闻', scores:{ british:2, scottish:2 } },
+      { text:'不感兴趣，睡我的觉', scores:{ persian:3, british:3 } },
+    ]},
+  { hint:'感情需求与边界感', avatar:'😻',
+    text:'主人今天特别想抱你，但你不想被抱，你会？',
+    options:[
+      { text:'直接挣脱，用眼神告诉他/她：别碰我', scores:{ russian:3, british:3 } },
+      { text:'忍了，让他/她抱，但脸上写满不情愿', scores:{ bengal:2, aby:2 } },
+      { text:'其实我一直在等他/她来抱，哪里会不让', scores:{ ragdoll:3, scottish:3 } },
+      { text:'给他/她五秒钟，然后优雅地跳走', scores:{ persian:3, siamese:2 } },
+    ]},
+  { hint:'夜间行动模式', avatar:'🌙',
+    text:'凌晨三点，你最可能在干什么？',
+    options:[
+      { text:'在房间里极速狂奔，能量满满', scores:{ bengal:3, siamese:3, aby:2 } },
+      { text:'睡得比主人还香，什么都没有', scores:{ british:3, persian:3 } },
+      { text:'悄悄爬上主人被窝，蜷缩在旁边', scores:{ ragdoll:3, scottish:3 } },
+      { text:'坐在窗边，发呆，思考猫生意义', scores:{ russian:3, aby:2 } },
+    ]},
+];
 
-    let currentQuestion = 0;
-    let scores = {};
+let current = 0;
+let selected = null;
+let scores = {};
+breeds.forEach(b => scores[b.id] = 0);
 
-    // 初始化得分
-    breeds.forEach(b => scores[b.id] = 0);
+function show(pageId) {
+  ['start-page','quiz-page','result-page'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(pageId);
+  target.style.display = 'flex';
+  target.classList.add('page-in');
+  setTimeout(() => target.classList.remove('page-in'), 400);
+}
 
-    function startTest() {
-        document.getElementById('start-page').classList.remove('active');
-        document.getElementById('quiz-page').classList.add('active');
-        showQuestion();
-    }
+function startTest() {
+  current = 0;
+  scores = {};
+  breeds.forEach(b => scores[b.id] = 0);
+  show('quiz-page');
+  renderQuestion();
+}
 
-    function showQuestion() {
-        const q = questions[currentQuestion];
-        document.getElementById('q-count').innerText = `${currentQuestion + 1} / ${questions.length}`;
-        document.getElementById('q-text').innerText = q.text;
-        document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+function renderQuestion() {
+  const q = questions[current];
+  selected = null;
 
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        q.options.forEach((opt, idx) => {
-            const btn = document.createElement('div');
-            btn.className = 'option-item';
-            btn.innerText = opt.text;
-            btn.onclick = () => selectOption(opt.scores);
-            optionsDiv.appendChild(btn);
-        });
-    }
+  document.getElementById('q-count').innerText = `${current + 1} / ${questions.length}`;
+  document.getElementById('progress-fill').style.width = `${((current + 1) / questions.length) * 100}%`;
+  document.getElementById('q-avatar').innerText = q.avatar;
+  document.getElementById('q-hint-text').innerText = q.hint;
+  document.getElementById('q-text').innerText = q.text;
 
-    function selectOption(optScores) {
-        // 累加得分
-        for (let id in optScores) {
-            scores[id] += optScores[id];
-        }
+  const optionsEl = document.getElementById('options');
+  optionsEl.innerHTML = '';
+  const labels = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option-item';
+    div.innerHTML = `<div class="option-label">${labels[i]}</div><div class="option-text">${opt.text}</div>`;
+    div.onclick = () => selectOption(div, i);
+    optionsEl.appendChild(div);
+  });
 
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            showQuestion();
-        } else {
-            showResult();
-        }
-    }
+  const btn = document.getElementById('continue-btn');
+  btn.disabled = true;
+}
 
-    function showResult() {
-        // 寻找最高分的品种
-        let maxScore = -1;
-        let winnerId = '';
-        for (let id in scores) {
-            if (scores[id] > maxScore) {
-                maxScore = scores[id];
-                winnerId = id;
-            }
-        }
+function selectOption(el, idx) {
+  document.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = idx;
+  document.getElementById('continue-btn').disabled = false;
+}
 
-        const winner = breeds.find(b => b.id === winnerId);
+function nextQuestion() {
+  if (selected === null) return;
+  const optScores = questions[current].options[selected].scores;
+  for (let id in optScores) scores[id] = (scores[id] || 0) + optScores[id];
 
-        document.getElementById('quiz-page').classList.remove('active');
-        document.getElementById('result-page').classList.add('active');
-        document.getElementById('progress').parentElement.style.display = 'none';
+  if (current < questions.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
 
-        document.getElementById('res-name').innerText = winner.name;
-        document.getElementById('res-img').src = winner.img;
-        document.getElementById('res-desc').innerText = winner.desc;
+function goBack() {
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  } else {
+    show('start-page');
+  }
+}
 
-        const traitsDiv = document.getElementById('res-traits');
-        traitsDiv.innerHTML = '';
-        winner.traits.forEach(t => {
-            const span = document.createElement('span');
-            span.className = 'trait-tag';
-            span.innerText = t;
-            traitsDiv.appendChild(span);
-        });
-    }
+function showResult() {
+  let max = -1, winner = null;
+  for (let id in scores) {
+    if (scores[id] > max) { max = scores[id]; winner = id; }
+  }
+  const breed = breeds.find(b => b.id === winner);
+
+  document.getElementById('res-name').innerText = breed.name;
+  document.getElementById('res-en').innerText = breed.en;
+  document.getElementById('res-avatar').innerText = breed.emoji;
+  document.getElementById('res-desc').innerText = breed.desc;
+
+  const traitsEl = document.getElementById('res-traits');
+  traitsEl.innerHTML = '';
+  breed.traits.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'result-trait';
+    span.innerText = t;
+    traitsEl.appendChild(span);
+  });
+
+  show('result-page');
+}
 </script>
-
 </body>
 </html>
