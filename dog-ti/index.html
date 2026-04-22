@@ -6,14 +6,14 @@
     <title>DogTI - 狗狗性格测试</title>
     <style>
         :root {
-            --bg: #f3f3f1;
+            --bg: #fcf7f4;
             --card: #ffffff;
-            --text: #0f0f0f;
-            --muted: #9c9c9c;
-            --line: #dbdbdb;
-            --yellow: #f0db67;
-            --black: #050505;
-            --shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            --text: #463734;
+            --muted: #a58e89;
+            --line: #eadbd6;
+            --yellow: #f3d6d2;
+            --black: #6a4b46;
+            --shadow: 0 18px 40px rgba(106, 75, 70, 0.14);
             --radius-xl: 28px;
             --radius-lg: 22px;
             --radius-md: 18px;
@@ -27,7 +27,7 @@
         body {
             margin: 0;
             min-height: 100%;
-            background: radial-gradient(circle at top, #fafaf8 0%, var(--bg) 42%, #ececea 100%);
+            background: radial-gradient(circle at top, #fffdfc 0%, var(--bg) 42%, #f4e8e3 100%);
             color: var(--text);
             font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
         }
@@ -79,7 +79,7 @@
             bottom: 0;
             margin-top: auto;
             padding: 18px 0 calc(env(safe-area-inset-bottom, 0px) + 18px);
-            background: linear-gradient(180deg, rgba(243, 243, 241, 0) 0%, rgba(243, 243, 241, 0.9) 18%, rgba(243, 243, 241, 0.98) 100%);
+            background: linear-gradient(180deg, rgba(252, 247, 244, 0) 0%, rgba(252, 247, 244, 0.9) 18%, rgba(252, 247, 244, 0.98) 100%);
             backdrop-filter: blur(8px);
         }
 
@@ -110,10 +110,10 @@
 
         .logo span {
             display: inline-block;
-            background: #111;
+            background: var(--black);
             color: #fff;
             padding: 8px 6px 4px;
-            box-shadow: 8px 8px 0 #000;
+            box-shadow: 8px 8px 0 #d8a6a1;
             min-width: 0.95em;
             text-align: center;
             transform-origin: center bottom;
@@ -162,12 +162,12 @@
 
         .sprite-wall::before {
             left: 0;
-            background: linear-gradient(90deg, var(--bg) 0%, rgba(243, 243, 241, 0) 100%);
+            background: linear-gradient(90deg, var(--bg) 0%, rgba(252, 247, 244, 0) 100%);
         }
 
         .sprite-wall::after {
             right: 0;
-            background: linear-gradient(270deg, var(--bg) 0%, rgba(243, 243, 241, 0) 100%);
+            background: linear-gradient(270deg, var(--bg) 0%, rgba(252, 247, 244, 0) 100%);
         }
 
         .sprite-marquee {
@@ -194,11 +194,11 @@
             --tilt-alt: 0.4deg;
             flex: 0 0 96px;
             position: relative;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 248, 248, 0.94) 100%);
-            border: 2px solid #111;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 241, 238, 0.94) 100%);
+            border: 2px solid #ddb9b3;
             border-radius: 24px;
             padding: 10px 8px 11px;
-            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.08), 0 8px 0 rgba(0, 0, 0, 0.12);
+            box-shadow: 0 16px 24px rgba(106, 75, 70, 0.12), 0 8px 0 rgba(216, 166, 161, 0.24);
             min-height: 100px;
             display: flex;
             flex-direction: column;
@@ -217,11 +217,13 @@
             bottom: -13px;
             height: 18px;
             border-radius: 999px;
-            background: rgba(0, 0, 0, 0.12);
+            background: rgba(180, 124, 116, 0.18);
+
             filter: blur(10px);
             opacity: 0.55;
             z-index: -1;
         }
+
 
         .sprite:nth-child(4n + 1) {
             --stack-y: -4px;
@@ -374,7 +376,7 @@
         .hero-subtitle {
             margin: 0 auto 18px;
             max-width: 16em;
-            color: #9ea3ad;
+            color: #a58e89;
             font-size: 18px;
             font-style: italic;
             line-height: 1.6;
@@ -392,9 +394,9 @@
         .hero-chip {
             border-radius: 999px;
             padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.92);
             border: 1.5px solid var(--line);
-            color: #666;
+            color: #7a6059;
             font-size: 13px;
             font-weight: 700;
         }
@@ -432,7 +434,7 @@
 
         .primary-btn:disabled {
             cursor: not-allowed;
-            background: #cacaca;
+            background: #e1d1cd;
             box-shadow: none;
             transform: none;
         }
@@ -450,14 +452,14 @@
 
         .bottom-note {
             margin-top: 22px;
-            color: #99a0aa;
+            color: #a58e89;
             text-align: center;
             font-size: 13px;
             line-height: 1.7;
         }
 
         .bottom-note a {
-            color: #4890ff;
+            color: #b67e78;
             text-decoration: none;
             font-weight: 800;
         }
@@ -480,16 +482,16 @@
             height: 52px;
             border-radius: 50%;
             border: 0;
-            background: rgba(255, 255, 255, 0.8);
-            color: #191919;
+            background: rgba(255, 255, 255, 0.88);
+            color: #5a433f;
             font-size: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 24px rgba(106, 75, 70, 0.08);
             cursor: pointer;
         }
 
         .progress-count {
             text-align: center;
-            color: #b0a690;
+            color: #c18983;
             font-size: 18px;
             font-weight: 800;
         }
@@ -497,7 +499,7 @@
         .progress-track {
             height: 6px;
             border-radius: 999px;
-            background: #dfdfdf;
+            background: #eedfda;
             overflow: hidden;
             margin: 22px 0 24px;
         }
@@ -505,7 +507,7 @@
         .progress-fill {
             height: 100%;
             width: 0;
-            background: linear-gradient(90deg, #111 0%, #3e3e3e 100%);
+            background: linear-gradient(90deg, #d8a6a1 0%, #e8c0bc 100%);
             border-radius: inherit;
             transition: width 0.22s ease;
         }
@@ -522,19 +524,19 @@
             width: 72px;
             height: 72px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.96);
             display: grid;
             place-items: center;
-            border: 1.5px solid #ececec;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+            border: 1.5px solid #eee0db;
+            box-shadow: 0 10px 24px rgba(106, 75, 70, 0.06);
             font-size: 34px;
         }
 
         .prompt-bubble {
             min-height: 72px;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.82);
             border-radius: 20px;
-            border: 1.5px solid #ebebeb;
+            border: 1.5px solid #ebdcd7;
             padding: 13px 15px;
             display: flex;
             flex-direction: column;
@@ -547,7 +549,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #6d6d6d;
+            color: #7a6059;
             font-size: 14px;
             font-weight: 800;
         }
@@ -557,11 +559,11 @@
             height: 8px;
             border-radius: 50%;
             background: var(--yellow);
-            box-shadow: 0 0 0 4px rgba(240, 219, 103, 0.2);
+            box-shadow: 0 0 0 4px rgba(243, 214, 210, 0.36);
         }
 
         .prompt-hint {
-            color: #b3b3b3;
+            color: #b29a95;
             font-size: 13px;
             line-height: 1.5;
         }
@@ -596,8 +598,8 @@
             text-align: left;
             padding: 16px 16px 16px 14px;
             border-radius: 20px;
-            border: 2px solid #dddddd;
-            background: rgba(255, 255, 255, 0.92);
+            border: 2px solid #eadbd6;
+            background: rgba(255, 255, 255, 0.94);
             color: var(--text);
             cursor: pointer;
             transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -605,9 +607,9 @@
 
 
         .option.active {
-            background: #080808;
+            background: #6a4b46;
             color: #fff;
-            border-color: #080808;
+            border-color: #6a4b46;
             box-shadow: var(--shadow);
         }
 
@@ -615,12 +617,14 @@
             font-size: 24px;
             font-weight: 900;
             line-height: 1;
-            color: #9ea3ad;
+            color: #a58e89;
         }
 
         .option.active .option-key {
-            color: #d9c27a;
+            color: #f6e5e1;
         }
+
+
 
         .option-text {
             font-size: 16.5px;
@@ -651,7 +655,7 @@
 
         .mapping-subtitle {
             margin: 0;
-            color: #6d6d6d;
+            color: #7a6059;
             font-size: 15px;
             line-height: 1.7;
             font-weight: 600;
@@ -664,16 +668,16 @@
         }
 
         .mapping-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             border-radius: 24px;
-            border: 1.5px solid #ebebeb;
+            border: 1.5px solid #eadbd6;
             padding: 18px 18px 20px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 12px 28px rgba(106, 75, 70, 0.06);
         }
 
         .mapping-card.active {
-            border-color: #111;
-            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+            border-color: #d8a6a1;
+            box-shadow: 0 16px 34px rgba(106, 75, 70, 0.12);
         }
 
         .mapping-card-head {
@@ -696,7 +700,7 @@
             min-width: 78px;
             padding: 6px 12px;
             border-radius: 999px;
-            background: #111;
+            background: #8d6760;
             color: #fff;
             font-family: "Courier New", monospace;
             font-size: 15px;
@@ -705,7 +709,7 @@
         }
 
         .mapping-current {
-            color: #767676;
+            color: #a58e89;
             font-size: 12px;
             font-weight: 700;
         }
@@ -724,7 +728,7 @@
 
         .mapping-card-role {
             margin: 0;
-            color: #585858;
+            color: #7a6059;
             font-size: 16px;
             line-height: 1.5;
             font-weight: 700;
@@ -741,11 +745,11 @@
             gap: 8px;
             padding: 10px 16px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1.5px solid #e8e8e8;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1.5px solid #eadbd6;
             font-size: 13px;
             font-weight: 800;
-            color: #5f5f5f;
+            color: #7a6059;
         }
 
         .result-head {
@@ -756,7 +760,7 @@
             font-size: 15px;
             font-weight: 900;
             letter-spacing: 0.28em;
-            color: #8c8060;
+            color: #c98c86;
             margin-bottom: 8px;
         }
 
@@ -770,13 +774,13 @@
         .result-role {
             margin: 8px 0 0;
             font-size: 16px;
-            color: #6b6b6b;
+            color: #7a6059;
             font-weight: 700;
         }
 
         .result-hero {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 100%);
-            border: 1.5px solid #ececec;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 239, 236, 0.92) 100%);
+            border: 1.5px solid #eee0db;
             border-radius: 24px;
             padding: 16px 16px 18px;
             box-shadow: var(--shadow);
@@ -798,8 +802,8 @@
         .tag {
             padding: 7px 10px;
             border-radius: 999px;
-            background: #f4f4f4;
-            color: #555;
+            background: #f8ece9;
+            color: #785e58;
             font-size: 12px;
             font-weight: 800;
         }
@@ -808,7 +812,7 @@
             margin: 0;
             font-size: 15px;
             line-height: 1.75;
-            color: #353535;
+            color: #4b3b38;
             font-weight: 600;
         }
 
@@ -820,11 +824,11 @@
         }
 
         .panel {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             border-radius: 22px;
-            border: 1.5px solid #ebebeb;
+            border: 1.5px solid #eadbd6;
             padding: 16px 16px 18px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 24px rgba(106, 75, 70, 0.05);
         }
 
         .panel-title {
@@ -861,7 +865,7 @@
         .metric-value {
             font-size: 13px;
             font-weight: 800;
-            color: #666;
+            color: #7a6059;
         }
 
         .metric-value {
@@ -871,21 +875,21 @@
         .metric-track {
             height: 12px;
             border-radius: 999px;
-            background: #ededed;
+            background: #f0e1dd;
             overflow: hidden;
         }
 
         .metric-fill {
             height: 100%;
             border-radius: inherit;
-            background: linear-gradient(90deg, #111 0%, #696969 100%);
+            background: linear-gradient(90deg, #d8a6a1 0%, #eac4be 100%);
         }
 
         .insight-text {
             margin: 0;
             font-size: 15px;
             line-height: 1.85;
-            color: #424242;
+            color: #5a4642;
             font-weight: 600;
         }
 
@@ -903,13 +907,13 @@
             gap: 10px;
             font-size: 15px;
             line-height: 1.75;
-            color: #383838;
+            color: #4d3d39;
             font-weight: 600;
         }
 
         .tips li::before {
             content: "✦";
-            color: #af9a59;
+            color: #d8a6a1;
             font-weight: 900;
         }
 
@@ -917,7 +921,7 @@
             margin-top: 12px;
             padding: 16px 18px;
             border-radius: 20px;
-            background: #0b0b0b;
+            background: #6a4b46;
             color: #fff;
             font-size: 14px;
             line-height: 1.8;
@@ -933,15 +937,15 @@
 
 
         .secondary-btn {
-            background: #101010;
+            background: #7b5b55;
             color: #fff;
             font-size: 16px;
         }
 
         .ghost-btn {
-            background: rgba(255, 255, 255, 0.95);
-            color: #111;
-            border: 1.5px solid #dbdbdb;
+            background: rgba(255, 255, 255, 0.96);
+            color: #6a4b46;
+            border: 1.5px solid #eadbd6;
             font-size: 16px;
         }
 
@@ -950,7 +954,7 @@
             left: 50%;
             bottom: 26px;
             transform: translateX(-50%) translateY(10px);
-            background: rgba(17, 17, 17, 0.94);
+            background: rgba(106, 75, 70, 0.94);
             color: #fff;
             padding: 10px 16px;
             border-radius: 999px;
@@ -960,6 +964,8 @@
             transition: opacity 0.18s ease, transform 0.18s ease;
             z-index: 20;
         }
+
+
 
         .toast.show {
             opacity: 1;
@@ -1529,121 +1535,195 @@
         }
 
         function createDogSvg(dog, uid) {
-            const patternSvg = getDogPatternSvg(dog);
-            const earSvg = getDogEarSvg(dog, uid);
-            const blushSvg = dog.blush ? `
-                <ellipse cx="31" cy="56" rx="5.6" ry="3" fill="#f6b1b4" opacity="0.48" />
-                <ellipse cx="65" cy="56" rx="5.6" ry="3" fill="#f6b1b4" opacity="0.48" />
-            ` : "";
-            const collarSvg = dog.collar ? `
-                <path d="M31 66c4.2 3.1 10.1 4.8 17 4.8 6.9 0 12.8-1.7 17-4.8v4.8c-4.6 2.8-10.2 4.2-17 4.2-6.8 0-12.4-1.4-17-4.2z" fill="#d94f43" opacity="0.95" />
-                <circle cx="48" cy="71" r="2.8" fill="#f4d16a" stroke="#7a5c19" stroke-width="1" />
-            ` : "";
-            const fluffyCheeks = dog.fluffy ? `
-                <ellipse cx="24" cy="49" rx="8.4" ry="10.5" fill="url(#fur-${uid})" opacity="0.92" />
-                <ellipse cx="72" cy="49" rx="8.4" ry="10.5" fill="url(#fur-${uid})" opacity="0.92" />
-            ` : "";
+            const outline = "#302521";
+            const shadow = [
+                [11, 25, 10, 1, "rgba(0,0,0,0.08)"],
+                [9, 26, 14, 1, "rgba(0,0,0,0.12)"],
+                [12, 27, 8, 1, "rgba(0,0,0,0.10)"]
+            ];
+            const faceBase = [
+                [10, 8, 12, 1, outline],
+                [8, 9, 16, 1, outline],
+                [7, 10, 18, 1, outline],
+                [6, 11, 20, 1, outline],
+                [5, 12, 22, 7, outline],
+                [6, 19, 20, 1, outline],
+                [7, 20, 18, 1, outline],
+                [9, 21, 14, 1, outline],
+                [11, 9, 10, 1, dog.furDark],
+                [9, 10, 14, 1, dog.furDark],
+                [8, 11, 16, 1, dog.furDark],
+                [7, 12, 18, 3, dog.furLight],
+                [7, 15, 18, 4, dog.furLight],
+                [8, 19, 16, 1, dog.furLight],
+                [10, 20, 12, 1, dog.furDark],
+                [10, 10, 12, 2, "rgba(0,0,0,0.10)"],
+                [11, 11, 10, 2, "rgba(255,255,255,0.18)"],
+                [12, 14, 8, 1, "rgba(255,255,255,0.12)"],
+                [8, 16, 3, 2, "rgba(0,0,0,0.08)"],
+                [21, 16, 3, 2, "rgba(0,0,0,0.08)"]
+            ];
+            const fluffyBlocks = dog.fluffy ? [
+                [5, 15, 2, 3, dog.furDark],
+                [25, 15, 2, 3, dog.furDark],
+                [6, 16, 2, 3, dog.furLight],
+                [24, 16, 2, 3, dog.furLight],
+                [12, 7, 2, 1, dog.furDark],
+                [18, 7, 2, 1, dog.furDark],
+                [13, 8, 2, 1, dog.furLight],
+                [17, 8, 2, 1, dog.furLight]
+            ] : [];
+            const muzzleBase = dog.muzzle || "rgba(255,255,255,0.82)";
+            const muzzle = [
+                [12, 16, 8, 1, outline],
+                [10, 17, 12, 1, outline],
+                [9, 18, 14, 1, outline],
+                [9, 19, 14, 3, outline],
+                [10, 22, 12, 1, outline],
+                [12, 23, 8, 1, outline],
+                [11, 17, 10, 1, muzzleBase],
+                [10, 18, 12, 1, muzzleBase],
+                [10, 19, 12, 2, muzzleBase],
+                [11, 21, 10, 1, muzzleBase],
+                [11, 21, 10, 1, "rgba(122,93,74,0.15)"]
+            ];
+            const features = [
+                [11, 14, 3, 2, dog.eye],
+                [18, 14, 3, 2, dog.eye],
+                [12, 14, 1, 1, "rgba(255,255,255,0.82)"],
+                [19, 14, 1, 1, "rgba(255,255,255,0.82)"],
+                [14, 18, 4, 2, dog.nose],
+                [15, 20, 2, 1, dog.nose],
+                [15, 21, 1, 2, "#655048"],
+                [14, 22, 1, 1, "#655048"],
+                [17, 22, 1, 1, "#655048"],
+                [6, 18, 3, 1, "rgba(48,37,33,0.45)"],
+                [23, 18, 3, 1, "rgba(48,37,33,0.45)"]
+            ];
+            const blush = dog.blush ? [
+                [8, 18, 2, 1, "#f6b1b4", 0.6],
+                [22, 18, 2, 1, "#f6b1b4", 0.6]
+            ] : [];
+            const collar = dog.collar ? [
+                [10, 23, 12, 1, "#d94f43"],
+                [12, 24, 8, 1, "#d94f43"],
+                [15, 24, 2, 2, "#f4d16a"],
+                [15, 24, 2, 1, "rgba(255,255,255,0.28)"]
+            ] : [];
 
             return `
-                <svg viewBox="0 0 96 88" aria-hidden="true">
-                    <defs>
-                        <linearGradient id="fur-${uid}" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="${dog.furLight}" />
-                            <stop offset="100%" stop-color="${dog.furDark}" />
-                        </linearGradient>
-                    </defs>
-                    <ellipse cx="48" cy="74" rx="21" ry="7.5" fill="rgba(0,0,0,0.10)" />
-                    ${earSvg}
-                    ${fluffyCheeks}
-                    <ellipse cx="48" cy="41" rx="24" ry="21" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2.2" />
-                    ${patternSvg}
-                    <ellipse cx="48" cy="57" rx="16.2" ry="12.8" fill="${dog.muzzle || "rgba(255,255,255,0.8)"}" opacity="0.97" stroke="rgba(120,96,82,0.22)" stroke-width="1" />
-                    <ellipse cx="38.5" cy="44" rx="3.3" ry="4.5" fill="${dog.eye}" />
-                    <ellipse cx="57.5" cy="44" rx="3.3" ry="4.5" fill="${dog.eye}" />
-                    <circle cx="39.2" cy="42.9" r="1" fill="#ffffff" />
-                    <circle cx="58.2" cy="42.9" r="1" fill="#ffffff" />
-                    <ellipse cx="48" cy="52" rx="4.6" ry="3.5" fill="${dog.nose}" />
-                    <path d="M48 55.6c-1.1 2-2.8 3.3-5.1 4.2" stroke="#655048" stroke-width="1.45" stroke-linecap="round" fill="none" />
-                    <path d="M48 55.6c1.1 2 2.8 3.3 5.1 4.2" stroke="#655048" stroke-width="1.45" stroke-linecap="round" fill="none" />
-                    <path d="M30 51c-3.8-1.1-6.9-1.2-10.1-.5" stroke="#6b5a51" stroke-width="1.2" stroke-linecap="round" />
-                    <path d="M66 51c3.8-1.1 6.9-1.2 10.1-.5" stroke="#6b5a51" stroke-width="1.2" stroke-linecap="round" />
-                    ${blushSvg}
-                    ${collarSvg}
+                <svg viewBox="0 0 96 96" aria-hidden="true" shape-rendering="crispEdges">
+                    ${renderDogPixels(shadow)}
+                    ${renderDogPixels(getDogPixelEarBlocks(dog, outline))}
+                    ${renderDogPixels(faceBase)}
+                    ${renderDogPixels(fluffyBlocks)}
+                    ${renderDogPixels(getDogPixelPatternBlocks(dog))}
+                    ${renderDogPixels(muzzle)}
+                    ${renderDogPixels(features)}
+                    ${renderDogPixels(blush)}
+                    ${renderDogPixels(collar)}
                 </svg>
             `;
         }
 
-        function getDogEarSvg(dog, uid) {
+        function renderDogPixels(blocks, scale = 3) {
+            return blocks.map(([x, y, w, h, fill, opacity = 1]) => `
+                <rect x="${x * scale}" y="${y * scale}" width="${w * scale}" height="${h * scale}" fill="${fill}"${opacity < 1 ? ` opacity="${opacity}"` : ""} />
+            `).join("");
+        }
+
+        function getDogPixelEarBlocks(dog, outline) {
             switch (dog.earType) {
                 case "floppy":
-                    return `
-                        <path d="M26 31c-9.8 1.2-13.8 9.2-11.4 19.8 4.9 1.5 10.1-1.9 13-8.3 2-4.5 1.7-8.1-1.6-11.5z" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M70 31c9.8 1.2 13.8 9.2 11.4 19.8-4.9 1.5-10.1-1.9-13-8.3-2-4.5-1.7-8.1 1.6-11.5z" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M22.5 35c-4.4 2.6-5.6 8.2-4.1 12.8 2.6-.2 5-2.5 6.6-6.1 1.3-2.8.9-5-.6-6.7z" fill="${dog.ear}" opacity="0.88" />
-                        <path d="M73.5 35c4.4 2.6 5.6 8.2 4.1 12.8-2.6-.2-5-2.5-6.6-6.1-1.3-2.8-.9-5 .6-6.7z" fill="${dog.ear}" opacity="0.88" />
-                    `;
+                    return [
+                        [5, 11, 2, 7, outline],
+                        [6, 10, 3, 1, outline],
+                        [7, 11, 1, 6, dog.furDark],
+                        [7, 12, 1, 4, dog.ear, 0.9],
+                        [25, 11, 2, 7, outline],
+                        [23, 10, 3, 1, outline],
+                        [24, 11, 1, 6, dog.furDark],
+                        [24, 12, 1, 4, dog.ear, 0.9]
+                    ];
                 case "round":
-                    return `
-                        <ellipse cx="24" cy="31" rx="9.6" ry="12.6" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2" />
-                        <ellipse cx="72" cy="31" rx="9.6" ry="12.6" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2" />
-                        <ellipse cx="24" cy="33" rx="5.3" ry="7.4" fill="${dog.ear}" opacity="0.82" />
-                        <ellipse cx="72" cy="33" rx="5.3" ry="7.4" fill="${dog.ear}" opacity="0.82" />
-                    `;
+                    return [
+                        [5, 9, 4, 4, outline],
+                        [6, 10, 2, 2, dog.furDark],
+                        [6, 11, 2, 1, dog.ear, 0.88],
+                        [23, 9, 4, 4, outline],
+                        [24, 10, 2, 2, dog.furDark],
+                        [24, 11, 2, 1, dog.ear, 0.88]
+                    ];
                 default:
-                    return `
-                        <path d="M25 33L33 14L42 32Z" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2.2" stroke-linejoin="round" />
-                        <path d="M71 33L63 14L54 32Z" fill="url(#fur-${uid})" stroke="#302521" stroke-width="2.2" stroke-linejoin="round" />
-                        <path d="M30 30.5L33.4 21l4.4 10.1z" fill="${dog.ear}" opacity="0.88" />
-                        <path d="M66 30.5L62.6 21l-4.4 10.1z" fill="${dog.ear}" opacity="0.88" />
-                    `;
+                    return [
+                        [7, 6, 1, 4, outline],
+                        [8, 5, 3, 1, outline],
+                        [11, 6, 1, 4, outline],
+                        [8, 6, 3, 3, dog.furDark],
+                        [9, 7, 1, 2, dog.ear, 0.9],
+                        [21, 6, 1, 4, outline],
+                        [22, 5, 3, 1, outline],
+                        [25, 6, 1, 4, outline],
+                        [22, 6, 3, 3, dog.furDark],
+                        [23, 7, 1, 2, dog.ear, 0.9]
+                    ];
             }
         }
 
-        function getDogPatternSvg(dog) {
+        function getDogPixelPatternBlocks(dog) {
             const color = dog.patternColor || "rgba(255,255,255,0.88)";
             switch (dog.pattern) {
                 case "cream":
-                    return `
-                        <path d="M48 30c5.1 3.2 6.8 8.1 6.2 15.2-3.9-2.4-8.1-3.4-12.4-2.8-.2-5.3 1.9-9.5 6.2-12.4z" fill="${color}" opacity="0.84" />
-                    `;
+                    return [
+                        [13, 10, 6, 1, color, 0.95],
+                        [12, 11, 8, 2, color, 0.92],
+                        [13, 13, 6, 2, color, 0.9]
+                    ];
                 case "blaze":
-                    return `
-                        <path d="M48 20c5.4 7 5.1 16.3 0 24-5.1-7.7-5.4-17 0-24z" fill="${color}" opacity="0.9" />
-                    `;
+                    return [
+                        [15, 9, 2, 2, color, 0.95],
+                        [14, 11, 4, 4, color, 0.92],
+                        [15, 15, 2, 3, color, 0.9]
+                    ];
                 case "mask":
-                    return `
-                        <path d="M27 39c5.9-9.6 12.9-13.6 21-13.6s15.1 4 21 13.6c-4.9-1.6-11.9-2.8-21-2.8-9.1 0-16.1 1.2-21 2.8z" fill="${color}" opacity="0.92" />
-                    `;
+                    return [
+                        [12, 9, 8, 2, color, 0.94],
+                        [8, 11, 6, 4, color, 0.92],
+                        [18, 11, 6, 4, color, 0.92],
+                        [13, 15, 6, 1, color, 0.78]
+                    ];
                 case "saddle":
-                    return `
-                        <path d="M24 38c3.9-10.6 12.2-16.2 24-16.2 11.8 0 20.1 5.6 24 16.2-5.4-2.4-13.4-4.2-24-4.2-10.6 0-18.6 1.8-24 4.2z" fill="${color}" opacity="0.95" />
-                    `;
+                    return [
+                        [8, 9, 16, 3, color, 0.96],
+                        [9, 12, 14, 2, color, 0.92]
+                    ];
                 case "patch":
-                    return `
-                        <ellipse cx="35" cy="42" rx="8.3" ry="9.5" fill="${color}" opacity="0.92" />
-                        <path d="M57 29c4.7 2.8 6.8 6.2 7.4 10.9-3.4-1.2-6.9-1.8-10.5-1.8.3-3.8 1.1-6.7 3.1-9.1z" fill="${color}" opacity="0.72" />
-                    `;
+                    return [
+                        [8, 12, 6, 5, color, 0.94],
+                        [19, 10, 4, 3, color, 0.82]
+                    ];
                 case "spots":
-                    return `
-                        <circle cx="36" cy="31" r="4.3" fill="${color}" opacity="0.86" />
-                        <ellipse cx="62" cy="30" rx="5.1" ry="4" fill="${color}" opacity="0.85" />
-                        <ellipse cx="67" cy="43" rx="4.8" ry="4.1" fill="${color}" opacity="0.8" />
-                    `;
+                    return [
+                        [9, 10, 3, 2, color, 0.86],
+                        [20, 11, 3, 2, color, 0.84],
+                        [21, 15, 2, 2, color, 0.8]
+                    ];
                 case "brows":
-                    return `
-                        <ellipse cx="38.4" cy="35" rx="4.1" ry="2.4" fill="${color}" opacity="0.92" />
-                        <ellipse cx="57.6" cy="35" rx="4.1" ry="2.4" fill="${color}" opacity="0.92" />
-                    `;
+                    return [
+                        [11, 12, 3, 1, color, 0.95],
+                        [18, 12, 3, 1, color, 0.95]
+                    ];
                 case "merle":
-                    return `
-                        <path d="M34 26c2.2 1.7 2.6 4.4 1.2 8-3.2-.3-5.5-1.7-6.7-4.2 1.2-2 2.9-3.3 5.5-3.8z" fill="${color}" opacity="0.68" />
-                        <path d="M60 24c3 1 4.9 3.1 5.8 6.7-1.8 2.6-4.4 3.7-7.7 3.4-1.1-3.2-.5-6.3 1.9-10.1z" fill="${color}" opacity="0.64" />
-                        <path d="M67 41c2.6.7 4.4 2.4 5 5.4-1.1 2-3 3-5.9 2.7-1.4-2.6-1.1-5.3.9-8.1z" fill="${color}" opacity="0.58" />
-                    `;
+                    return [
+                        [9, 10, 3, 2, color, 0.66],
+                        [17, 11, 4, 2, color, 0.58],
+                        [20, 15, 2, 2, color, 0.64]
+                    ];
                 default:
-                    return "";
+                    return [];
             }
         }
+
 
         function startQuiz() {
             switchScreen("quiz");
@@ -1855,9 +1935,11 @@
                     if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 });
                 ctx.closePath();
-                ctx.fillStyle = level % 2 === 0 ? "rgba(0, 0, 0, 0.03)" : "rgba(0, 0, 0, 0.015)";
-                ctx.strokeStyle = "rgba(0, 0, 0, 0.08)";
+                ctx.fillStyle = level % 2 === 0 ? "rgba(216, 166, 161, 0.1)" : "rgba(216, 166, 161, 0.05)";
+                ctx.strokeStyle = "rgba(106, 75, 70, 0.14)";
+
                 ctx.lineWidth = 1;
+
                 ctx.fill();
                 ctx.stroke();
             }
@@ -1869,12 +1951,14 @@
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(x, y);
-                ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
+                ctx.strokeStyle = "rgba(106, 75, 70, 0.2)";
                 ctx.stroke();
 
                 const textX = centerX + Math.cos(angle) * (radius + 24);
                 const textY = centerY + Math.sin(angle) * (radius + 24);
-                ctx.fillStyle = "#666";
+                ctx.fillStyle = "#7a6059";
+
+
                 ctx.font = "700 13px Microsoft YaHei";
                 ctx.textAlign = textX < centerX - 6 ? "right" : textX > centerX + 6 ? "left" : "center";
                 ctx.textBaseline = textY < centerY ? "bottom" : "top";
@@ -1890,8 +1974,8 @@
                 if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
             });
             ctx.closePath();
-            ctx.fillStyle = "rgba(17, 17, 17, 0.18)";
-            ctx.strokeStyle = "#111";
+            ctx.fillStyle = "rgba(216, 166, 161, 0.24)";
+            ctx.strokeStyle = "#c98c86";
             ctx.lineWidth = 2.5;
             ctx.fill();
             ctx.stroke();
@@ -1903,13 +1987,15 @@
                 const y = centerY + Math.sin(angle) * scaledRadius;
                 ctx.beginPath();
                 ctx.arc(x, y, 5, 0, Math.PI * 2);
-                ctx.fillStyle = "#111";
+                ctx.fillStyle = "#c98c86";
                 ctx.fill();
                 ctx.beginPath();
                 ctx.arc(x, y, 2, 0, Math.PI * 2);
-                ctx.fillStyle = "#f0db67";
+                ctx.fillStyle = "#fff4f2";
                 ctx.fill();
             });
+
+
 
             ctx.restore();
         }
