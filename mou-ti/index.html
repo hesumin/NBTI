@@ -55,7 +55,34 @@
             display: block;
         }
 
+        .screen.quiz-screen.active {
+            display: flex;
+        }
+
+        .quiz-screen {
+            min-height: calc(100dvh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-main {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-footer {
+            position: sticky;
+            bottom: 0;
+            margin-top: auto;
+            padding: 14px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
+            background: linear-gradient(180deg, rgba(244, 241, 235, 0) 0%, rgba(244, 241, 235, 0.92) 20%, rgba(244, 241, 235, 0.98) 100%);
+            backdrop-filter: blur(6px);
+        }
+
         @keyframes fadeIn {
+
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -446,11 +473,17 @@
         }
 
         .options {
+            flex: 1;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             gap: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 0;
+            overflow-y: auto;
+            padding: 2px 2px 8px;
+            scrollbar-width: thin;
         }
+
 
         .option {
             width: 100%;
@@ -822,7 +855,7 @@
             <p class="bottom-note">来小红书找我玩 <a href="https://xhslink.com/m/9ijxa3lmbI8" target="_blank" rel="noopener noreferrer">@禾苏</a> · MouTI 已到位 🐮</p>
         </section>
 
-        <section id="quizScreen" class="screen">
+        <section id="quizScreen" class="screen quiz-screen">
             <div class="topbar">
                 <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
                 <div id="progressCount" class="progress-count">1 / 12</div>
@@ -830,22 +863,27 @@
             </div>
             <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
 
-            <div class="prompt-row">
-                <div id="promptAvatar" class="prompt-avatar">🐮</div>
-                <div class="prompt-bubble">
-                    <div class="prompt-category"><span class="dot"></span><span id="promptCategory">合群还是单拧，这是个问题</span></div>
-                    <div id="promptHint" class="prompt-hint">牛生很多时候不在于跑多快，而在于你遇事先冲、先想，还是先装没看见。</div>
+            <div class="quiz-main">
+                <div class="prompt-row">
+                    <div id="promptAvatar" class="prompt-avatar">🐮</div>
+                    <div class="prompt-bubble">
+                        <div class="prompt-category"><span class="dot"></span><span id="promptCategory">合群还是单拧，这是个问题</span></div>
+                        <div id="promptHint" class="prompt-hint">牛生很多时候不在于跑多快，而在于你遇事先冲、先想，还是先装没看见。</div>
+                    </div>
                 </div>
+
+                <h2 id="questionTitle" class="question-title">加载中...</h2>
+                <div id="optionList" class="options"></div>
             </div>
 
-            <h2 id="questionTitle" class="question-title">加载中...</h2>
-            <div id="optionList" class="options"></div>
-
-            <button id="nextBtn" class="primary-btn" type="button" disabled>
-                继续
-                <span>→</span>
-            </button>
+            <div class="quiz-footer">
+                <button id="nextBtn" class="primary-btn" type="button" disabled>
+                    继续
+                    <span>→</span>
+                </button>
+            </div>
         </section>
+
 
         <section id="resultScreen" class="screen result-screen">
             <div class="result-badge">🐂 你的 MouTI 牛格档案已生成</div>

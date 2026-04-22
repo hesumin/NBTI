@@ -1,6 +1,7 @@
 # NBTI
 
-把 CatTI 和 MouTI 放进同一个仓库后的统一项目。
+把 CatTI、MouTI 和 DogTI 放进同一个仓库后的统一项目。
+
 
 ## 项目结构
 
@@ -10,29 +11,36 @@ NBTI/
 │  └─ index.html
 ├─ mou-ti/
 │  └─ index.html
+├─ dog-ti/
+│  └─ index.html
 └─ index.html
 ```
+
 
 ## 约定后的发布流程
 
 以后统一走这条链路：
 
-1. 先在本地修改 `cat-ti/index.html` 或 `mou-ti/index.html`
+1. 先在本地修改 `cat-ti/index.html`、`mou-ti/index.html` 或 `dog-ti/index.html`
 2. 提交并推送到 GitHub 仓库 `https://github.com/hesumin/NBTI`
 3. 由 GitHub Actions 自动把对应目录发布到 Cloudflare Pages
 
+
 ## 已落地的自动部署方式
 
-仓库内已经增加两个工作流：
+仓库内已经增加三个工作流：
 
 - `.github/workflows/deploy-cat-ti.yml`
 - `.github/workflows/deploy-mou-ti.yml`
+- `.github/workflows/deploy-dog-ti.yml`
 
 触发逻辑：
 
 - 修改 `cat-ti/**` 并推送到 `main` → 自动部署 `cat-ti`
 - 修改 `mou-ti/**` 并推送到 `main` → 自动部署 `mou-ti`
+- 修改 `dog-ti/**` 并推送到 `main` → 自动部署 `dog-ti`
 - 也支持在 GitHub Actions 页面手动触发
+
 
 ## GitHub 需要补的 Secrets
 
@@ -58,9 +66,16 @@ NBTI/
 - Deploy directory: `./mou-ti`
 - Branch: `main`
 
+### DogTI
+- Project name: `dog-ti`
+- Deploy directory: `./dog-ti`
+- Branch: `main`
+- 首次运行会在 GitHub Actions 中自动尝试创建 `dog-ti` 的 Cloudflare Pages 项目
 
 ## 页面入口
 
 - CatTI: `cat-ti/index.html`
 - MouTI: `mou-ti/index.html`
+- DogTI: `dog-ti/index.html`
 - 根目录导航页: `index.html`
+
