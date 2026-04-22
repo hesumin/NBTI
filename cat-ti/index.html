@@ -512,35 +512,36 @@
 
         .prompt-row {
             display: grid;
-            grid-template-columns: 84px 1fr;
-            gap: 14px;
+            grid-template-columns: 72px 1fr;
+            gap: 12px;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
         }
 
         .prompt-avatar {
-            width: 84px;
-            height: 84px;
-            border-radius: 24px;
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
             background: rgba(255, 255, 255, 0.9);
             display: grid;
             place-items: center;
             border: 1.5px solid #ececec;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
-            font-size: 40px;
+            font-size: 34px;
         }
 
         .prompt-bubble {
-            min-height: 84px;
+            min-height: 72px;
             background: rgba(255, 255, 255, 0.75);
-            border-radius: 22px;
+            border-radius: 20px;
             border: 1.5px solid #ebebeb;
-            padding: 16px 18px;
+            padding: 13px 15px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
+
 
         .prompt-category {
             display: inline-flex;
@@ -566,9 +567,9 @@
         }
 
         .question-title {
-            margin: 0 0 22px;
-            font-size: clamp(28px, 8vw, 44px);
-            line-height: 1.28;
+            margin: 0 0 16px;
+            font-size: clamp(25px, 7.4vw, 40px);
+            line-height: 1.2;
             font-weight: 900;
             letter-spacing: -0.02em;
         }
@@ -578,10 +579,10 @@
             min-height: 0;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
             margin-bottom: 0;
             overflow-y: auto;
-            padding: 2px 2px 8px;
+            padding: 2px 2px 4px;
             scrollbar-width: thin;
         }
 
@@ -589,18 +590,19 @@
         .option {
             width: 100%;
             display: grid;
-            grid-template-columns: 44px 1fr;
-            gap: 14px;
+            grid-template-columns: 38px 1fr;
+            gap: 12px;
             align-items: start;
             text-align: left;
-            padding: 22px 22px 22px 18px;
-            border-radius: 24px;
+            padding: 16px 16px 16px 14px;
+            border-radius: 20px;
             border: 2px solid #dddddd;
             background: rgba(255, 255, 255, 0.92);
             color: var(--text);
             cursor: pointer;
             transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
         }
+
 
         .option.active {
             background: #080808;
@@ -610,7 +612,7 @@
         }
 
         .option-key {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 900;
             line-height: 1;
             color: #9ea3ad;
@@ -621,16 +623,119 @@
         }
 
         .option-text {
-            font-size: 18px;
-            line-height: 1.7;
+            font-size: 16.5px;
+            line-height: 1.55;
             font-weight: 800;
         }
+
 
         .result-screen {
             padding-bottom: 24px;
         }
 
+        .mapping-screen {
+            padding-bottom: 30px;
+        }
+
+        .mapping-hero {
+            margin: 10px 0 18px;
+        }
+
+        .mapping-title {
+            margin: 14px 0 10px;
+            font-size: clamp(28px, 8vw, 38px);
+            line-height: 1.08;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .mapping-subtitle {
+            margin: 0;
+            color: #6d6d6d;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .mapping-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            border: 1.5px solid #ebebeb;
+            padding: 18px 18px 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+        }
+
+        .mapping-card.active {
+            border-color: #111;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+        }
+
+        .mapping-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .mapping-code-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mapping-card-code {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #111;
+            color: #fff;
+            font-family: "Courier New", monospace;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .mapping-current {
+            color: #767676;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .mapping-card-emoji {
+            font-size: 34px;
+            line-height: 1;
+        }
+
+        .mapping-card-breed {
+            margin: 14px 0 6px;
+            font-size: clamp(24px, 6.4vw, 30px);
+            line-height: 1.12;
+            font-weight: 900;
+        }
+
+        .mapping-card-role {
+            margin: 0;
+            color: #585858;
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .mapping-card .tag-list {
+            margin: 14px 0 0;
+        }
+
         .result-badge {
+
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -644,27 +749,27 @@
         }
 
         .result-head {
-            margin: 16px 0 18px;
+            margin: 12px 0 14px;
         }
 
         .result-code {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.28em;
             color: #8c8060;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .result-breed {
             margin: 0;
-            font-size: clamp(34px, 9vw, 50px);
-            line-height: 1.12;
+            font-size: clamp(30px, 8vw, 44px);
+            line-height: 1.08;
             font-weight: 900;
         }
 
         .result-role {
-            margin: 10px 0 0;
-            font-size: 18px;
+            margin: 8px 0 0;
+            font-size: 16px;
             color: #6b6b6b;
             font-weight: 700;
         }
@@ -672,37 +777,37 @@
         .result-hero {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 100%);
             border: 1.5px solid #ececec;
-            border-radius: 28px;
-            padding: 20px 20px 22px;
+            border-radius: 24px;
+            padding: 16px 16px 18px;
             box-shadow: var(--shadow);
         }
 
         .result-emoji {
-            font-size: 72px;
+            font-size: 60px;
             line-height: 1;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .tag-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin: 14px 0 16px;
+            gap: 6px;
+            margin: 12px 0 14px;
         }
 
         .tag {
-            padding: 8px 12px;
+            padding: 7px 10px;
             border-radius: 999px;
             background: #f4f4f4;
             color: #555;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
         }
 
         .result-summary {
             margin: 0;
-            font-size: 16px;
-            line-height: 1.9;
+            font-size: 15px;
+            line-height: 1.75;
             color: #353535;
             font-weight: 600;
         }
@@ -710,23 +815,24 @@
         .panel-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 14px;
-            margin-top: 16px;
+            gap: 12px;
+            margin-top: 14px;
         }
 
         .panel {
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 24px;
+            border-radius: 22px;
             border: 1.5px solid #ebebeb;
-            padding: 18px 18px 20px;
+            padding: 16px 16px 18px;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
         }
 
         .panel-title {
-            margin: 0 0 14px;
-            font-size: 18px;
+            margin: 0 0 12px;
+            font-size: 17px;
             font-weight: 900;
         }
+
 
         .radar-wrap {
             display: flex;
@@ -820,10 +926,11 @@
 
         .action-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 12px;
             margin-top: 18px;
         }
+
 
         .secondary-btn {
             background: #101010;
@@ -874,20 +981,53 @@
                 height: 52px;
             }
 
-            .option {
-                padding: 18px 18px 18px 16px;
+            .prompt-row {
+                grid-template-columns: 62px 1fr;
+                gap: 10px;
+                margin-bottom: 14px;
             }
 
+            .prompt-avatar {
+                width: 62px;
+                height: 62px;
+                border-radius: 18px;
+                font-size: 30px;
+            }
 
+            .prompt-bubble {
+                min-height: 62px;
+                padding: 11px 13px;
+            }
+
+            .question-title {
+                margin-bottom: 14px;
+                font-size: clamp(23px, 7vw, 34px);
+            }
+
+            .option {
+                grid-template-columns: 34px 1fr;
+                gap: 10px;
+                padding: 14px 14px 14px 12px;
+            }
+
+            .option-key {
+                font-size: 22px;
+            }
 
             .option-text {
-                font-size: 17px;
+                font-size: 15.5px;
+                line-height: 1.48;
+            }
+
+            .result-breed {
+                font-size: clamp(28px, 7.8vw, 38px);
             }
 
             .action-row {
                 grid-template-columns: 1fr;
             }
         }
+
     </style>
 </head>
 <body>
@@ -997,11 +1137,29 @@
             </div>
 
             <div class="action-row">
-                <button id="shareBtn" class="secondary-btn" type="button">分享给朋友</button>
+                <button id="typeMapBtn" class="secondary-btn" type="button">查看16型图鉴</button>
+                <button id="shareBtn" class="ghost-btn" type="button">分享给朋友</button>
                 <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
             </div>
         </section>
+
+        <section id="typeMapScreen" class="screen mapping-screen">
+            <div class="topbar">
+                <button id="typeMapBackBtn" class="icon-btn" type="button" aria-label="返回结果页">←</button>
+                <div class="progress-count">16 型图鉴</div>
+                <div></div>
+            </div>
+
+            <div class="mapping-hero">
+                <div class="result-badge">🐾 CatTI 全类型图鉴</div>
+                <h1 class="mapping-title">16 种猫格映射</h1>
+                <p class="mapping-subtitle">按类型代码查看猫咪品种、角色标题和标签。</p>
+            </div>
+
+            <div id="typeMapGrid" class="mapping-grid"></div>
+        </section>
     </div>
+
 
     <div id="toast" class="toast">已复制</div>
 
@@ -1316,6 +1474,7 @@
         const landingScreen = document.getElementById("landingScreen");
         const quizScreen = document.getElementById("quizScreen");
         const resultScreen = document.getElementById("resultScreen");
+        const typeMapScreen = document.getElementById("typeMapScreen");
         const progressCount = document.getElementById("progressCount");
         const progressFill = document.getElementById("progressFill");
         const promptAvatar = document.getElementById("promptAvatar");
@@ -1328,9 +1487,13 @@
         const startBtn = document.getElementById("startBtn");
         const restartBtn = document.getElementById("restartBtn");
         const shareBtn = document.getElementById("shareBtn");
+        const typeMapBtn = document.getElementById("typeMapBtn");
+        const typeMapBackBtn = document.getElementById("typeMapBackBtn");
+        const typeMapGrid = document.getElementById("typeMapGrid");
         const toast = document.getElementById("toast");
         const heroCatRow1 = document.getElementById("heroCatRow1");
         const heroCatRow2 = document.getElementById("heroCatRow2");
+
 
         renderHeroCats();
 
@@ -1340,6 +1503,9 @@
         backBtn.addEventListener("click", goPrev);
         restartBtn.addEventListener("click", restartQuiz);
         shareBtn.addEventListener("click", copyShareText);
+        typeMapBtn.addEventListener("click", openTypeMap);
+        typeMapBackBtn.addEventListener("click", backToResult);
+
 
         function renderHeroCats() {
             renderHeroRow(heroCatRow1, heroCatsRow1, "row1");
@@ -1458,13 +1624,47 @@
             switchScreen("landing");
         }
 
+        function openTypeMap() {
+            renderTypeMap();
+            switchScreen("typeMap");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function backToResult() {
+            switchScreen("result");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
         function switchScreen(target) {
             landingScreen.classList.toggle("active", target === "landing");
             quizScreen.classList.toggle("active", target === "quiz");
             resultScreen.classList.toggle("active", target === "result");
+            typeMapScreen.classList.toggle("active", target === "typeMap");
+        }
+
+        function renderTypeMap() {
+            const currentCode = state.answers.every((answer) => answer !== null) ? computeResult().code : "";
+            typeMapGrid.innerHTML = Object.entries(profiles).map(([code, profile]) => {
+                const isCurrent = code === currentCode;
+                return `
+                    <article class="mapping-card ${isCurrent ? "active" : ""}">
+                        <div class="mapping-card-head">
+                            <div class="mapping-code-wrap">
+                                <div class="mapping-card-code">${code}</div>
+                                <span class="mapping-current">${isCurrent ? "你的结果" : "类型映射"}</span>
+                            </div>
+                            <div class="mapping-card-emoji">${profile.emoji}</div>
+                        </div>
+                        <h3 class="mapping-card-breed">${profile.breed}</h3>
+                        <p class="mapping-card-role">${profile.role}</p>
+                        <div class="tag-list">${profile.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
+                    </article>
+                `;
+            }).join("");
         }
 
         function renderQuestion() {
+
             const question = questions[state.index];
             const selected = state.answers[state.index];
             progressCount.textContent = `${state.index + 1} / ${questions.length}`;
@@ -1590,7 +1790,8 @@
                 </div>
             `).join("");
 
-            const shareText = `我测出来的 CatTI 是【${profile.breed}｜${profile.role}】\n代码：${code}\n标签：${profile.tags.join(" / ")}\n一句话总结：${profile.summary}`;
+            const shareText = `我测出来的 CatTI 是【${profile.breed}｜${profile.role}】\n代码：${code}\n标签：${profile.tags.join(" / ")}\n一句话总结：${profile.summary}\n测试链接：https://cat-ti.pages.dev/`;
+
             document.getElementById("shareBox").textContent = shareText;
             shareBtn.dataset.shareText = shareText;
 
@@ -1684,7 +1885,8 @@
             const text = shareBtn.dataset.shareText || document.getElementById("shareBox").textContent;
             try {
                 await navigator.clipboard.writeText(text);
-                showToast("分享文案已复制，可以直接发给朋友");
+                showToast("分享文案和链接已复制，可以直接发给朋友");
+
             } catch (error) {
                 showToast("复制失败，请手动长按复制");
             }
