@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CatTI - 猫咪性格测试</title>
+    <style>
+        :root {
+            --bg: #f3f3f1;
+            --card: #ffffff;
+            --text: #0f0f0f;
+            --muted: #9c9c9c;
+            --line: #dbdbdb;
+            --yellow: #f0db67;
+            --black: #050505;
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+            --radius-md: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background: radial-gradient(circle at top, #fafaf8 0%, var(--bg) 42%, #ececea 100%);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px 14px 40px;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .app {
+            width: min(100%, 430px);
+            min-height: calc(100dvh - 40px);
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.28s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            gap: 8px;
+            letter-spacing: 2px;
+            font-family: "Courier New", monospace;
+            font-size: clamp(42px, 12vw, 64px);
+            font-weight: 900;
+            line-height: 1;
+            margin: 10px 0 22px;
+            perspective: 800px;
+        }
+
+        .logo span {
+            display: inline-block;
+            background: #111;
+            color: #fff;
+            padding: 8px 6px 4px;
+            box-shadow: 8px 8px 0 #000;
+            min-width: 0.95em;
+            text-align: center;
+            transform-origin: center bottom;
+            animation: logoBounce 3.6s cubic-bezier(0.35, 0, 0.2, 1) infinite;
+            will-change: transform;
+        }
+
+        .logo span:nth-child(2) {
+            animation-delay: 0.12s;
+        }
+
+        .logo span:nth-child(3) {
+            animation-delay: 0.24s;
+        }
+
+        .logo span:nth-child(4) {
+            animation-delay: 0.36s;
+        }
+
+        .logo span:nth-child(5) {
+            animation-delay: 0.48s;
+        }
+
+        .hero {
+            text-align: center;
+            padding-top: 6px;
+        }
+
+        .sprite-wall {
+            position: relative;
+            overflow: hidden;
+            margin: 12px 0 32px;
+            padding: 10px 0;
+        }
+
+        .sprite-wall::before,
+        .sprite-wall::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 26px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sprite-wall::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--bg) 0%, rgba(243, 243, 241, 0) 100%);
+        }
+
+        .sprite-wall::after {
+            right: 0;
+            background: linear-gradient(270deg, var(--bg) 0%, rgba(243, 243, 241, 0) 100%);
+        }
+
+        .sprite-marquee {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            margin-bottom: 16px;
+            animation: driftLeft 24s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+            will-change: transform;
+        }
+
+        .sprite-marquee.reverse {
+            animation-name: driftRight;
+            animation-duration: 26s;
+        }
+
+        .sprite-marquee:last-child {
+            margin-bottom: 0;
+        }
+
+        .sprite {
+            --stack-y: 0px;
+            --tilt: 0deg;
+            --tilt-alt: 0.4deg;
+            flex: 0 0 96px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 248, 248, 0.94) 100%);
+            border: 2px solid #111;
+            border-radius: 24px;
+            padding: 10px 8px 11px;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.08), 0 8px 0 rgba(0, 0, 0, 0.12);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            animation: cardBob 4s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .sprite::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: -13px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.12);
+            filter: blur(10px);
+            opacity: 0.55;
+            z-index: -1;
+        }
+
+        .sprite:nth-child(4n + 1) {
+            --stack-y: -4px;
+            --tilt: -1.3deg;
+            --tilt-alt: 0.2deg;
+        }
+
+        .sprite:nth-child(4n + 2) {
+            --stack-y: 3px;
+            --tilt: 1deg;
+            --tilt-alt: -0.35deg;
+        }
+
+        .sprite:nth-child(4n + 3) {
+            --stack-y: -2px;
+            --tilt: -0.7deg;
+            --tilt-alt: 0.45deg;
+        }
+
+        .sprite:nth-child(4n + 4) {
+            --stack-y: 4px;
+            --tilt: 1.2deg;
+            --tilt-alt: -0.25deg;
+        }
+
+        .sprite:nth-child(2n) {
+            animation-delay: 0.28s;
+        }
+
+        .sprite:nth-child(3n) {
+            animation-delay: 0.62s;
+        }
+
+        .sprite-photo {
+            width: 64px;
+            height: 58px;
+            border-radius: 18px;
+            padding: 5px;
+            background: radial-gradient(circle at 50% 22%, var(--cat-bg-1, #ffffff) 0%, var(--cat-bg-2, #ece8df) 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -8px 14px rgba(0, 0, 0, 0.03);
+        }
+
+        .sprite-photo svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .sprite-name {
+            font-size: 11px;
+            color: #7d7d7d;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        @keyframes logoBounce {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            10% {
+                transform: translateY(0) rotate(0deg);
+            }
+            22% {
+                transform: translateY(-6px) rotate(-0.8deg);
+            }
+            30% {
+                transform: translateY(-2px) rotate(0.3deg);
+            }
+            38% {
+                transform: translateY(-7px) rotate(0.8deg);
+            }
+            48% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        @keyframes driftLeft {
+            0%,
+            12% {
+                transform: translateX(0);
+            }
+            24%,
+            36% {
+                transform: translateX(-7%);
+            }
+            48%,
+            60% {
+                transform: translateX(-14%);
+            }
+            72%,
+            84% {
+                transform: translateX(-21%);
+            }
+            100% {
+                transform: translateX(-28%);
+            }
+        }
+
+        @keyframes driftRight {
+            0%,
+            12% {
+                transform: translateX(-28%);
+            }
+            24%,
+            36% {
+                transform: translateX(-21%);
+            }
+            48%,
+            60% {
+                transform: translateX(-14%);
+            }
+            72%,
+            84% {
+                transform: translateX(-7%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes cardBob {
+            0%,
+            100% {
+                transform: translateY(var(--stack-y)) rotate(var(--tilt)) scale(1);
+            }
+            30% {
+                transform: translateY(calc(var(--stack-y) - 4px)) rotate(var(--tilt-alt)) scale(1.015);
+            }
+            54% {
+                transform: translateY(calc(var(--stack-y) - 1px)) rotate(var(--tilt)) scale(1.005);
+            }
+        }
+
+
+
+        .hero-title {
+            margin: 0 auto 12px;
+            font-size: clamp(28px, 7vw, 40px);
+            line-height: 1.18;
+            font-weight: 900;
+            max-width: 10.5em;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 88%, transparent 88%);
+            padding: 0 4px;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto 18px;
+            max-width: 16em;
+            color: #9ea3ad;
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .hero-chip {
+            border-radius: 999px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1.5px solid var(--line);
+            color: #666;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .primary-btn,
+        .secondary-btn,
+        .ghost-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 999px;
+            min-height: 66px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+        }
+
+        .primary-btn {
+            background: var(--black);
+            color: #fff;
+            box-shadow: var(--shadow);
+            font-size: 18px;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover,
+        .ghost-btn:hover,
+        .icon-btn:hover,
+        .option:hover {
+            transform: translateY(-1px);
+        }
+
+        .primary-btn:disabled {
+            cursor: not-allowed;
+            background: #cacaca;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .bottom-note {
+            margin-top: 22px;
+            color: #99a0aa;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .bottom-note a {
+            color: #4890ff;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .bottom-note a:hover {
+            text-decoration: underline;
+        }
+
+
+        .topbar {
+            display: grid;
+            grid-template-columns: 52px 1fr 52px;
+            align-items: center;
+            gap: 10px;
+            padding-top: 6px;
+        }
+
+        .icon-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 0;
+            background: rgba(255, 255, 255, 0.8);
+            color: #191919;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .progress-count {
+            text-align: center;
+            color: #b0a690;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #dfdfdf;
+            overflow: hidden;
+            margin: 22px 0 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #111 0%, #3e3e3e 100%);
+            border-radius: inherit;
+            transition: width 0.22s ease;
+        }
+
+        .prompt-row {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .prompt-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            display: grid;
+            place-items: center;
+            border: 1.5px solid #ececec;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+            font-size: 40px;
+        }
+
+        .prompt-bubble {
+            min-height: 84px;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 22px;
+            border: 1.5px solid #ebebeb;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .prompt-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6d6d6d;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--yellow);
+            box-shadow: 0 0 0 4px rgba(240, 219, 103, 0.2);
+        }
+
+        .prompt-hint {
+            color: #b3b3b3;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .question-title {
+            margin: 0 0 22px;
+            font-size: clamp(28px, 8vw, 44px);
+            line-height: 1.28;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .option {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 14px;
+            align-items: start;
+            text-align: left;
+            padding: 22px 22px 22px 18px;
+            border-radius: 24px;
+            border: 2px solid #dddddd;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .option.active {
+            background: #080808;
+            color: #fff;
+            border-color: #080808;
+            box-shadow: var(--shadow);
+        }
+
+        .option-key {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            color: #9ea3ad;
+        }
+
+        .option.active .option-key {
+            color: #d9c27a;
+        }
+
+        .option-text {
+            font-size: 18px;
+            line-height: 1.7;
+            font-weight: 800;
+        }
+
+        .result-screen {
+            padding-bottom: 24px;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid #e8e8e8;
+            font-size: 13px;
+            font-weight: 800;
+            color: #5f5f5f;
+        }
+
+        .result-head {
+            margin: 16px 0 18px;
+        }
+
+        .result-code {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            color: #8c8060;
+            margin-bottom: 10px;
+        }
+
+        .result-breed {
+            margin: 0;
+            font-size: clamp(34px, 9vw, 50px);
+            line-height: 1.12;
+            font-weight: 900;
+        }
+
+        .result-role {
+            margin: 10px 0 0;
+            font-size: 18px;
+            color: #6b6b6b;
+            font-weight: 700;
+        }
+
+        .result-hero {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 100%);
+            border: 1.5px solid #ececec;
+            border-radius: 28px;
+            padding: 20px 20px 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-emoji {
+            font-size: 72px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 14px 0 16px;
+        }
+
+        .tag {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #f4f4f4;
+            color: #555;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .result-summary {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.9;
+            color: #353535;
+            font-weight: 600;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            border: 1.5px solid #ebebeb;
+            padding: 18px 18px 20px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .panel-title {
+            margin: 0 0 14px;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .radar-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        #radarCanvas {
+            width: min(100%, 310px);
+            aspect-ratio: 1;
+        }
+
+        .metric-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .metric-item {
+            display: grid;
+            grid-template-columns: 86px 1fr 44px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .metric-label,
+        .metric-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: #666;
+        }
+
+        .metric-value {
+            text-align: right;
+        }
+
+        .metric-track {
+            height: 12px;
+            border-radius: 999px;
+            background: #ededed;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #111 0%, #696969 100%);
+        }
+
+        .insight-text {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.85;
+            color: #424242;
+            font-weight: 600;
+        }
+
+        .tips {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tips li {
+            display: flex;
+            gap: 10px;
+            font-size: 15px;
+            line-height: 1.75;
+            color: #383838;
+            font-weight: 600;
+        }
+
+        .tips li::before {
+            content: "✦";
+            color: #af9a59;
+            font-weight: 900;
+        }
+
+        .share-box {
+            margin-top: 12px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: #0b0b0b;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .secondary-btn {
+            background: #101010;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ghost-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #111;
+            border: 1.5px solid #dbdbdb;
+            font-size: 16px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(17, 17, 17, 0.94);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 20;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 375px) {
+            .sprite-marquee {
+                gap: 10px;
+            }
+
+            .sprite {
+                flex-basis: 84px;
+                min-height: 88px;
+            }
+
+            .sprite-photo {
+                width: 58px;
+                height: 52px;
+            }
+
+            .option {
+                padding: 18px 18px 18px 16px;
+            }
+
+
+
+            .option-text {
+                font-size: 17px;
+            }
+
+            .action-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section id="landingScreen" class="screen active hero">
+            <div class="logo" aria-label="CATTI 标题">
+                <span>C</span><span>A</span><span>T</span><span>T</span><span>I</span>
+            </div>
+
+            <div class="sprite-wall" aria-hidden="true">
+                <div id="heroCatRow1" class="sprite-marquee"></div>
+                <div id="heroCatRow2" class="sprite-marquee reverse"></div>
+            </div>
+
+
+
+            <h1 class="hero-title"><span class="highlight">重生之我变成了一只猫</span></h1>
+            <p class="hero-subtitle">“这一世，我要优雅、任性、理直气壮地活出自己的猫生。”</p>
+
+            <div class="hero-meta">
+                <div class="hero-chip">12 道情境题</div>
+                <div class="hero-chip">16 种猫格结果</div>
+                <div class="hero-chip">带雷达图和相处建议</div>
+            </div>
+
+            <button id="startBtn" class="primary-btn" type="button">
+                <span class="btn-icon">▶</span>
+                开始测试
+            </button>
+
+            <p class="bottom-note">来小红书找我玩 <a href="https://xhslink.com/m/9ijxa3lmbI8" target="_blank" rel="noopener noreferrer">@禾苏</a> · CatTI 已到位 🐱</p>
+
+
+
+        </section>
+
+        <section id="quizScreen" class="screen">
+            <div class="topbar">
+                <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
+                <div id="progressCount" class="progress-count">1 / 12</div>
+                <div></div>
+            </div>
+            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+            <div class="prompt-row">
+                <div id="promptAvatar" class="prompt-avatar">🐱</div>
+                <div class="prompt-bubble">
+                    <div class="prompt-category"><span class="dot"></span><span id="promptCategory">社交还是不社交，这是个问题</span></div>
+                    <div id="promptHint" class="prompt-hint">有些答案决定了你是主动贴贴，还是先躲起来观察局势。</div>
+                </div>
+            </div>
+
+            <h2 id="questionTitle" class="question-title">加载中...</h2>
+            <div id="optionList" class="options"></div>
+
+            <button id="nextBtn" class="primary-btn" type="button" disabled>
+                继续
+                <span>→</span>
+            </button>
+        </section>
+
+        <section id="resultScreen" class="screen result-screen">
+            <div class="result-badge">🐾 你的 CatTI 猫格档案已生成</div>
+
+            <div class="result-head">
+                <div id="resultCode" class="result-code">INFP</div>
+                <h1 id="resultBreed" class="result-breed">挪威森林猫</h1>
+                <p id="resultRole" class="result-role">月光诗人型</p>
+            </div>
+
+            <div class="result-hero">
+                <div id="resultEmoji" class="result-emoji">🐱</div>
+                <div id="resultTags" class="tag-list"></div>
+                <p id="resultSummary" class="result-summary">你有很强的感受力和慢热观察力，表面看起来平静，内心其实戏很多，只是你懒得解释。</p>
+            </div>
+
+            <div class="panel-grid">
+                <div class="panel">
+                    <h3 class="panel-title">人格雷达</h3>
+                    <div class="radar-wrap"><canvas id="radarCanvas" width="320" height="320"></canvas></div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">你的猫生画像</h3>
+                    <div id="metricList" class="metric-list"></div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">你在关系里的样子</h3>
+                    <p id="resultLove" class="insight-text"></p>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">和你相处的正确方式</h3>
+                    <ul id="resultTips" class="tips"></ul>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">一键分享文案</h3>
+                    <div id="shareBox" class="share-box"></div>
+                </div>
+            </div>
+
+            <div class="action-row">
+                <button id="shareBtn" class="secondary-btn" type="button">分享给朋友</button>
+                <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast">已复制</div>
+
+    <script>
+        const questions = [
+            {
+                avatar: "🐈",
+                category: "社交还是不社交，这是个问题",
+                hint: "第一反应往往最像你的本体。",
+                text: "在楼道里遇到一只从没见过的陌生猫，你怎么做？",
+                options: [
+                    { text: "直接贴过去闻闻，交朋友这种事讲究先发制猫。", effect: { ei: 2, sn: 1, ft: 1, jp: 1, social: 3, curiosity: 2, affection: 2, order: 0, drama: 1 } },
+                    { text: "先远远观察，确认对方没有敌意再慢慢靠近。", effect: { ei: -1, sn: -1, ft: 0, jp: -1, social: 1, curiosity: 2, affection: 1, order: 2, drama: 0 } },
+                    { text: "掉头就走，今天的社交额度已经用完了。", effect: { ei: -2, sn: 0, ft: -1, jp: 0, social: 0, curiosity: 0, affection: 0, order: 1, drama: 1 } }
+                ]
+            },
+            {
+                avatar: "🧶",
+                category: "玩具试炼",
+                hint: "你对新事物的反应，就是你的探索本能。",
+                text: "主人带回来一个新的逗猫棒，你的第一反应是？",
+                options: [
+                    { text: "猛扑上去，先把场子热起来再说。", effect: { ei: 1, sn: 2, ft: 0, jp: 2, social: 1, curiosity: 3, affection: 0, order: 0, drama: 2 } },
+                    { text: "绕着它走两圈，试探一下，再决定要不要出手。", effect: { ei: 0, sn: -1, ft: 0, jp: -1, social: 1, curiosity: 2, affection: 0, order: 2, drama: 0 } },
+                    { text: "看一眼，表示知道了，然后继续趴着。", effect: { ei: -1, sn: -2, ft: -1, jp: 0, social: 0, curiosity: 0, affection: 0, order: 1, drama: 1 } }
+                ]
+            },
+            {
+                avatar: "🍗",
+                category: "干饭哲学",
+                hint: "吃饭这件事，会暴露你对快乐的定义。",
+                text: "深夜听见罐头“啪”地一声被打开，你会？",
+                options: [
+                    { text: "瞬间闪现到厨房，饭可以晚到，我不行。", effect: { ei: 1, sn: 1, ft: 2, jp: 2, social: 1, curiosity: 1, affection: 2, order: 0, drama: 2 } },
+                    { text: "保持体面地走过去，优雅永远比速度重要。", effect: { ei: 0, sn: -1, ft: 1, jp: -1, social: 1, curiosity: 0, affection: 2, order: 2, drama: 0 } },
+                    { text: "内心想吃，但表面装淡定，等人来请。", effect: { ei: -1, sn: 1, ft: 1, jp: 0, social: 0, curiosity: 0, affection: 2, order: 1, drama: 3 } }
+                ]
+            },
+            {
+                avatar: "🪟",
+                category: "窗台观察员",
+                hint: "你更像行动派，还是脑内弹幕派？",
+                text: "连续下雨三天，只能在窗边看外面的世界，你会？",
+                options: [
+                    { text: "疯狂盯鸟，脑内已经完成一整套捕猎计划。", effect: { ei: 0, sn: 2, ft: -1, jp: -1, social: 0, curiosity: 3, affection: 0, order: 1, drama: 1 } },
+                    { text: "安静晒毛发呆，雨声本身就是很高级的陪伴。", effect: { ei: -1, sn: -1, ft: 1, jp: -1, social: 0, curiosity: 1, affection: 2, order: 2, drama: 0 } },
+                    { text: "开始扒拉窗帘，试图自己给生活找点节目。", effect: { ei: 1, sn: 1, ft: 0, jp: 2, social: 1, curiosity: 2, affection: 0, order: 0, drama: 3 } }
+                ]
+            },
+            {
+                avatar: "🛋️",
+                category: "领地意识",
+                hint: "空间感，就是你的控制欲外显。",
+                text: "家里来了陌生客人，你通常会？",
+                options: [
+                    { text: "先绕着他一圈巡视，让对方知道谁才是主人。", effect: { ei: 1, sn: 1, ft: -1, jp: -1, social: 2, curiosity: 2, affection: 0, order: 2, drama: 1 } },
+                    { text: "藏起来观察一阵，确认安全再决定露不露面。", effect: { ei: -2, sn: -1, ft: 0, jp: 1, social: 0, curiosity: 1, affection: 0, order: 3, drama: 0 } },
+                    { text: "直接跳到沙发最高点，居高临下地审判全场。", effect: { ei: 0, sn: 2, ft: -1, jp: 2, social: 1, curiosity: 1, affection: 0, order: 1, drama: 3 } }
+                ]
+            },
+            {
+                avatar: "💤",
+                category: "作息管理",
+                hint: "规律和随性，决定你是队长还是夜游神。",
+                text: "你的睡觉风格更接近下面哪一种？",
+                options: [
+                    { text: "固定时间固定位置，谁都别动我的专属坑位。", effect: { ei: -1, sn: -1, ft: 0, jp: -2, social: 0, curiosity: 0, affection: 1, order: 3, drama: 0 } },
+                    { text: "哪里舒服睡哪里，今天床上明天纸箱。", effect: { ei: 0, sn: 1, ft: 0, jp: 2, social: 0, curiosity: 2, affection: 1, order: 0, drama: 1 } },
+                    { text: "白天睡够，晚上开始巡逻，主打一个神出鬼没。", effect: { ei: -1, sn: 2, ft: -1, jp: 2, social: 0, curiosity: 2, affection: 0, order: 0, drama: 2 } }
+                ]
+            },
+            {
+                avatar: "💞",
+                category: "亲密关系",
+                hint: "你贴不贴人，差别真的很大。",
+                text: "当你很喜欢一个人时，你会怎么表达？",
+                options: [
+                    { text: "紧贴着他转圈圈，顺便把尾巴也借出去。", effect: { ei: 1, sn: 0, ft: 2, jp: 1, social: 2, curiosity: 0, affection: 3, order: 0, drama: 1 } },
+                    { text: "坐在不远处陪着，不说话但绝不离场。", effect: { ei: -1, sn: -1, ft: 1, jp: -1, social: 1, curiosity: 0, affection: 2, order: 2, drama: 0 } },
+                    { text: "我不会说，但我允许你摸我肚皮，这已经是顶配。", effect: { ei: -1, sn: 1, ft: 1, jp: 0, social: 0, curiosity: 0, affection: 2, order: 1, drama: 2 } }
+                ]
+            },
+            {
+                avatar: "🧠",
+                category: "脑内频道",
+                hint: "遇到问题时，你会先动爪还是先动脑？",
+                text: "当玩具滚进沙发底下，你通常会怎么解决？",
+                options: [
+                    { text: "立刻伸爪猛掏，实践永远比理论快。", effect: { ei: 1, sn: 1, ft: -1, jp: 2, social: 0, curiosity: 2, affection: 0, order: 0, drama: 1 } },
+                    { text: "先换角度研究结构，找最省力的下手路线。", effect: { ei: -1, sn: -2, ft: -2, jp: -1, social: 0, curiosity: 2, affection: 0, order: 3, drama: 0 } },
+                    { text: "叫一声让人类过来，他们发明手臂就是干这个的。", effect: { ei: 1, sn: 0, ft: 2, jp: 1, social: 2, curiosity: 0, affection: 2, order: 0, drama: 2 } }
+                ]
+            },
+            {
+                avatar: "🎭",
+                category: "情绪表达",
+                hint: "有的人真的只是高冷，有的人是演的。",
+                text: "当你被误会做错事时，你更像哪种反应？",
+                options: [
+                    { text: "当场喵喵抗议，必须为自己讨回清白。", effect: { ei: 2, sn: 0, ft: 2, jp: 1, social: 2, curiosity: 0, affection: 2, order: 0, drama: 3 } },
+                    { text: "面无表情地走开，用沉默制造压力。", effect: { ei: -2, sn: -1, ft: -1, jp: -1, social: 0, curiosity: 0, affection: 0, order: 2, drama: 1 } },
+                    { text: "先认栽，等半夜再推翻一杯水表达态度。", effect: { ei: -1, sn: 1, ft: 0, jp: 2, social: 0, curiosity: 1, affection: 0, order: 0, drama: 3 } }
+                ]
+            },
+            {
+                avatar: "📦",
+                category: "安全感来源",
+                hint: "小空间，往往藏着你真正的舒适圈。",
+                text: "看到一个刚拆开的纸箱，你会？",
+                options: [
+                    { text: "立刻钻进去，这种机会不能让给别猫。", effect: { ei: 0, sn: 1, ft: 1, jp: 2, social: 0, curiosity: 2, affection: 1, order: 0, drama: 1 } },
+                    { text: "先研究一下尺寸和稳定性，再选择姿势入驻。", effect: { ei: -1, sn: -2, ft: 0, jp: -1, social: 0, curiosity: 1, affection: 0, order: 3, drama: 0 } },
+                    { text: "箱子无所谓，重要的是人类会不会因此夸我可爱。", effect: { ei: 1, sn: 0, ft: 2, jp: 1, social: 2, curiosity: 0, affection: 3, order: 0, drama: 2 } }
+                ]
+            },
+            {
+                avatar: "👑",
+                category: "主场气质",
+                hint: "你是气氛组，还是统治组？",
+                text: "如果你要接管一个新地盘，你最在意什么？",
+                options: [
+                    { text: "谁都得知道我是主角，先把存在感拉满。", effect: { ei: 2, sn: 1, ft: 0, jp: 1, social: 3, curiosity: 1, affection: 0, order: 1, drama: 3 } },
+                    { text: "动线清晰、补给稳定，领地秩序比排场重要。", effect: { ei: -1, sn: -1, ft: -1, jp: -2, social: 0, curiosity: 0, affection: 0, order: 3, drama: 0 } },
+                    { text: "只要有足够高的观察点和几个秘密角落就行。", effect: { ei: -1, sn: 2, ft: 0, jp: 0, social: 0, curiosity: 2, affection: 0, order: 1, drama: 1 } }
+                ]
+            },
+            {
+                avatar: "🌙",
+                category: "夜间人格",
+                hint: "夜晚才是很多猫真正的主场。",
+                text: "凌晨两点，大家都睡了，你通常会？",
+                options: [
+                    { text: "开始跑酷，把白天忍住的能量一次性释放。", effect: { ei: 1, sn: 2, ft: 0, jp: 2, social: 1, curiosity: 3, affection: 0, order: 0, drama: 3 } },
+                    { text: "安静巡视每个角落，确认一切仍在掌控中。", effect: { ei: -1, sn: -1, ft: -1, jp: -2, social: 0, curiosity: 1, affection: 0, order: 3, drama: 0 } },
+                    { text: "去找最信任的人窝一下，夜晚适合偷偷撒娇。", effect: { ei: 0, sn: 0, ft: 2, jp: 0, social: 1, curiosity: 0, affection: 3, order: 1, drama: 1 } }
+                ]
+            }
+        ];
+
+        const profiles = {
+            ENFP: {
+                breed: "布偶猫",
+                role: "发光贴贴型",
+                emoji: "😻",
+                tags: ["社交天花板", "情绪价值高", "快乐制造机"],
+                summary: "你像一只情绪明亮、热爱互动的布偶猫，见到喜欢的人会主动靠近，生活对你来说不是流程，而是一场值得参与的热闹冒险。",
+                love: "你在关系里很会给回应，喜欢被看见，也擅长让别人觉得被喜欢。你黏人，但不让人窒息，属于会把氛围变暖的那种猫。",
+                tips: ["别用冷处理对你，你会立刻脑补八百集剧情。", "给你一点陪伴和反馈，你就会自动开机发光。", "适合和你一起玩，别总让你一个人内耗。"]
+            },
+            ENFJ: {
+                breed: "暹罗猫",
+                role: "关系导演型",
+                emoji: "🐱",
+                tags: ["善于共情", "会带节奏", "在意连接"],
+                summary: "你像一只观察力极强的暹罗猫，能迅速察觉现场情绪，并本能地把关系调整到更舒服的位置。你不是单纯外向，而是很会经营亲密感。",
+                love: "你很需要稳定回应，但通常不会直接说“我需要”，而是会通过照顾、提醒、黏在旁边来表达。",
+                tips: ["真诚回应比敷衍安抚更重要。", "你会为别人兜情绪，也需要别人为你留位置。", "别让你长期处在情绪噪音里，你会先撑着，后耗尽。"]
+            },
+            ENTP: {
+                breed: "阿比西尼亚猫",
+                role: "脑洞挑事型",
+                emoji: "😼",
+                tags: ["灵感很多", "反应极快", "爱试新东西"],
+                summary: "你像一只停不下来的阿比西尼亚猫，越新鲜越来劲，越有挑战越兴奋。你不一定按规矩走，但你总能找到自己的玩法。",
+                love: "你喜欢好玩的关系，怕无聊胜过怕争执。对你来说，能接住彼此的脑回路，比形式感更重要。",
+                tips: ["不要试图用死规矩困住你。", "给你空间探索，你反而更愿意回来。", "和你沟通最好直接、有趣、带一点脑力对抗。"]
+            },
+            ENTJ: {
+                breed: "孟加拉豹猫",
+                role: "掌控总指挥型",
+                emoji: "🐆",
+                tags: ["执行力强", "目标清晰", "天然主场感"],
+                summary: "你像一只锋利、漂亮、战术感极强的孟加拉豹猫。你不是喜欢控制别人，而是本能地想把局面整理成自己能驾驭的样子。",
+                love: "你表达爱意的方式往往不是说软话，而是帮对方把问题处理掉。你很可靠，但也容易显得压迫感强。",
+                tips: ["对你别太绕，结论比铺垫重要。", "适当示弱对你是加分，不是掉价。", "你需要被信任，也需要学习不是什么都自己扛。"]
+            },
+            ESFP: {
+                breed: "异国短毛猫",
+                role: "镜头甜心型",
+                emoji: "😸",
+                tags: ["可爱显眼", "会活跃气氛", "快乐优先"],
+                summary: "你像一只天然自带存在感的异国短毛猫，只要出现就很难被忽视。你对生活的热情不是表演，而是真的想把每一刻都过得有意思。",
+                love: "你需要即时反馈和鲜活互动。只要气氛对了，你会很快把心打开。",
+                tips: ["夸奖对你是真的有用。", "别把你丢进过于沉闷的关系里。", "你需要被接住热情，而不是被说“太夸张”。"]
+            },
+            ESFJ: {
+                breed: "金吉拉",
+                role: "体面治愈型",
+                emoji: "😽",
+                tags: ["温柔稳定", "照顾型人格", "氛围维护者"],
+                summary: "你像一只漂亮、讲究、很会照顾现场感受的金吉拉。你擅长把身边的人和空间整理得更舒服，也很容易成为大家默认的情绪缓冲带。",
+                love: "你很在意仪式感和被珍惜的感觉。哪怕嘴上不说，心里也会默默记录谁有回应、谁在敷衍。",
+                tips: ["把你当理所当然会很伤。", "你擅长照顾别人，也需要有人照顾你。", "稳定、礼貌、温柔的关系会让你迅速放松。"]
+            },
+            ESTP: {
+                breed: "埃及猫",
+                role: "极速冒险型",
+                emoji: "🐾",
+                tags: ["行动优先", "胆大心细", "不怕开新局"],
+                summary: "你像一只肌肉线条漂亮的埃及猫，面对世界的方式永远是“先上去试试”。你讨厌拖沓，也不喜欢情绪在空气里悬着不解决。",
+                love: "你喜欢真实、有火花、能一起行动的关系。太被动的人会让你失去耐心。",
+                tips: ["和你说话直接一点，拐弯抹角很消耗。", "别只讲感受不讲办法，你会抓狂。", "你需要刺激感，但也要有人提醒你慢一点。"]
+            },
+            ESTJ: {
+                breed: "美国短毛猫",
+                role: "稳场队长型",
+                emoji: "🐈",
+                tags: ["可靠耐久", "重视秩序", "执行到位"],
+                summary: "你像一只标准答案型的美国短毛猫，稳、准、能扛事。你会天然地维护秩序，也擅长让混乱回到可控状态。",
+                love: "你在关系里最看重的是靠谱。浪漫可以晚点来，但失约和失控会直接扣大分。",
+                tips: ["守时、讲信用，对你来说不是小事。", "你需要可预期感，不喜欢反复横跳。", "你已经很能扛了，偶尔放松不是失职。"]
+            },
+            INFP: {
+                breed: "挪威森林猫",
+                role: "月光诗人型",
+                emoji: "🌙",
+                tags: ["慢热细腻", "想象力强", "内心戏丰富"],
+                summary: "你像一只在月光里发呆的挪威森林猫，看起来安静，实际上情绪和想法都很多。你不是冷淡，只是不愿意把真心随便摊开。",
+                love: "你会慢慢靠近，一旦确认安全，就会展现非常深的依恋和忠诚。你怕被误解，也怕真诚不被珍惜。",
+                tips: ["别逼你立刻表态，你需要一点缓冲时间。", "温柔且稳定的回应，是打开你的钥匙。", "你很会体谅别人，也要学会先保护自己。"]
+            },
+            INFJ: {
+                breed: "俄罗斯蓝猫",
+                role: "冷感共情型",
+                emoji: "🐈‍⬛",
+                tags: ["敏锐克制", "洞察深", "边界明确"],
+                summary: "你像一只外冷内热的俄罗斯蓝猫，表情不多，但感知极强。你会迅速看穿氛围，也会本能地筛选那些不值得靠近的人。",
+                love: "你不是不需要爱，而是需要高质量的爱。低配理解和表面热闹，都很难真正打动你。",
+                tips: ["尊重你的边界，比热情轰炸有效得多。", "你需要精神层面的连接，不只是形式上的陪伴。", "一旦你信任了，就会非常稳定。"]
+            },
+            INTP: {
+                breed: "东方短毛猫",
+                role: "逻辑拆解型",
+                emoji: "🧠",
+                tags: ["脑力在线", "独处续航", "喜欢搞明白"],
+                summary: "你像一只聪明到有点旁观感的东方短毛猫，很多时候不是没情绪，而是先想搞清楚到底发生了什么。",
+                love: "你喜欢清晰、真实、不粘腻的关系。对你来说，能聊到一起比甜言蜜语更珍贵。",
+                tips: ["别逼你用情绪语言即时输出。", "给你思考时间，你反而会给出更深的回应。", "你需要的是理解，不是被规定应该怎么感受。"]
+            },
+            INTJ: {
+                breed: "缅因猫",
+                role: "高冷策士型",
+                emoji: "👑",
+                tags: ["格局大", "计划性强", "不爱废话"],
+                summary: "你像一只体型巨大、气场很稳的缅因猫。看起来懒得搭理人，实际上一直在默默评估局势、安排路径和保留后手。",
+                love: "你不轻易交付信任，但一旦认定，会非常长期、非常稳定。你讨厌无效沟通，也厌烦情绪操控。",
+                tips: ["和你沟通最好结论先行。", "不要试图用情绪勒索推进关系。", "你需要的是高质量协作型陪伴。"]
+            },
+            ISFP: {
+                breed: "苏格兰折耳猫",
+                role: "柔软审美型",
+                emoji: "🎀",
+                tags: ["温柔感性", "细节控", "重体验"],
+                summary: "你像一只自带温柔滤镜的折耳猫，对环境、氛围、声音、触感都很敏感。你不爱抢戏，但对“舒服”这件事有极高标准。",
+                love: "你在关系里是细水长流型，会通过陪伴、记住小事、默默靠近来表达在乎。",
+                tips: ["粗暴和催促都会让你缩回壳里。", "你需要被温柔对待，也需要自己的节奏。", "高质量的小事，比宏大承诺更能打动你。"]
+            },
+            ISFJ: {
+                breed: "英国短毛猫",
+                role: "稳定守护型",
+                emoji: "🛋️",
+                tags: ["可靠治愈", "耐心高", "情感长线"],
+                summary: "你像一只经典英短，不爱瞎折腾，但极有陪伴感。你给人的安全感不是高调展示出来的，而是一直都在。",
+                love: "你会在日常里很认真地照顾关系，记得承诺，也会希望别人同样珍惜你的付出。",
+                tips: ["你不擅长抢位置，所以更需要被主动看见。", "被需要会让你满足，但别总把自己放最后。", "适合稳定、真诚、不作妖的关系。"]
+            },
+            ISTP: {
+                breed: "中华田园猫",
+                role: "独行解决型",
+                emoji: "🛠️",
+                tags: ["适应力强", "不矫情", "现场处理王"],
+                summary: "你像一只经验值很高的田园猫，表面松弛，实际非常有生存智慧。你不爱多说，但遇事真能上。",
+                love: "你不喜欢过度捆绑，更习惯用行动解决问题。嘴上不腻，但关键时刻很顶。",
+                tips: ["给你自由，你的忠诚度反而更高。", "少一点情绪拉扯，多一点并肩处理问题。", "你不是冷，只是不擅长包装。"]
+            },
+            ISTJ: {
+                breed: "沙特尔猫",
+                role: "秩序巡逻型",
+                emoji: "📏",
+                tags: ["自律稳定", "低调靠谱", "原则明确"],
+                summary: "你像一只节奏固定、边界清楚的沙特尔猫。你不爱热闹，但很值得信任；不爱表达，但很少掉链子。",
+                love: "你更相信时间积累出来的可靠感，而不是瞬间的情绪浓度。慢一点没关系，稳才是重点。",
+                tips: ["别轻易打乱你的节奏。", "你需要的是长期一致，而不是偶尔上头。", "学会表达需求，会让关系轻松很多。"]
+            }
+        };
+
+        const heroCatsRow1 = [
+            { name: "英短", furLight: "#cfd7e4", furDark: "#8d9db1", ear: "#f4d2d2", eye: "#86a45b", nose: "#b77a82", bg1: "#ffffff", bg2: "#eceff4", pattern: "solid" },
+            { name: "黑猫", furLight: "#6d677f", furDark: "#343040", ear: "#b59ed9", eye: "#f2d96b", nose: "#86638b", bg1: "#f4f1fb", bg2: "#e4def1", pattern: "solid" },
+            { name: "豹猫", furLight: "#efb54a", furDark: "#c57625", ear: "#f2bc8f", eye: "#7ea44b", nose: "#aa694f", bg1: "#fff4df", bg2: "#f4e1c4", pattern: "spots", patternColor: "#8d4c20" },
+            { name: "布偶", furLight: "#fff8ef", furDark: "#d8cab8", ear: "#e6bcbb", eye: "#7fc4d9", nose: "#c98e92", bg1: "#fffdf8", bg2: "#f1ebe2", pattern: "mask", patternColor: "#a99286", ribbon: true },
+            { name: "高冷", furLight: "#d6d9e0", furDark: "#9ca4b0", ear: "#e7c0c5", eye: "#9abd67", nose: "#ab7880", bg1: "#f6f7fb", bg2: "#e8ebf1", pattern: "blaze", patternColor: "#a8afb9" },
+            { name: "田园", furLight: "#f3b154", furDark: "#da7f35", ear: "#f4be97", eye: "#90ad52", nose: "#bf7e5f", bg1: "#fff3e3", bg2: "#f3e0cb", pattern: "tabby", patternColor: "#b6662e" }
+        ];
+
+        const heroCatsRow2 = [
+            { name: "甜妹", furLight: "#ffbe6b", furDark: "#f28a47", ear: "#ffc8af", eye: "#85a94b", nose: "#d07b73", bg1: "#fff3eb", bg2: "#f9dfd8", pattern: "blaze", patternColor: "#f29f3f", blush: true },
+            { name: "巡逻", furLight: "#d8dceb", furDark: "#7882a3", ear: "#d8badd", eye: "#8bb35a", nose: "#a37584", bg1: "#f6f7fd", bg2: "#e3e7f5", pattern: "mask", patternColor: "#6a7292" },
+            { name: "挪森", furLight: "#cfa17a", furDark: "#8b5f42", ear: "#e8b59c", eye: "#a4bb67", nose: "#b9776d", bg1: "#fff3eb", bg2: "#ead8cb", pattern: "cheeks", patternColor: "#744631" },
+            { name: "戏精", furLight: "#ffba5e", furDark: "#ee8f3f", ear: "#ffc9ab", eye: "#8aab4f", nose: "#d17d72", bg1: "#fff2e8", bg2: "#f6dfd1", pattern: "tabby", patternColor: "#cd732f", ribbon: true },
+            { name: "夜猫", furLight: "#595569", furDark: "#2d2b37", ear: "#9b8fb6", eye: "#f1de71", nose: "#a97582", bg1: "#efedf7", bg2: "#dcd8eb", pattern: "tuxedo", patternColor: "#efeff3" },
+            { name: "粘人", furLight: "#fff6ea", furDark: "#dec8b3", ear: "#f1c2c7", eye: "#8eb361", nose: "#c88186", bg1: "#fffdf8", bg2: "#f5ece5", pattern: "solid", blush: true, ribbon: true }
+        ];
+
+        const metricLabels = ["社交力", "探索欲", "依恋感", "秩序感", "戏精值"];
+        const state = {
+
+            index: 0,
+            answers: Array(questions.length).fill(null)
+        };
+
+        const landingScreen = document.getElementById("landingScreen");
+        const quizScreen = document.getElementById("quizScreen");
+        const resultScreen = document.getElementById("resultScreen");
+        const progressCount = document.getElementById("progressCount");
+        const progressFill = document.getElementById("progressFill");
+        const promptAvatar = document.getElementById("promptAvatar");
+        const promptCategory = document.getElementById("promptCategory");
+        const promptHint = document.getElementById("promptHint");
+        const questionTitle = document.getElementById("questionTitle");
+        const optionList = document.getElementById("optionList");
+        const nextBtn = document.getElementById("nextBtn");
+        const backBtn = document.getElementById("backBtn");
+        const startBtn = document.getElementById("startBtn");
+        const restartBtn = document.getElementById("restartBtn");
+        const shareBtn = document.getElementById("shareBtn");
+        const toast = document.getElementById("toast");
+        const heroCatRow1 = document.getElementById("heroCatRow1");
+        const heroCatRow2 = document.getElementById("heroCatRow2");
+
+        renderHeroCats();
+
+        startBtn.addEventListener("click", startQuiz);
+
+        nextBtn.addEventListener("click", goNext);
+        backBtn.addEventListener("click", goPrev);
+        restartBtn.addEventListener("click", restartQuiz);
+        shareBtn.addEventListener("click", copyShareText);
+
+        function renderHeroCats() {
+            renderHeroRow(heroCatRow1, heroCatsRow1, "row1");
+            renderHeroRow(heroCatRow2, heroCatsRow2, "row2");
+        }
+
+        function renderHeroRow(container, cats, rowKey) {
+            const doubledCats = [...cats, ...cats];
+            container.innerHTML = doubledCats.map((cat, index) => createHeroCatCard(cat, `${rowKey}-${index}`)).join("");
+        }
+
+        function createHeroCatCard(cat, uid) {
+            return `
+                <div class="sprite">
+                    <div class="sprite-photo" style="--cat-bg-1:${cat.bg1}; --cat-bg-2:${cat.bg2};">
+                        ${createCatSvg(cat, uid)}
+                    </div>
+                    <div class="sprite-name">${cat.name}</div>
+                </div>
+            `;
+        }
+
+        function createCatSvg(cat, uid) {
+            const patternSvg = getCatPatternSvg(cat);
+            const blushSvg = cat.blush ? `
+                <ellipse cx="31" cy="50" rx="5.8" ry="3.2" fill="#f8b9bb" opacity="0.55" />
+                <ellipse cx="65" cy="50" rx="5.8" ry="3.2" fill="#f8b9bb" opacity="0.55" />
+            ` : "";
+            const ribbonSvg = cat.ribbon ? `
+                <path d="M48 66l-9 3.4 4.3-8.8z" fill="#ea7f8f" />
+                <path d="M48 66l9 3.4-4.3-8.8z" fill="#f29aaa" />
+                <circle cx="48" cy="64" r="4.8" fill="#f7b7c1" stroke="#8a5962" stroke-width="1.2" />
+            ` : "";
+
+            return `
+                <svg viewBox="0 0 96 88" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="fur-${uid}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${cat.furLight}" />
+                            <stop offset="100%" stop-color="${cat.furDark}" />
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="48" cy="73" rx="21" ry="8" fill="rgba(0,0,0,0.10)" />
+                    <path d="M24 33L34 13L42 32Z" fill="url(#fur-${uid})" stroke="#33261f" stroke-width="2.2" stroke-linejoin="round" />
+                    <path d="M72 33L62 13L54 32Z" fill="url(#fur-${uid})" stroke="#33261f" stroke-width="2.2" stroke-linejoin="round" />
+                    <path d="M28.5 30L34 18l4.5 12z" fill="${cat.ear}" opacity="0.95" />
+                    <path d="M67.5 30L62 18l-4.5 12z" fill="${cat.ear}" opacity="0.95" />
+                    <circle cx="48" cy="42" r="24" fill="url(#fur-${uid})" stroke="#33261f" stroke-width="2.2" />
+                    <ellipse cx="48" cy="50" rx="15.5" ry="11.4" fill="rgba(255,255,255,0.7)" opacity="0.75" />
+                    ${patternSvg}
+                    ${blushSvg}
+                    <ellipse cx="39" cy="42" rx="3.8" ry="5.2" fill="${cat.eye}" />
+                    <ellipse cx="57" cy="42" rx="3.8" ry="5.2" fill="${cat.eye}" />
+                    <circle cx="39" cy="41" r="1.2" fill="#ffffff" />
+                    <circle cx="57" cy="41" r="1.2" fill="#ffffff" />
+                    <path d="M48 46l4.6 3.8H43.4z" fill="${cat.nose}" stroke="#7f5b60" stroke-width="1" stroke-linejoin="round" />
+                    <path d="M47.6 50.6c-1.3 2-3.1 3.1-5.6 3.8" stroke="#6f5354" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M48.4 50.6c1.3 2 3.1 3.1 5.6 3.8" stroke="#6f5354" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M31 47c-4.5-1.2-8.1-1.5-12.2-.9" stroke="#5a4e46" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M31 51c-4.1.2-7.5.8-11.2 2.5" stroke="#5a4e46" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M65 47c4.5-1.2 8.1-1.5 12.2-.9" stroke="#5a4e46" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M65 51c4.1.2 7.5.8 11.2 2.5" stroke="#5a4e46" stroke-width="1.3" stroke-linecap="round" />
+                    ${ribbonSvg}
+                </svg>
+            `;
+        }
+
+        function getCatPatternSvg(cat) {
+            const color = cat.patternColor || "rgba(255,255,255,0.9)";
+            switch (cat.pattern) {
+                case "spots":
+                    return `
+                        <circle cx="37" cy="31" r="4.5" fill="${color}" opacity="0.9" />
+                        <circle cx="57" cy="28" r="4" fill="${color}" opacity="0.85" />
+                        <ellipse cx="31" cy="42" rx="5.5" ry="4.2" fill="${color}" opacity="0.8" />
+                        <ellipse cx="65" cy="42" rx="5.5" ry="4.2" fill="${color}" opacity="0.8" />
+                    `;
+                case "mask":
+                    return `
+                        <path d="M28 40c5.8-8.8 11.6-12.4 20-12.4s14.2 3.6 20 12.4c-4.7-1.9-11.2-3-20-3s-15.3 1.1-20 3z" fill="${color}" opacity="0.95" />
+                    `;
+                case "blaze":
+                    return `
+                        <path d="M48 20c6.2 7.4 5.6 16.4 0 23.8-5.6-7.4-6.2-16.4 0-23.8z" fill="${color}" opacity="0.85" />
+                    `;
+                case "tabby":
+                    return `
+                        <path d="M40 24c2.4 2.2 3.9 4.1 4.7 6.8" stroke="${color}" stroke-width="2.2" stroke-linecap="round" fill="none" />
+                        <path d="M48 22c1.4 2.4 2.2 4.9 2.2 7.8" stroke="${color}" stroke-width="2.2" stroke-linecap="round" fill="none" />
+                        <path d="M56 24c-2.4 2.2-3.9 4.1-4.7 6.8" stroke="${color}" stroke-width="2.2" stroke-linecap="round" fill="none" />
+                    `;
+                case "cheeks":
+                    return `
+                        <ellipse cx="30" cy="42" rx="6.5" ry="5" fill="${color}" opacity="0.9" />
+                        <ellipse cx="66" cy="42" rx="6.5" ry="5" fill="${color}" opacity="0.9" />
+                        <path d="M48 25c3.6 3.1 5.6 6.1 5.8 10.2-3.8-1.9-7.8-1.9-11.6 0 .2-4.1 2.2-7.1 5.8-10.2z" fill="${color}" opacity="0.8" />
+                    `;
+                case "tuxedo":
+                    return `
+                        <path d="M48 36c7.5 0 13.2 4.6 15.6 12.5-4.5 3.8-9.8 5.7-15.6 5.7-5.8 0-11.1-1.9-15.6-5.7C34.8 40.6 40.5 36 48 36z" fill="${color}" opacity="0.95" />
+                    `;
+                default:
+                    return "";
+            }
+        }
+
+        function startQuiz() {
+            switchScreen("quiz");
+            renderQuestion();
+        }
+
+
+        function restartQuiz() {
+            state.index = 0;
+            state.answers = Array(questions.length).fill(null);
+            switchScreen("landing");
+        }
+
+        function switchScreen(target) {
+            landingScreen.classList.toggle("active", target === "landing");
+            quizScreen.classList.toggle("active", target === "quiz");
+            resultScreen.classList.toggle("active", target === "result");
+        }
+
+        function renderQuestion() {
+            const question = questions[state.index];
+            const selected = state.answers[state.index];
+            progressCount.textContent = `${state.index + 1} / ${questions.length}`;
+            progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+            promptAvatar.textContent = question.avatar;
+            promptCategory.textContent = question.category;
+            promptHint.textContent = question.hint;
+            questionTitle.textContent = question.text;
+            optionList.innerHTML = "";
+
+            question.options.forEach((option, optionIndex) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = `option${selected === optionIndex ? " active" : ""}`;
+                button.innerHTML = `<div class="option-key">${String.fromCharCode(65 + optionIndex)}</div><div class="option-text">${option.text}</div>`;
+                button.addEventListener("click", () => selectOption(optionIndex));
+                optionList.appendChild(button);
+            });
+
+            nextBtn.disabled = selected === null;
+            nextBtn.innerHTML = state.index === questions.length - 1 ? "查看结果 <span>→</span>" : "继续 <span>→</span>";
+            backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+        }
+
+        function selectOption(optionIndex) {
+            state.answers[state.index] = optionIndex;
+            [...optionList.children].forEach((node, idx) => {
+                node.classList.toggle("active", idx === optionIndex);
+            });
+            nextBtn.disabled = false;
+        }
+
+        function goNext() {
+            if (state.answers[state.index] === null) return;
+            if (state.index < questions.length - 1) {
+                state.index += 1;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                renderResult();
+                switchScreen("result");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+
+        function goPrev() {
+            if (state.index === 0) return;
+            state.index -= 1;
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function computeResult() {
+            const totals = {
+                ei: 0,
+                sn: 0,
+                ft: 0,
+                jp: 0,
+                social: 0,
+                curiosity: 0,
+                affection: 0,
+                order: 0,
+                drama: 0
+            };
+
+            state.answers.forEach((answerIndex, questionIndex) => {
+                const effect = questions[questionIndex].options[answerIndex].effect;
+                Object.keys(effect).forEach((key) => {
+                    totals[key] += effect[key];
+                });
+            });
+
+            const code = [
+                totals.ei >= 0 ? "E" : "I",
+                totals.sn >= 0 ? "N" : "S",
+                totals.ft >= 0 ? "F" : "T",
+                totals.jp >= 0 ? "P" : "J"
+            ].join("");
+
+            const metrics = {
+                social: clamp(Math.round(32 + totals.social * 7), 28, 98),
+                curiosity: clamp(Math.round(30 + totals.curiosity * 7), 26, 99),
+                affection: clamp(Math.round(30 + totals.affection * 7), 24, 99),
+                order: clamp(Math.round(30 + totals.order * 7), 24, 99),
+                drama: clamp(Math.round(28 + totals.drama * 7), 20, 99)
+            };
+
+            return {
+                code,
+                profile: profiles[code],
+                metrics
+            };
+        }
+
+        function renderResult() {
+            const result = computeResult();
+            const { code, profile, metrics } = result;
+            document.getElementById("resultCode").textContent = code;
+            document.getElementById("resultBreed").textContent = profile.breed;
+            document.getElementById("resultRole").textContent = profile.role;
+            document.getElementById("resultEmoji").textContent = profile.emoji;
+            document.getElementById("resultSummary").textContent = profile.summary;
+            document.getElementById("resultLove").textContent = profile.love;
+
+            const tagsContainer = document.getElementById("resultTags");
+            tagsContainer.innerHTML = profile.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+
+            const tipsContainer = document.getElementById("resultTips");
+            tipsContainer.innerHTML = profile.tips.map((tip) => `<li>${tip}</li>`).join("");
+
+            const metricEntries = [
+                [metricLabels[0], metrics.social],
+                [metricLabels[1], metrics.curiosity],
+                [metricLabels[2], metrics.affection],
+                [metricLabels[3], metrics.order],
+                [metricLabels[4], metrics.drama]
+            ];
+            document.getElementById("metricList").innerHTML = metricEntries.map(([label, value]) => `
+                <div class="metric-item">
+                    <div class="metric-label">${label}</div>
+                    <div class="metric-track"><div class="metric-fill" style="width:${value}%"></div></div>
+                    <div class="metric-value">${value}</div>
+                </div>
+            `).join("");
+
+            const shareText = `我测出来的 CatTI 是【${profile.breed}｜${profile.role}】\n代码：${code}\n标签：${profile.tags.join(" / ")}\n一句话总结：${profile.summary}`;
+            document.getElementById("shareBox").textContent = shareText;
+            shareBtn.dataset.shareText = shareText;
+
+            drawRadar([metrics.social, metrics.curiosity, metrics.affection, metrics.order, metrics.drama], metricLabels);
+        }
+
+        function drawRadar(values, labels) {
+            const canvas = document.getElementById("radarCanvas");
+            const ctx = canvas.getContext("2d");
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2 + 6;
+            const radius = 110;
+            const levels = 4;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(0.5, 0.5);
+
+            for (let level = levels; level >= 1; level -= 1) {
+                const currentRadius = (radius / levels) * level;
+                ctx.beginPath();
+                labels.forEach((_, index) => {
+                    const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / labels.length;
+                    const x = centerX + Math.cos(angle) * currentRadius;
+                    const y = centerY + Math.sin(angle) * currentRadius;
+                    if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = level % 2 === 0 ? "rgba(0, 0, 0, 0.03)" : "rgba(0, 0, 0, 0.015)";
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.08)";
+                ctx.lineWidth = 1;
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            labels.forEach((label, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / labels.length;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
+                ctx.stroke();
+
+                const textX = centerX + Math.cos(angle) * (radius + 24);
+                const textY = centerY + Math.sin(angle) * (radius + 24);
+                ctx.fillStyle = "#666";
+                ctx.font = "700 13px Microsoft YaHei";
+                ctx.textAlign = textX < centerX - 6 ? "right" : textX > centerX + 6 ? "left" : "center";
+                ctx.textBaseline = textY < centerY ? "bottom" : "top";
+                ctx.fillText(label, textX, textY);
+            });
+
+            ctx.beginPath();
+            values.forEach((value, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / values.length;
+                const scaledRadius = (value / 100) * radius;
+                const x = centerX + Math.cos(angle) * scaledRadius;
+                const y = centerY + Math.sin(angle) * scaledRadius;
+                if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = "rgba(17, 17, 17, 0.18)";
+            ctx.strokeStyle = "#111";
+            ctx.lineWidth = 2.5;
+            ctx.fill();
+            ctx.stroke();
+
+            values.forEach((value, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / values.length;
+                const scaledRadius = (value / 100) * radius;
+                const x = centerX + Math.cos(angle) * scaledRadius;
+                const y = centerY + Math.sin(angle) * scaledRadius;
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = "#111";
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = "#f0db67";
+                ctx.fill();
+            });
+
+            ctx.restore();
+        }
+
+        async function copyShareText() {
+            const text = shareBtn.dataset.shareText || document.getElementById("shareBox").textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast("分享文案已复制，可以直接发给朋友");
+            } catch (error) {
+                showToast("复制失败，请手动长按复制");
+            }
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add("show");
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 1800);
+        }
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+    </script>
+</body>
+</html>

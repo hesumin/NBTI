@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MouTI - 牛牛性格测试</title>
+    <style>
+        :root {
+            --bg: #f4f1eb;
+            --card: rgba(255, 255, 255, 0.94);
+            --text: #14110f;
+            --muted: #93887d;
+            --line: #ddd3c8;
+            --yellow: #f1d56b;
+            --brown: #7a563a;
+            --black: #080808;
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background: radial-gradient(circle at top, #fbfaf7 0%, #f4f1eb 44%, #ebe4db 100%);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px 14px 40px;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .app {
+            width: min(100%, 430px);
+            min-height: calc(100dvh - 40px);
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.28s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            gap: 8px;
+            letter-spacing: 2px;
+            font-family: "Courier New", monospace;
+            font-size: clamp(42px, 12vw, 64px);
+            font-weight: 900;
+            line-height: 1;
+            margin: 10px 0 22px;
+            perspective: 800px;
+        }
+
+        .logo span {
+            display: inline-block;
+            background: #111;
+            color: #fff;
+            padding: 8px 6px 4px;
+            box-shadow: 8px 8px 0 #000;
+            min-width: 0.95em;
+            text-align: center;
+            transform-origin: center bottom;
+            animation: logoBounce 3.8s cubic-bezier(0.35, 0, 0.2, 1) infinite;
+            will-change: transform;
+        }
+
+        .logo span:nth-child(2) { animation-delay: 0.12s; }
+        .logo span:nth-child(3) { animation-delay: 0.24s; }
+        .logo span:nth-child(4) { animation-delay: 0.36s; }
+        .logo span:nth-child(5) { animation-delay: 0.48s; }
+
+        .hero {
+            text-align: center;
+            padding-top: 6px;
+        }
+
+        .mou-wall {
+            position: relative;
+            overflow: hidden;
+            margin: 12px 0 32px;
+            padding: 10px 0;
+        }
+
+        .mou-wall::before,
+        .mou-wall::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 26px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .mou-wall::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--bg) 0%, rgba(244, 241, 235, 0) 100%);
+        }
+
+        .mou-wall::after {
+            right: 0;
+            background: linear-gradient(270deg, var(--bg) 0%, rgba(244, 241, 235, 0) 100%);
+        }
+
+        .mou-row {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            margin-bottom: 16px;
+            animation: driftLeft 24s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+            will-change: transform;
+        }
+
+        .mou-row.reverse {
+            animation-name: driftRight;
+            animation-duration: 26s;
+        }
+
+        .mou-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .mou-card {
+            --stack-y: 0px;
+            --tilt: 0deg;
+            --tilt-alt: 0.4deg;
+            flex: 0 0 98px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 246, 242, 0.95) 100%);
+            border: 2px solid #121212;
+            border-radius: 24px;
+            padding: 10px 8px 11px;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.08), 0 8px 0 rgba(0, 0, 0, 0.12);
+            min-height: 102px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            animation: cardBob 4s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .mou-card::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: -13px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.12);
+            filter: blur(10px);
+            opacity: 0.55;
+            z-index: -1;
+        }
+
+        .mou-card:nth-child(4n + 1) {
+            --stack-y: -4px;
+            --tilt: -1.3deg;
+            --tilt-alt: 0.2deg;
+        }
+
+        .mou-card:nth-child(4n + 2) {
+            --stack-y: 3px;
+            --tilt: 1deg;
+            --tilt-alt: -0.35deg;
+        }
+
+        .mou-card:nth-child(4n + 3) {
+            --stack-y: -2px;
+            --tilt: -0.7deg;
+            --tilt-alt: 0.45deg;
+        }
+
+        .mou-card:nth-child(4n + 4) {
+            --stack-y: 4px;
+            --tilt: 1.2deg;
+            --tilt-alt: -0.25deg;
+        }
+
+        .mou-card:nth-child(2n) { animation-delay: 0.28s; }
+        .mou-card:nth-child(3n) { animation-delay: 0.62s; }
+
+        .mou-photo {
+            width: 66px;
+            height: 58px;
+            border-radius: 18px;
+            padding: 5px;
+            background: radial-gradient(circle at 50% 20%, var(--cow-bg-1, #ffffff) 0%, var(--cow-bg-2, #ece6dc) 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -8px 14px rgba(0, 0, 0, 0.03);
+        }
+
+        .mou-photo svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .mou-name {
+            font-size: 11px;
+            color: #7d7065;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-title {
+            margin: 0 auto 12px;
+            font-size: clamp(28px, 7vw, 40px);
+            line-height: 1.18;
+            font-weight: 900;
+            max-width: 10.5em;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 88%, transparent 88%);
+            padding: 0 4px;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto 18px;
+            max-width: 16em;
+            color: #9d958b;
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .hero-chip {
+            border-radius: 999px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1.5px solid var(--line);
+            color: #6e645a;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .primary-btn,
+        .secondary-btn,
+        .ghost-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 999px;
+            min-height: 66px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+        }
+
+        .primary-btn {
+            background: var(--black);
+            color: #fff;
+            box-shadow: var(--shadow);
+            font-size: 18px;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover,
+        .ghost-btn:hover,
+        .icon-btn:hover,
+        .option:hover {
+            transform: translateY(-1px);
+        }
+
+        .primary-btn:disabled {
+            cursor: not-allowed;
+            background: #cacaca;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .bottom-note {
+            margin-top: 22px;
+            color: #9b948b;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .bottom-note a {
+            color: #4890ff;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .bottom-note a:hover {
+            text-decoration: underline;
+        }
+
+        .topbar {
+            display: grid;
+            grid-template-columns: 52px 1fr 52px;
+            align-items: center;
+            gap: 10px;
+            padding-top: 6px;
+        }
+
+        .icon-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 0;
+            background: rgba(255, 255, 255, 0.82);
+            color: #191919;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .progress-count {
+            text-align: center;
+            color: #b29b7e;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #dfd8cf;
+            overflow: hidden;
+            margin: 22px 0 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #111 0%, #6d4f37 100%);
+            border-radius: inherit;
+            transition: width 0.22s ease;
+        }
+
+        .prompt-row {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .prompt-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.92);
+            display: grid;
+            place-items: center;
+            border: 1.5px solid #ece2d6;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+            font-size: 40px;
+        }
+
+        .prompt-bubble {
+            min-height: 84px;
+            background: rgba(255, 255, 255, 0.76);
+            border-radius: 22px;
+            border: 1.5px solid #ede2d6;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .prompt-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6d6158;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--yellow);
+            box-shadow: 0 0 0 4px rgba(240, 219, 103, 0.2);
+        }
+
+        .prompt-hint {
+            color: #b2a79b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .question-title {
+            margin: 0 0 22px;
+            font-size: clamp(28px, 8vw, 44px);
+            line-height: 1.28;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .option {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 14px;
+            align-items: start;
+            text-align: left;
+            padding: 22px 22px 22px 18px;
+            border-radius: 24px;
+            border: 2px solid #ddd3c8;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .option.active {
+            background: #080808;
+            color: #fff;
+            border-color: #080808;
+            box-shadow: var(--shadow);
+        }
+
+        .option-key {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            color: #a59b90;
+        }
+
+        .option.active .option-key {
+            color: #d9c27a;
+        }
+
+        .option-text {
+            font-size: 18px;
+            line-height: 1.7;
+            font-weight: 800;
+        }
+
+        .result-screen {
+            padding-bottom: 24px;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1.5px solid #e8ddd1;
+            font-size: 13px;
+            font-weight: 800;
+            color: #655a51;
+        }
+
+        .result-head {
+            margin: 16px 0 18px;
+        }
+
+        .result-code {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            color: #8f755a;
+            margin-bottom: 10px;
+        }
+
+        .result-breed {
+            margin: 0;
+            font-size: clamp(34px, 9vw, 50px);
+            line-height: 1.12;
+            font-weight: 900;
+        }
+
+        .result-role {
+            margin: 10px 0 0;
+            font-size: 18px;
+            color: #6b625a;
+            font-weight: 700;
+        }
+
+        .result-hero {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.84) 100%);
+            border: 1.5px solid #ece0d4;
+            border-radius: 28px;
+            padding: 20px 20px 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-emoji {
+            font-size: 72px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 14px 0 16px;
+        }
+
+        .tag {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #f5f1ec;
+            color: #5e564f;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .result-summary {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.9;
+            color: #3c342f;
+            font-weight: 600;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 24px;
+            border: 1.5px solid #ece0d4;
+            padding: 18px 18px 20px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .panel-title {
+            margin: 0 0 14px;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .radar-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        #radarCanvas {
+            width: min(100%, 310px);
+            aspect-ratio: 1;
+        }
+
+        .metric-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .metric-item {
+            display: grid;
+            grid-template-columns: 86px 1fr 44px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .metric-label,
+        .metric-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: #6a6158;
+        }
+
+        .metric-value {
+            text-align: right;
+        }
+
+        .metric-track {
+            height: 12px;
+            border-radius: 999px;
+            background: #eee7df;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #111 0%, #8e633d 100%);
+        }
+
+        .insight-text {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.85;
+            color: #463d37;
+            font-weight: 600;
+        }
+
+        .tips {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tips li {
+            display: flex;
+            gap: 10px;
+            font-size: 15px;
+            line-height: 1.75;
+            color: #3c342f;
+            font-weight: 600;
+        }
+
+        .tips li::before {
+            content: "✦";
+            color: #af8459;
+            font-weight: 900;
+        }
+
+        .share-box {
+            margin-top: 12px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: #0b0b0b;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .secondary-btn {
+            background: #101010;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ghost-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #111;
+            border: 1.5px solid #dbd1c7;
+            font-size: 16px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(17, 17, 17, 0.94);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 20;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @keyframes logoBounce {
+            0%,
+            100% { transform: translateY(0) rotate(0deg); }
+            10% { transform: translateY(0) rotate(0deg); }
+            22% { transform: translateY(-6px) rotate(-0.8deg); }
+            30% { transform: translateY(-2px) rotate(0.3deg); }
+            38% { transform: translateY(-7px) rotate(0.8deg); }
+            48% { transform: translateY(0) rotate(0deg); }
+        }
+
+        @keyframes driftLeft {
+            0%, 12% { transform: translateX(0); }
+            24%, 36% { transform: translateX(-7%); }
+            48%, 60% { transform: translateX(-14%); }
+            72%, 84% { transform: translateX(-21%); }
+            100% { transform: translateX(-28%); }
+        }
+
+        @keyframes driftRight {
+            0%, 12% { transform: translateX(-28%); }
+            24%, 36% { transform: translateX(-21%); }
+            48%, 60% { transform: translateX(-14%); }
+            72%, 84% { transform: translateX(-7%); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes cardBob {
+            0%,
+            100% {
+                transform: translateY(var(--stack-y)) rotate(var(--tilt)) scale(1);
+            }
+            30% {
+                transform: translateY(calc(var(--stack-y) - 4px)) rotate(var(--tilt-alt)) scale(1.015);
+            }
+            54% {
+                transform: translateY(calc(var(--stack-y) - 1px)) rotate(var(--tilt)) scale(1.005);
+            }
+        }
+
+        @media (max-width: 375px) {
+            .mou-row {
+                gap: 10px;
+            }
+
+            .mou-card {
+                flex-basis: 86px;
+                min-height: 92px;
+            }
+
+            .mou-photo {
+                width: 58px;
+                height: 52px;
+            }
+
+            .option {
+                padding: 18px 18px 18px 16px;
+            }
+
+            .option-text {
+                font-size: 17px;
+            }
+
+            .action-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section id="landingScreen" class="screen active hero">
+            <div class="logo" aria-label="MOUTI 标题">
+                <span>M</span><span>O</span><span>U</span><span>T</span><span>I</span>
+            </div>
+
+            <div class="mou-wall" aria-hidden="true">
+                <div id="heroCowRow1" class="mou-row"></div>
+                <div id="heroCowRow2" class="mou-row reverse"></div>
+            </div>
+
+            <h1 class="hero-title"><span class="highlight">重生之我变成了一头牛</span></h1>
+            <p class="hero-subtitle">“这一世，我要稳稳反刍，慢慢发光，理直气壮地活出自己的牛生。”</p>
+
+            <div class="hero-meta">
+                <div class="hero-chip">12 道牧场情境题</div>
+                <div class="hero-chip">16 种牛格结果</div>
+                <div class="hero-chip">带雷达图和相处建议</div>
+            </div>
+
+            <button id="startBtn" class="primary-btn" type="button">
+                <span class="btn-icon">▶</span>
+                开始测试
+            </button>
+
+            <p class="bottom-note">来小红书找我玩 <a href="https://xhslink.com/m/9ijxa3lmbI8" target="_blank" rel="noopener noreferrer">@禾苏</a> · MouTI 已到位 🐮</p>
+        </section>
+
+        <section id="quizScreen" class="screen">
+            <div class="topbar">
+                <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
+                <div id="progressCount" class="progress-count">1 / 12</div>
+                <div></div>
+            </div>
+            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+            <div class="prompt-row">
+                <div id="promptAvatar" class="prompt-avatar">🐮</div>
+                <div class="prompt-bubble">
+                    <div class="prompt-category"><span class="dot"></span><span id="promptCategory">合群还是单拧，这是个问题</span></div>
+                    <div id="promptHint" class="prompt-hint">牛生很多时候不在于跑多快，而在于你遇事先冲、先想，还是先装没看见。</div>
+                </div>
+            </div>
+
+            <h2 id="questionTitle" class="question-title">加载中...</h2>
+            <div id="optionList" class="options"></div>
+
+            <button id="nextBtn" class="primary-btn" type="button" disabled>
+                继续
+                <span>→</span>
+            </button>
+        </section>
+
+        <section id="resultScreen" class="screen result-screen">
+            <div class="result-badge">🐂 你的 MouTI 牛格档案已生成</div>
+
+            <div class="result-head">
+                <div id="resultCode" class="result-code">INFP</div>
+                <h1 id="resultBreed" class="result-breed">牦牛</h1>
+                <p id="resultRole" class="result-role">高原慢热型</p>
+            </div>
+
+            <div class="result-hero">
+                <div id="resultEmoji" class="result-emoji">🐮</div>
+                <div id="resultTags" class="tag-list"></div>
+                <p id="resultSummary" class="result-summary">你看着不急不躁，实际上很有自己的节奏和耐力。别人以为你慢，其实你只是从不乱跑。</p>
+            </div>
+
+            <div class="panel-grid">
+                <div class="panel">
+                    <h3 class="panel-title">牛格雷达</h3>
+                    <div class="radar-wrap"><canvas id="radarCanvas" width="320" height="320"></canvas></div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">你的牛生画像</h3>
+                    <div id="metricList" class="metric-list"></div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">你在关系里的样子</h3>
+                    <p id="resultLove" class="insight-text"></p>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">和你相处的正确方式</h3>
+                    <ul id="resultTips" class="tips"></ul>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">一键分享文案</h3>
+                    <div id="shareBox" class="share-box"></div>
+                </div>
+            </div>
+
+            <div class="action-row">
+                <button id="shareBtn" class="secondary-btn" type="button">分享给朋友</button>
+                <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast">已复制</div>
+
+    <script>
+        const questions = [
+            {
+                avatar: "🌾",
+                category: "合群还是单拧，这是个问题",
+                hint: "第一反应最像你的本体。",
+                text: "第一次被带到陌生草场，看见一大群没见过的牛，你会？",
+                options: [
+                    { text: "先走过去打个招呼，混个脸熟再说。", effect: { ei: 2, sn: 1, ft: 1, jp: 1, social: 3, drive: 1, endurance: 1, gentleness: 2, stubborn: 0 } },
+                    { text: "先边吃边观察，摸清气氛再决定跟谁站一起。", effect: { ei: -1, sn: -1, ft: 0, jp: -1, social: 1, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "找个角落自己站着，今天先不营业。", effect: { ei: -2, sn: 0, ft: -1, jp: 0, social: 0, drive: 0, endurance: 1, gentleness: 0, stubborn: 2 } }
+                ]
+            },
+            {
+                avatar: "🌿",
+                category: "吃草这件事，也很显性格",
+                hint: "有人抢节奏，有人守秩序。",
+                text: "新鲜草垛刚推进来，你的第一反应通常是？",
+                options: [
+                    { text: "冲去最前排，第一口草必须归我。", effect: { ei: 1, sn: 2, ft: -1, jp: 2, social: 1, drive: 3, endurance: 0, gentleness: 0, stubborn: 2 } },
+                    { text: "找个舒服位置慢慢吃，稳定输出更重要。", effect: { ei: -1, sn: -1, ft: 1, jp: -1, social: 0, drive: 0, endurance: 3, gentleness: 2, stubborn: 0 } },
+                    { text: "先观察哪里草最好，再低调移动过去。", effect: { ei: 0, sn: -1, ft: -1, jp: -1, social: 1, drive: 1, endurance: 2, gentleness: 1, stubborn: 1 } }
+                ]
+            },
+            {
+                avatar: "⛈️",
+                category: "天气一变，牛格就出来了",
+                hint: "暴风雨里才能看出你到底稳不稳。",
+                text: "远处开始打雷，风雨马上要来，你会怎么做？",
+                options: [
+                    { text: "赶紧带着大家往棚里走，先保全全队。", effect: { ei: 1, sn: -1, ft: 2, jp: -2, social: 2, drive: 2, endurance: 2, gentleness: 2, stubborn: 0 } },
+                    { text: "默默找好避风点，主打一个提前准备。", effect: { ei: -1, sn: -2, ft: 0, jp: -2, social: 0, drive: 0, endurance: 3, gentleness: 1, stubborn: 1 } },
+                    { text: "就这？我还能再站一会，风大点才有感觉。", effect: { ei: 0, sn: 2, ft: -1, jp: 2, social: 0, drive: 2, endurance: 2, gentleness: 0, stubborn: 3 } }
+                ]
+            },
+            {
+                avatar: "🚪",
+                category: "边界感测试",
+                hint: "新栏门一开，你是先冲还是先算？",
+                text: "牧场新开了一个区域，大家都好奇想进去，你会？",
+                options: [
+                    { text: "第一个进去踩点，不试试怎么知道好不好。", effect: { ei: 1, sn: 2, ft: -1, jp: 2, social: 1, drive: 3, endurance: 1, gentleness: 0, stubborn: 1 } },
+                    { text: "先看路线和地形，确认没有坑再走。", effect: { ei: -1, sn: -2, ft: -1, jp: -1, social: 0, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "别人进去我再进，踩雷这种事别找我。", effect: { ei: -1, sn: 0, ft: 1, jp: 0, social: 1, drive: 0, endurance: 1, gentleness: 2, stubborn: 0 } }
+                ]
+            },
+            {
+                avatar: "🧍",
+                category: "被人类接近时",
+                hint: "有人喜欢贴贴，有人先保持体面距离。",
+                text: "一个第一次见的饲养员伸手想摸摸你，你一般会？",
+                options: [
+                    { text: "主动靠过去闻一下，看看这人顺不顺眼。", effect: { ei: 2, sn: 0, ft: 2, jp: 1, social: 3, drive: 0, endurance: 0, gentleness: 3, stubborn: 0 } },
+                    { text: "站着不动，但眼神已经在评估对方。", effect: { ei: -1, sn: -1, ft: -1, jp: -1, social: 0, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "后退半步，保持礼貌但不让人随便碰。", effect: { ei: -2, sn: 1, ft: -1, jp: 0, social: 0, drive: 0, endurance: 1, gentleness: 0, stubborn: 2 } }
+                ]
+            },
+            {
+                avatar: "🪵",
+                category: "牛脾气暴露时刻",
+                hint: "慢不是没脾气，稳也可能很轴。",
+                text: "你已经认定的路线突然被挡住了，你会？",
+                options: [
+                    { text: "立刻换条路，效率最重要。", effect: { ei: 1, sn: 1, ft: -1, jp: 2, social: 0, drive: 2, endurance: 1, gentleness: 0, stubborn: 0 } },
+                    { text: "停下来想一想，找最省力的办法绕过去。", effect: { ei: -1, sn: -2, ft: -2, jp: -1, social: 0, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "我都走到这了，谁挡我谁有问题。", effect: { ei: 0, sn: 1, ft: -1, jp: 1, social: 0, drive: 1, endurance: 2, gentleness: 0, stubborn: 3 } }
+                ]
+            },
+            {
+                avatar: "🥛",
+                category: "产出型人格",
+                hint: "你是稳稳发力，还是临场爆种？",
+                text: "大家都指望你今天状态好一点时，你会怎么应对？",
+                options: [
+                    { text: "没问题，我就是那种关键时刻很能顶的牛。", effect: { ei: 1, sn: 0, ft: 1, jp: -1, social: 2, drive: 2, endurance: 2, gentleness: 1, stubborn: 0 } },
+                    { text: "我不爱表态，但会把结果稳稳做出来。", effect: { ei: -1, sn: -1, ft: -1, jp: -2, social: 0, drive: 0, endurance: 3, gentleness: 1, stubborn: 1 } },
+                    { text: "别催，催只会让我更想按自己的节奏来。", effect: { ei: -1, sn: 1, ft: 0, jp: 1, social: 0, drive: 0, endurance: 2, gentleness: 0, stubborn: 3 } }
+                ]
+            },
+            {
+                avatar: "🧠",
+                category: "想得快还是扛得久",
+                hint: "牛群里也有脑力派。",
+                text: "如果要从一堆草堆里找到最好的那一垛，你更像？",
+                options: [
+                    { text: "凭感觉冲，吃到哪算哪，反正总会遇到好的。", effect: { ei: 1, sn: 2, ft: 0, jp: 2, social: 0, drive: 2, endurance: 1, gentleness: 0, stubborn: 1 } },
+                    { text: "先看颜色、湿度和位置，再精准下口。", effect: { ei: -1, sn: -2, ft: -2, jp: -1, social: 0, drive: 0, endurance: 2, gentleness: 1, stubborn: 0 } },
+                    { text: "跟着最懂草的那头牛走，借力也是智慧。", effect: { ei: 1, sn: -1, ft: 2, jp: 0, social: 2, drive: 0, endurance: 1, gentleness: 2, stubborn: 0 } }
+                ]
+            },
+            {
+                avatar: "🤝",
+                category: "关系浓度",
+                hint: "你黏不黏，全看你认不认人。",
+                text: "如果你很认可一头同伴牛，你会怎么表现？",
+                options: [
+                    { text: "经常站到它旁边，默契就是站出来的。", effect: { ei: 1, sn: -1, ft: 2, jp: -1, social: 2, drive: 0, endurance: 2, gentleness: 2, stubborn: 0 } },
+                    { text: "我不一定主动贴，但有事一定站它这边。", effect: { ei: -1, sn: 0, ft: 1, jp: -1, social: 1, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "喜欢是喜欢，但也别离我太近。", effect: { ei: -2, sn: 1, ft: 0, jp: 1, social: 0, drive: 0, endurance: 1, gentleness: 0, stubborn: 2 } }
+                ]
+            },
+            {
+                avatar: "🏃",
+                category: "突发事件反应",
+                hint: "紧急情况最考验你的牛格。",
+                text: "牛群突然开始躁动，有东西从远处冲过来，你会？",
+                options: [
+                    { text: "立刻跟着动起来，先带节奏脱险。", effect: { ei: 2, sn: 1, ft: 0, jp: 2, social: 2, drive: 3, endurance: 0, gentleness: 0, stubborn: 1 } },
+                    { text: "先判断方向和风险，再决定往哪边撤。", effect: { ei: -1, sn: -2, ft: -1, jp: -2, social: 0, drive: 1, endurance: 2, gentleness: 0, stubborn: 0 } },
+                    { text: "你们先慌，我先站稳，乱跑不是我的风格。", effect: { ei: -1, sn: 1, ft: -1, jp: 0, social: 0, drive: 0, endurance: 3, gentleness: 0, stubborn: 3 } }
+                ]
+            },
+            {
+                avatar: "🌙",
+                category: "夜晚才见真性情",
+                hint: "有的牛白天稳，晚上脑子才开始热。",
+                text: "夜里大家都安静反刍时，你通常更像？",
+                options: [
+                    { text: "终于安静了，我适合在这种时候慢慢想事情。", effect: { ei: -2, sn: 1, ft: 1, jp: -1, social: 0, drive: 0, endurance: 2, gentleness: 1, stubborn: 1 } },
+                    { text: "靠着熟人待着，安静但不想一个人。", effect: { ei: 0, sn: -1, ft: 2, jp: -1, social: 2, drive: 0, endurance: 2, gentleness: 3, stubborn: 0 } },
+                    { text: "我会顺便巡视一圈，确认一切都还在掌控里。", effect: { ei: 0, sn: -1, ft: -1, jp: -2, social: 1, drive: 1, endurance: 2, gentleness: 0, stubborn: 1 } }
+                ]
+            },
+            {
+                avatar: "👑",
+                category: "主场感测试",
+                hint: "有的牛天生就带管理感。",
+                text: "如果今天必须由你带领大家换场，你最在意什么？",
+                options: [
+                    { text: "路线要快，别磨蹭，跟上就对了。", effect: { ei: 2, sn: 1, ft: -1, jp: -2, social: 2, drive: 3, endurance: 1, gentleness: 0, stubborn: 1 } },
+                    { text: "秩序要稳，别挤别乱，整个队伍都得舒服。", effect: { ei: 1, sn: -1, ft: 2, jp: -2, social: 2, drive: 1, endurance: 2, gentleness: 3, stubborn: 0 } },
+                    { text: "我可以带，但必须按我判断来，不接受乱指挥。", effect: { ei: 0, sn: 0, ft: -1, jp: -1, social: 1, drive: 1, endurance: 2, gentleness: 0, stubborn: 3 } }
+                ]
+            }
+        ];
+
+        const profiles = {
+            ENFP: {
+                breed: "娟姗牛",
+                role: "明亮社交型",
+                emoji: "🐮",
+                tags: ["热情上头快", "氛围感强", "情绪传染力高"],
+                summary: "你像一头灵气很足的娟姗牛，温柔里带点活泼，走到哪都能把气氛带暖。你不是瞎热闹，是很会让别人觉得舒服。",
+                love: "你在关系里很需要回应，也擅长制造回应。你会主动靠近、主动表达，一旦认人，就很会给安全感。",
+                tips: ["别用冷处理对你，你会瞬间脑补很多版本。", "你需要被接住热情，而不是被嫌“太能量”。", "和你相处，真诚反馈比高冷更有效。"]
+            },
+            ENFJ: {
+                breed: "西门塔尔牛",
+                role: "牧场组织者型",
+                emoji: "🐂",
+                tags: ["会照顾群体", "节奏感强", "关系协调高手"],
+                summary: "你像一头非常会带队的西门塔尔牛，天然有组织力，能看到集体的状态，也知道怎么让队伍走得更顺。",
+                love: "你常常通过照顾、提醒和兜底表达在乎。你不是不会示弱，只是更习惯先把局面撑住。",
+                tips: ["别总把你当默认主心骨。", "你也需要被照顾，而不只是照顾别人。", "稳稳回应你，会让你更柔软。"]
+            },
+            ENTP: {
+                breed: "德州长角牛",
+                role: "野路子点子王型",
+                emoji: "🤠",
+                tags: ["脑回路野", "爱试新路", "不怕折腾"],
+                summary: "你像一头脑子特别活的德州长角牛，不一定按标准路线走，但总能搞出新办法。无聊比风险更让你难受。",
+                love: "你需要有火花的关系，最好能聊、能玩、能互相接住脑洞。死板和重复会让你迅速掉电。",
+                tips: ["别试图用旧规矩完全框住你。", "给你空间，你反而更愿意回来。", "最适合你的沟通方式是直接、有趣、别太无聊。"]
+            },
+            ENTJ: {
+                breed: "安格斯牛",
+                role: "领地总指挥型",
+                emoji: "👑",
+                tags: ["目标明确", "执行迅速", "掌控力强"],
+                summary: "你像一头黑亮有压迫感的安格斯牛，气场天生在线。你不是爱控制，而是不喜欢混乱，更习惯把事情推到可控轨道。",
+                love: "你表达在乎的方式，往往是帮对方搞定问题。嘴不一定甜，但行动很硬。",
+                tips: ["跟你沟通，结论先行最有效。", "你不需要事事独扛，适当示弱不会掉价。", "别让低效率和反复横跳消耗你。"]
+            },
+            ESFP: {
+                breed: "高地牛",
+                role: "镜头宠儿型",
+                emoji: "✨",
+                tags: ["可爱有记忆点", "舞台感强", "快乐外放"],
+                summary: "你像一头毛茸茸又极有辨识度的高地牛，自带可爱滤镜，存在感强，走到哪都很容易成为大家的注意力中心。",
+                love: "你喜欢鲜活、热闹、有互动的关系。你不是非要被围着转，但你确实需要被看见。",
+                tips: ["夸奖对你真的有用。", "别把你放进太沉闷的气氛里。", "你需要被欣赏，而不是被嫌“太显眼”。"]
+            },
+            ESFJ: {
+                breed: "荷斯坦奶牛",
+                role: "温柔主产型",
+                emoji: "🥛",
+                tags: ["责任心强", "稳定给出", "照顾感重"],
+                summary: "你像一头经典荷斯坦奶牛，可靠、耐心、愿意持续输出价值。你不一定最张扬，但通常是最不能缺的那个。",
+                love: "你在关系里很看重稳定和投入，会默默记住承诺，也会在日常里不断给回应。",
+                tips: ["别把你的付出当成理所当然。", "你最吃“被认真对待”这一套。", "长期稳定的陪伴会让你很安心。"]
+            },
+            ESTP: {
+                breed: "夏洛莱牛",
+                role: "开荒冲锋型",
+                emoji: "⚡",
+                tags: ["行动快", "不怕硬碰硬", "临场胆子大"],
+                summary: "你像一头肌肉感十足的夏洛莱牛，关键时刻说动就动，反应快，冲劲足，最烦磨磨唧唧。",
+                love: "你适合真实直接的关系，不喜欢把情绪悬在半空里。一起行动，比空谈更能建立连接。",
+                tips: ["别跟你绕圈子，直说更省事。", "你需要刺激感，也需要一点刹车提醒。", "最消耗你的，是只说感受不谈办法。"]
+            },
+            ESTJ: {
+                breed: "利木赞牛",
+                role: "稳场执行型",
+                emoji: "📏",
+                tags: ["讲秩序", "很能扛事", "稳定高效"],
+                summary: "你像一头标准答案感很强的利木赞牛，遇事不慌，认准目标就稳定推进。你不爱花里胡哨，但非常靠得住。",
+                love: "你在关系里最重视靠谱和一致。好听的话可以少一点，但失约绝对不行。",
+                tips: ["守时和守信，对你来说都不是小事。", "你已经很能扛了，偶尔放松不会影响你厉害。", "别让低标准的人长期占用你的耐心。"]
+            },
+            INFP: {
+                breed: "牦牛",
+                role: "高原慢热型",
+                emoji: "🏔️",
+                tags: ["耐寒耐心", "内心很深", "慢熟但真诚"],
+                summary: "你像一头在高原上慢慢走的牦牛，看起来安静，其实内心世界很辽阔。你不爱瞎展示，但一旦认定，就非常真。",
+                love: "你在关系里很慢热，需要先确认安全，再慢慢把真心给出去。你不是冷，是不想把珍贵的东西随便分发。",
+                tips: ["别逼你立刻给答案。", "温柔且稳定的回应，才是打开你的方式。", "你会体谅别人，也要记得照顾自己的感受。"]
+            },
+            INFJ: {
+                breed: "盖洛韦牛",
+                role: "雾原洞察型",
+                emoji: "🌫️",
+                tags: ["感知敏锐", "外冷内暖", "边界清晰"],
+                summary: "你像一头黑色毛绒感很强的盖洛韦牛，安静、克制，但观察力很深。很多事你不说，不代表你没看见。",
+                love: "你需要高质量连接，不太吃表面热闹。真正能让你放下防备的，是被理解而不是被追着热情。",
+                tips: ["尊重你的边界，比强行靠近更有效。", "你需要精神层面的默契。", "一旦被你信任，你会非常稳定。"]
+            },
+            INTP: {
+                breed: "比利时蓝牛",
+                role: "力学研究型",
+                emoji: "🧠",
+                tags: ["逻辑优先", "冷静拆解", "喜欢搞明白"],
+                summary: "你像一头外形很能打、脑子也很在线的比利时蓝牛。你不是不近人情，而是很多时候先想知道底层逻辑。",
+                love: "你喜欢清晰、真实、不过度捆绑的关系。对你来说，聊得通比仪式化示爱更重要。",
+                tips: ["别逼你即时输出情绪。", "给你思考空间，你会回得更深。", "和你沟通，讲逻辑比堆情绪有效。"]
+            },
+            INTJ: {
+                breed: "海福特牛",
+                role: "冷静谋局型",
+                emoji: "♟️",
+                tags: ["布局感强", "不爱废话", "长期主义"],
+                summary: "你像一头白脸红身、存在感稳定的海福特牛，看似安静，实际一直在默默评估路径、成本和后手。",
+                love: "你不会轻易给信任，但一旦给了，通常就是长期模式。你讨厌情绪操控，也看不上无效沟通。",
+                tips: ["结论先行能节省你很多耐心。", "别总拿情绪试探你。", "你适合高质量协作型的关系。"]
+            },
+            ISFP: {
+                breed: "水牛",
+                role: "慢热感受型",
+                emoji: "💧",
+                tags: ["情绪细腻", "重体验", "看似松弛"],
+                summary: "你像一头在水边待着最舒服的水牛，表面慢吞吞，实际上对环境和感受都很敏锐。舒服这件事，对你非常重要。",
+                love: "你不爱大张旗鼓地表达，却会通过陪伴、靠近和细节表现真心。你的爱很安静，但不浅。",
+                tips: ["粗暴和催促会让你迅速退后。", "你需要被温柔对待，也需要自己的节奏。", "最能打动你的，往往是细节。"]
+            },
+            ISFJ: {
+                breed: "丹麦红牛",
+                role: "温厚守仓型",
+                emoji: "🫶",
+                tags: ["照顾力强", "情感稳定", "耐心很长"],
+                summary: "你像一头非常稳的丹麦红牛，不爱抢风头，却能长时间地把事情和关系照顾好。你是那种“有你在就安心”的存在。",
+                love: "你在关系里会认真地记住很多小事，也愿意反复付出。但你同样需要被看见和珍惜。",
+                tips: ["别让你一直做沉默兜底的人。", "被需要会让你满足，但别总把自己放最后。", "真诚、稳定、少作妖，是你的舒适区。"]
+            },
+            ISTP: {
+                breed: "婆罗门牛",
+                role: "旱地生存型",
+                emoji: "🛠️",
+                tags: ["适应力强", "现场处理王", "嘴少手稳"],
+                summary: "你像一头在热环境里也很能扛的婆罗门牛，遇事不爱废话，先判断，再处理。你不是喜欢独来独往，而是更信行动。",
+                love: "你不爱黏，但关键时刻绝对顶。你的可靠感不是说出来的，是做出来的。",
+                tips: ["给你自由，你反而更愿意靠近。", "少一点拉扯，多一点并肩解决问题。", "你不是冷，只是不擅长包装。"]
+            },
+            ISTJ: {
+                breed: "瑞士褐牛",
+                role: "秩序耐久型",
+                emoji: "🧭",
+                tags: ["自律稳定", "边界清晰", "非常耐久"],
+                summary: "你像一头经典的瑞士褐牛，耐力、秩序和责任感都很强。你不会轻易夸口，但大多数时候都不掉链子。",
+                love: "你更相信时间积累出来的可靠感，而不是瞬时热烈。慢没关系，稳才有意义。",
+                tips: ["别轻易打乱你的节奏。", "你需要的是长期一致，而不是偶尔上头。", "学会更直接表达需求，会轻松很多。"]
+            }
+        };
+
+        const heroCowsRow1 = [
+            { name: "荷斯坦", coatLight: "#ffffff", coatDark: "#161616", patch: "#1a1a1a", bg1: "#fffdf8", bg2: "#ece7df", horn: "#d6c4a7", snout: "#f2c8cf", nose: "#b8747d", eye: "#70574a", pattern: "holstein" },
+            { name: "娟姗", coatLight: "#d5a46c", coatDark: "#9b6335", patch: "#b27545", bg1: "#fff5eb", bg2: "#ecd9c7", horn: "#d8c0a5", snout: "#f0b7b8", nose: "#b66f73", eye: "#71584a", pattern: "solid" },
+            { name: "安格斯", coatLight: "#58545a", coatDark: "#1f1e22", patch: "#2b2a2f", bg1: "#f4f1f7", bg2: "#e0dce6", horn: "#cdbfa5", snout: "#e5a8ae", nose: "#9b6167", eye: "#f2ddb2", pattern: "solid", tuft: true },
+            { name: "西门塔尔", coatLight: "#c87b4d", coatDark: "#8d4c2d", patch: "#fff7ef", bg1: "#fff5ee", bg2: "#ecded0", horn: "#d8c4ab", snout: "#f2bfc3", nose: "#b7767c", eye: "#6d5243", pattern: "whiteface" },
+            { name: "高地", coatLight: "#c8814c", coatDark: "#8a4c2d", patch: "#8a4c2d", bg1: "#fff4ec", bg2: "#ebdacd", horn: "#dfd1bb", snout: "#efb8bb", nose: "#af6f73", eye: "#6f5342", pattern: "shaggy", fringe: true },
+            { name: "夏洛莱", coatLight: "#f2e1bf", coatDark: "#c8b084", patch: "#ddc79f", bg1: "#fffaf1", bg2: "#ede2d0", horn: "#d7c4ab", snout: "#efbec2", nose: "#b87579", eye: "#69584a", pattern: "solid" }
+        ];
+
+        const heroCowsRow2 = [
+            { name: "牦牛", coatLight: "#533b31", coatDark: "#1f1613", patch: "#2b201c", bg1: "#f7f0eb", bg2: "#e1d4cb", horn: "#d8c9b5", snout: "#e9b1b7", nose: "#a4666e", eye: "#eed7b1", pattern: "shaggy", fringe: true },
+            { name: "水牛", coatLight: "#7a8087", coatDark: "#42474d", patch: "#535861", bg1: "#f4f5f8", bg2: "#dfe4ea", horn: "#c8b89d", snout: "#dfafb7", nose: "#926772", eye: "#fff0ca", pattern: "mask" },
+            { name: "德长", coatLight: "#b8845b", coatDark: "#7b4a30", patch: "#8d5838", bg1: "#fff5ec", bg2: "#ebdbcf", horn: "#e2d2bc", snout: "#efb9be", nose: "#b06c72", eye: "#6e5647", pattern: "forehead" },
+            { name: "海福特", coatLight: "#b36b46", coatDark: "#7d4229", patch: "#fff9f2", bg1: "#fff5ee", bg2: "#eedfd2", horn: "#d8c4ab", snout: "#f0bec2", nose: "#b7777d", eye: "#69564a", pattern: "whiteface" },
+            { name: "盖洛韦", coatLight: "#4a474d", coatDark: "#1c1b1f", patch: "#f4f1eb", bg1: "#f6f4f7", bg2: "#dfdbe3", horn: "#d2c6b2", snout: "#e7b2b9", nose: "#9c6770", eye: "#f6e4bc", pattern: "belt", fringe: true },
+            { name: "褐牛", coatLight: "#a27a59", coatDark: "#684b34", patch: "#80593d", bg1: "#fff5ec", bg2: "#ead8cb", horn: "#d7c4ab", snout: "#edbabd", nose: "#b37277", eye: "#6f5646", pattern: "solid" }
+        ];
+
+        const metricLabels = ["社交力", "冲劲值", "耐力值", "温润值", "轴劲值"];
+        const state = {
+            index: 0,
+            answers: Array(questions.length).fill(null)
+        };
+
+        const landingScreen = document.getElementById("landingScreen");
+        const quizScreen = document.getElementById("quizScreen");
+        const resultScreen = document.getElementById("resultScreen");
+        const progressCount = document.getElementById("progressCount");
+        const progressFill = document.getElementById("progressFill");
+        const promptAvatar = document.getElementById("promptAvatar");
+        const promptCategory = document.getElementById("promptCategory");
+        const promptHint = document.getElementById("promptHint");
+        const questionTitle = document.getElementById("questionTitle");
+        const optionList = document.getElementById("optionList");
+        const nextBtn = document.getElementById("nextBtn");
+        const backBtn = document.getElementById("backBtn");
+        const startBtn = document.getElementById("startBtn");
+        const restartBtn = document.getElementById("restartBtn");
+        const shareBtn = document.getElementById("shareBtn");
+        const toast = document.getElementById("toast");
+        const heroCowRow1 = document.getElementById("heroCowRow1");
+        const heroCowRow2 = document.getElementById("heroCowRow2");
+
+        renderHeroCows();
+
+        startBtn.addEventListener("click", startQuiz);
+        nextBtn.addEventListener("click", goNext);
+        backBtn.addEventListener("click", goPrev);
+        restartBtn.addEventListener("click", restartQuiz);
+        shareBtn.addEventListener("click", copyShareText);
+
+        function renderHeroCows() {
+            renderHeroRow(heroCowRow1, heroCowsRow1, "row1");
+            renderHeroRow(heroCowRow2, heroCowsRow2, "row2");
+        }
+
+        function renderHeroRow(container, cows, rowKey) {
+            const doubled = [...cows, ...cows];
+            container.innerHTML = doubled.map((cow, index) => createHeroCowCard(cow, `${rowKey}-${index}`)).join("");
+        }
+
+        function createHeroCowCard(cow, uid) {
+            return `
+                <div class="mou-card">
+                    <div class="mou-photo" style="--cow-bg-1:${cow.bg1}; --cow-bg-2:${cow.bg2};">
+                        ${createCowSvg(cow, uid)}
+                    </div>
+                    <div class="mou-name">${cow.name}</div>
+                </div>
+            `;
+        }
+
+        function createCowSvg(cow, uid) {
+            const patternSvg = getCowPatternSvg(cow);
+            const fringeSvg = cow.fringe ? `
+                <path d="M23 28c3-6 7-8 12-7-1 6-3 9-8 12-2.5-1-3.5-2.5-4-5z" fill="${cow.coatDark}" opacity="0.95" />
+                <path d="M48 18c6 2 10 6 11 12-6-1-10-3-14-8 1-2 2-3 3-4z" fill="${cow.coatDark}" opacity="0.95" />
+                <path d="M63 23c5 1 8 4 10 9-5 0-9-1.5-13-6 .6-1.5 1.6-2.3 3-3z" fill="${cow.coatDark}" opacity="0.95" />
+            ` : "";
+
+            return `
+                <svg viewBox="0 0 96 88" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="coat-${uid}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${cow.coatLight}" />
+                            <stop offset="100%" stop-color="${cow.coatDark}" />
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="48" cy="74" rx="22" ry="8" fill="rgba(0,0,0,0.09)" />
+                    <path d="M25 30c-8-1-14 4-14 12 0 5 3 9 8 10 6 1 12-3 14-9 1-7-2-12-8-13z" fill="url(#coat-${uid})" stroke="#3a2c24" stroke-width="2" />
+                    <path d="M71 30c8-1 14 4 14 12 0 5-3 9-8 10-6 1-12-3-14-9-1-7 2-12 8-13z" fill="url(#coat-${uid})" stroke="#3a2c24" stroke-width="2" />
+                    <path d="M28 24c-1-9 6-16 15-17 1 7-1 14-8 18z" fill="${cow.horn}" stroke="#8b775d" stroke-width="1.5" stroke-linejoin="round" />
+                    <path d="M68 24c1-9-6-16-15-17-1 7 1 14 8 18z" fill="${cow.horn}" stroke="#8b775d" stroke-width="1.5" stroke-linejoin="round" />
+                    ${fringeSvg}
+                    <ellipse cx="48" cy="40" rx="27" ry="24" fill="url(#coat-${uid})" stroke="#3a2c24" stroke-width="2.2" />
+                    ${patternSvg}
+                    <ellipse cx="48" cy="56" rx="18" ry="12" fill="${cow.snout}" stroke="#8e676a" stroke-width="1.6" />
+                    <ellipse cx="40" cy="54" rx="3.8" ry="2.6" fill="${cow.nose}" />
+                    <ellipse cx="56" cy="54" rx="3.8" ry="2.6" fill="${cow.nose}" />
+                    <path d="M48 55.5c-1.2 2.2-2.8 3.8-5.3 4.8" stroke="#7a5859" stroke-width="1.4" stroke-linecap="round" fill="none" />
+                    <path d="M48 55.5c1.2 2.2 2.8 3.8 5.3 4.8" stroke="#7a5859" stroke-width="1.4" stroke-linecap="round" fill="none" />
+                    <ellipse cx="38" cy="39" rx="3.4" ry="4.7" fill="${cow.eye}" />
+                    <ellipse cx="58" cy="39" rx="3.4" ry="4.7" fill="${cow.eye}" />
+                    <circle cx="38" cy="38" r="1.1" fill="#ffffff" />
+                    <circle cx="58" cy="38" r="1.1" fill="#ffffff" />
+                    <path d="M29 47c-5-1.2-9-1.3-13 .2" stroke="#604a3f" stroke-width="1.2" stroke-linecap="round" />
+                    <path d="M29 51c-4.8.4-8.5 1.3-12 3.2" stroke="#604a3f" stroke-width="1.2" stroke-linecap="round" />
+                    <path d="M67 47c5-1.2 9-1.3 13 .2" stroke="#604a3f" stroke-width="1.2" stroke-linecap="round" />
+                    <path d="M67 51c4.8.4 8.5 1.3 12 3.2" stroke="#604a3f" stroke-width="1.2" stroke-linecap="round" />
+                </svg>
+            `;
+        }
+
+        function getCowPatternSvg(cow) {
+            const color = cow.patch || cow.coatDark;
+            switch (cow.pattern) {
+                case "holstein":
+                    return `
+                        <path d="M24 38c5-8 12-11 19-10-3 8-7 13-14 16-3-1-4.5-3-5-6z" fill="${color}" opacity="0.96" />
+                        <path d="M56 22c10 1 16 7 17 16-7-2-13-2-18 0-1-7-1-12 1-16z" fill="${color}" opacity="0.96" />
+                        <ellipse cx="61" cy="46" rx="7" ry="6" fill="${color}" opacity="0.92" />
+                    `;
+                case "whiteface":
+                    return `
+                        <ellipse cx="48" cy="41" rx="15" ry="17" fill="#fbf7f1" opacity="0.98" />
+                        <ellipse cx="48" cy="31" rx="9" ry="7" fill="#fbf7f1" opacity="0.98" />
+                    `;
+                case "mask":
+                    return `
+                        <path d="M27 34c6-7 13-10 21-10 8 0 15 3 21 10-6-2.2-13-3.4-21-3.4-8 0-15 1.2-21 3.4z" fill="${color}" opacity="0.94" />
+                    `;
+                case "forehead":
+                    return `
+                        <path d="M48 22c6 4 8 8 8 14-5-2.4-11-2.4-16 0 0-6 2-10 8-14z" fill="${color}" opacity="0.92" />
+                    `;
+                case "belt":
+                    return `
+                        <rect x="31" y="34" width="34" height="11" rx="5.5" fill="#f3efe6" opacity="0.96" />
+                    `;
+                case "shaggy":
+                    return `
+                        <path d="M23 30c4-6 8-9 13-9-1 6-4 11-10 15-2-1.5-3-3.2-3-6z" fill="${color}" opacity="0.94" />
+                        <path d="M48 18c6 2 10 6 11 12-6-.8-10-2.8-14-8 .8-1.8 1.8-3 3-4z" fill="${color}" opacity="0.94" />
+                        <path d="M64 23c5 1.5 8 5 10 10-5-.2-9-2-13-6.5 0-1.6 1-2.8 3-3.5z" fill="${color}" opacity="0.94" />
+                    `;
+                default:
+                    return "";
+            }
+        }
+
+        function startQuiz() {
+            switchScreen("quiz");
+            renderQuestion();
+        }
+
+        function restartQuiz() {
+            state.index = 0;
+            state.answers = Array(questions.length).fill(null);
+            switchScreen("landing");
+        }
+
+        function switchScreen(target) {
+            landingScreen.classList.toggle("active", target === "landing");
+            quizScreen.classList.toggle("active", target === "quiz");
+            resultScreen.classList.toggle("active", target === "result");
+        }
+
+        function renderQuestion() {
+            const question = questions[state.index];
+            const selected = state.answers[state.index];
+            progressCount.textContent = `${state.index + 1} / ${questions.length}`;
+            progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+            promptAvatar.textContent = question.avatar;
+            promptCategory.textContent = question.category;
+            promptHint.textContent = question.hint;
+            questionTitle.textContent = question.text;
+            optionList.innerHTML = "";
+
+            question.options.forEach((option, optionIndex) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = `option${selected === optionIndex ? " active" : ""}`;
+                button.innerHTML = `<div class="option-key">${String.fromCharCode(65 + optionIndex)}</div><div class="option-text">${option.text}</div>`;
+                button.addEventListener("click", () => selectOption(optionIndex));
+                optionList.appendChild(button);
+            });
+
+            nextBtn.disabled = selected === null;
+            nextBtn.innerHTML = state.index === questions.length - 1 ? "查看结果 <span>→</span>" : "继续 <span>→</span>";
+            backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+        }
+
+        function selectOption(optionIndex) {
+            state.answers[state.index] = optionIndex;
+            [...optionList.children].forEach((node, idx) => {
+                node.classList.toggle("active", idx === optionIndex);
+            });
+            nextBtn.disabled = false;
+        }
+
+        function goNext() {
+            if (state.answers[state.index] === null) return;
+            if (state.index < questions.length - 1) {
+                state.index += 1;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                renderResult();
+                switchScreen("result");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+
+        function goPrev() {
+            if (state.index === 0) return;
+            state.index -= 1;
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function computeResult() {
+            const totals = {
+                ei: 0,
+                sn: 0,
+                ft: 0,
+                jp: 0,
+                social: 0,
+                drive: 0,
+                endurance: 0,
+                gentleness: 0,
+                stubborn: 0
+            };
+
+            state.answers.forEach((answerIndex, questionIndex) => {
+                const effect = questions[questionIndex].options[answerIndex].effect;
+                Object.keys(effect).forEach((key) => {
+                    totals[key] += effect[key];
+                });
+            });
+
+            const code = [
+                totals.ei >= 0 ? "E" : "I",
+                totals.sn >= 0 ? "N" : "S",
+                totals.ft >= 0 ? "F" : "T",
+                totals.jp >= 0 ? "P" : "J"
+            ].join("");
+
+            const metrics = {
+                social: clamp(Math.round(30 + totals.social * 7), 22, 99),
+                drive: clamp(Math.round(28 + totals.drive * 7), 20, 99),
+                endurance: clamp(Math.round(34 + totals.endurance * 7), 24, 99),
+                gentleness: clamp(Math.round(30 + totals.gentleness * 7), 22, 99),
+                stubborn: clamp(Math.round(26 + totals.stubborn * 7), 18, 99)
+            };
+
+            return {
+                code,
+                profile: profiles[code],
+                metrics
+            };
+        }
+
+        function renderResult() {
+            const result = computeResult();
+            const { code, profile, metrics } = result;
+            document.getElementById("resultCode").textContent = code;
+            document.getElementById("resultBreed").textContent = profile.breed;
+            document.getElementById("resultRole").textContent = profile.role;
+            document.getElementById("resultEmoji").textContent = profile.emoji;
+            document.getElementById("resultSummary").textContent = profile.summary;
+            document.getElementById("resultLove").textContent = profile.love;
+
+            const tagsContainer = document.getElementById("resultTags");
+            tagsContainer.innerHTML = profile.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+
+            const tipsContainer = document.getElementById("resultTips");
+            tipsContainer.innerHTML = profile.tips.map((tip) => `<li>${tip}</li>`).join("");
+
+            const metricEntries = [
+                [metricLabels[0], metrics.social],
+                [metricLabels[1], metrics.drive],
+                [metricLabels[2], metrics.endurance],
+                [metricLabels[3], metrics.gentleness],
+                [metricLabels[4], metrics.stubborn]
+            ];
+            document.getElementById("metricList").innerHTML = metricEntries.map(([label, value]) => `
+                <div class="metric-item">
+                    <div class="metric-label">${label}</div>
+                    <div class="metric-track"><div class="metric-fill" style="width:${value}%"></div></div>
+                    <div class="metric-value">${value}</div>
+                </div>
+            `).join("");
+
+            const shareText = `我测出来的 MouTI 是【${profile.breed}｜${profile.role}】\n代码：${code}\n标签：${profile.tags.join(" / ")}\n一句话总结：${profile.summary}`;
+            document.getElementById("shareBox").textContent = shareText;
+            shareBtn.dataset.shareText = shareText;
+
+            drawRadar([metrics.social, metrics.drive, metrics.endurance, metrics.gentleness, metrics.stubborn], metricLabels);
+        }
+
+        function drawRadar(values, labels) {
+            const canvas = document.getElementById("radarCanvas");
+            const ctx = canvas.getContext("2d");
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2 + 6;
+            const radius = 110;
+            const levels = 4;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(0.5, 0.5);
+
+            for (let level = levels; level >= 1; level -= 1) {
+                const currentRadius = (radius / levels) * level;
+                ctx.beginPath();
+                labels.forEach((_, index) => {
+                    const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / labels.length;
+                    const x = centerX + Math.cos(angle) * currentRadius;
+                    const y = centerY + Math.sin(angle) * currentRadius;
+                    if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = level % 2 === 0 ? "rgba(122, 86, 58, 0.05)" : "rgba(122, 86, 58, 0.02)";
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.08)";
+                ctx.lineWidth = 1;
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            labels.forEach((label, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / labels.length;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
+                ctx.stroke();
+
+                const textX = centerX + Math.cos(angle) * (radius + 24);
+                const textY = centerY + Math.sin(angle) * (radius + 24);
+                ctx.fillStyle = "#6b6057";
+                ctx.font = "700 13px Microsoft YaHei";
+                ctx.textAlign = textX < centerX - 6 ? "right" : textX > centerX + 6 ? "left" : "center";
+                ctx.textBaseline = textY < centerY ? "bottom" : "top";
+                ctx.fillText(label, textX, textY);
+            });
+
+            ctx.beginPath();
+            values.forEach((value, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / values.length;
+                const scaledRadius = (value / 100) * radius;
+                const x = centerX + Math.cos(angle) * scaledRadius;
+                const y = centerY + Math.sin(angle) * scaledRadius;
+                if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = "rgba(122, 86, 58, 0.18)";
+            ctx.strokeStyle = "#5d412b";
+            ctx.lineWidth = 2.5;
+            ctx.fill();
+            ctx.stroke();
+
+            values.forEach((value, index) => {
+                const angle = (-Math.PI / 2) + (Math.PI * 2 * index) / values.length;
+                const scaledRadius = (value / 100) * radius;
+                const x = centerX + Math.cos(angle) * scaledRadius;
+                const y = centerY + Math.sin(angle) * scaledRadius;
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = "#5d412b";
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = "#f0db67";
+                ctx.fill();
+            });
+
+            ctx.restore();
+        }
+
+        async function copyShareText() {
+            const text = shareBtn.dataset.shareText || document.getElementById("shareBox").textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast("分享文案已复制，可以直接发给朋友");
+            } catch (error) {
+                showToast("复制失败，请手动长按复制");
+            }
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add("show");
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 1800);
+        }
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+    </script>
+</body>
+</html>
