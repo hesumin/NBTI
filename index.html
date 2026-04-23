@@ -16,6 +16,7 @@
       --cat: #f0db67;
       --dog: #d9a5a1;
       --cow: #d7b68d;
+      --sb: #c4b5fd;
       --black: #3f302d;
       --radius-xl: 30px;
       --radius-lg: 24px;
@@ -222,6 +223,7 @@
     .mini-card.cat .mini-photo { background: radial-gradient(circle at 50% 20%, #fffdf8 0%, #eceff4 100%); }
     .mini-card.dog .mini-photo { background: radial-gradient(circle at 50% 20%, #fff7f3 0%, #f3dfd9 100%); }
     .mini-card.cow .mini-photo { background: radial-gradient(circle at 50% 20%, #fffaf2 0%, #ece2d2 100%); }
+    .mini-card.sb .mini-photo { background: radial-gradient(circle at 50% 20%, #faf5ff 0%, #ede9fe 100%); }
 
     .mini-name {
       font-size: 11px;
@@ -373,6 +375,11 @@
       border: 1px solid rgba(122, 86, 58, 0.12);
     }
 
+    .project-card.sb {
+      background: linear-gradient(135deg, #f5f0ff 0%, #ede5f7 100%);
+      border: 1px solid rgba(124, 58, 237, 0.12);
+    }
+
     .project-top {
       display: flex;
       align-items: center;
@@ -495,7 +502,7 @@
       position: sticky;
       bottom: 14px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin-top: 18px;
       padding: 10px;
@@ -576,11 +583,11 @@
         margin-right: auto;
       }
 
-      .project-grid,
-      .why-grid,
-      .path-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
+        .project-grid,
+        .why-grid,
+        .path-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
     }
   </style>
 </head>
@@ -606,6 +613,8 @@
           <div class="mini-card cat"><div class="mini-photo">🐈‍⬛</div><div class="mini-name">俄蓝</div></div>
           <div class="mini-card dog"><div class="mini-photo">🦮</div><div class="mini-name">边牧</div></div>
           <div class="mini-card cow"><div class="mini-photo">🐂</div><div class="mini-name">牦牛</div></div>
+          <div class="mini-card sb"><div class="mini-photo">💼</div><div class="mini-name">社畜</div></div>
+          <div class="mini-card sb"><div class="mini-photo">🧟</div><div class="mini-name">丧尸模式</div></div>
         </div>
         <div class="marquee-row reverse">
           <div class="mini-card dog"><div class="mini-photo">🐕</div><div class="mini-name">柴犬</div></div>
@@ -614,20 +623,22 @@
           <div class="mini-card dog"><div class="mini-photo">🐩</div><div class="mini-name">贵宾</div></div>
           <div class="mini-card cow"><div class="mini-photo">🌾</div><div class="mini-name">利木赞</div></div>
           <div class="mini-card cat"><div class="mini-photo">🎀</div><div class="mini-name">布偶</div></div>
+          <div class="mini-card sb"><div class="mini-photo">😏</div><div class="mini-name">职场猫咪</div></div>
           <div class="mini-card dog"><div class="mini-photo">🐕</div><div class="mini-name">柴犬</div></div>
           <div class="mini-card cow"><div class="mini-photo">🐄</div><div class="mini-name">荷斯坦</div></div>
           <div class="mini-card cat"><div class="mini-photo">😼</div><div class="mini-name">豹猫</div></div>
           <div class="mini-card dog"><div class="mini-photo">🐩</div><div class="mini-name">贵宾</div></div>
+          <div class="mini-card sb"><div class="mini-photo">🤡</div><div class="mini-name">职场小丑</div></div>
           <div class="mini-card cow"><div class="mini-photo">🌾</div><div class="mini-name">利木赞</div></div>
           <div class="mini-card cat"><div class="mini-photo">🎀</div><div class="mini-name">布偶</div></div>
         </div>
       </div>
 
       <h1 class="hero-title"><span class="highlight">MBTI 测腻了，NBTI 来了。</span></h1>
-      <p class="hero-subtitle">先别做人类了，这次直接选本体。猫系、狗系、牛系三条支线都能单独开测，挑一个最像你现在状态的，测完顺手去认领你的动物人格。</p>
+      <p class="hero-subtitle">先别做人类了，这次直接选本体。猫系、狗系、牛系、社畜四条支线都能单独开测，挑一个最像你现在状态的，测完顺手去认领你的人格。</p>
 
       <div class="hero-meta">
-        <div class="hero-chip">3 条动物人格支线</div>
+        <div class="hero-chip">4 条人格支线</div>
         <div class="hero-chip">每套 12 题 × 16 结果</div>
         <div class="hero-chip">测完可直接晒结果</div>
       </div>
@@ -694,13 +705,32 @@
             </div>
             <div class="project-mark">🐮</div>
           </div>
-          <p class="project-copy">适合抽象打工人语境。比猫狗更少见，但更有“牛马文学”的辨识度，能做出稳场、兜底、耐久型人格的差异感。</p>
+          <p class="project-copy">适合抽象打工人语境。比猫狗更少见，但更有"牛马文学"的辨识度，能做出稳场、兜底、耐久型人格的差异感。</p>
           <div class="tag-row">
             <span class="tag">牦牛 / 荷斯坦 / 安格斯</span>
             <span class="tag">牧场情境题</span>
             <span class="tag">16 种牛格</span>
           </div>
           <a class="project-btn" href="./mou-ti/">去认领牛设 <span>→</span></a>
+
+        </article>
+
+        <article class="project-card sb">
+          <div class="project-top">
+            <div>
+              <div class="project-code">NBTI / SB LINE</div>
+              <h3 class="project-name">SbTI</h3>
+              <p class="project-role">暴躁玩梗、贴近现实的社畜人格支线</p>
+            </div>
+            <div class="project-mark">💼</div>
+          </div>
+          <p class="project-copy">适合互联网打工人。题目全是真实职场情境和抽象玩梗，结果用英文缩写梗+中文称号，16种社畜人格从控制狂魔到摆烂之王全覆盖。</p>
+          <div class="tag-row">
+            <span class="tag">CTRL / BOSS / 摆烂王</span>
+            <span class="tag">12 道玩梗题</span>
+            <span class="tag">16 种社畜格</span>
+          </div>
+          <a class="project-btn" href="./sb-ti/">去认领社畜设 <span>→</span></a>
 
         </article>
       </div>
@@ -719,7 +749,7 @@
         <article class="why-card">
           <div class="why-index">02</div>
           <h3 class="why-title">三条支线，三种完全不同的气质</h3>
-          <p class="why-copy">猫系偏冷感、狗系偏热烈、牛系偏抽象打工人。就算是同一个人，换一条线玩也会有完全不一样的代入体验。</p>
+          <p class="why-copy">猫系偏冷感、狗系偏热烈、牛系偏抽象打工人、社畜系偏暴躁玩梗。就算是同一个人，换一条线玩也会有完全不一样的代入体验。</p>
         </article>
         <article class="why-card">
           <div class="why-index">03</div>
@@ -759,7 +789,8 @@
     <nav class="floating-bar" aria-label="快捷入口">
       <a class="floating-link" href="./cat-ti/">🐱 猫系开测</a>
       <a class="floating-link" href="./dog-ti/">🐶 狗系开测</a>
-      <a class="floating-link" href="./mou-ti/">🐮 牛系开测</a>
+      <a class="floating-link" href="./mou-ti/">🐮 牛系</a>
+      <a class="floating-link" href="./sb-ti/">💼 社畜系</a>
     </nav>
 
   </main>

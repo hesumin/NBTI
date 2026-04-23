@@ -9,6 +9,7 @@ on:
       - "cat-ti/**"
       - "dog-ti/**"
       - "mou-ti/**"
+      - "sb-ti/**"
       - ".github/workflows/deploy-nbti.yml"
   workflow_dispatch:
 

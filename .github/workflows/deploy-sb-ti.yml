@@ -1,0 +1,31 @@
+name: Deploy SbTI to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "sb-ti/**"
+      - ".github/workflows/deploy-sb-ti.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy SbTI
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: sb-ti
+          directory: ./sb-ti
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
