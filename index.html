@@ -450,12 +450,26 @@
 
     .project-btn {
       width: 100%;
-      justify-content: space-between;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(65,53,51,0.08);
-      color: #4d403d;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+      justify-content: center;
+      gap: 8px;
+      min-height: 52px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
     }
+
+    .project-btn:hover {
+      transform: translateY(-2px);
+      filter: saturate(1.06);
+    }
+
+    .project-card.cat .project-btn { background: linear-gradient(135deg, #3f302d 0%, #5a453e 100%); }
+    .project-card.dog .project-btn { background: linear-gradient(135deg, #8b4a43 0%, #a66a62 100%); }
+    .project-card.cow .project-btn { background: linear-gradient(135deg, #7a6038 0%, #9a7a50 100%); }
+    .project-card.sb .project-btn { background: linear-gradient(135deg, #4c3a7d 0%, #6b52a3 100%); }
 
     .why-card,
     .path-card {
@@ -505,27 +519,38 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin-top: 18px;
-      padding: 10px;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(255,255,255,0.72);
+      padding: 12px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(200,190,182,0.2);
       border-radius: 22px;
-      box-shadow: 0 16px 32px rgba(74, 54, 50, 0.12);
-      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 40px rgba(74, 54, 50, 0.15);
+      backdrop-filter: blur(16px);
     }
 
     .floating-link {
-      min-height: 46px;
+      min-height: 50px;
       border-radius: 16px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      color: #5f4a46;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(105, 84, 79, 0.08);
+      gap: 5px;
+      color: #fff;
+      border: none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      transition: transform 0.18s ease, filter 0.18s ease;
     }
+
+    .floating-link:hover {
+      transform: translateY(-2px);
+      filter: saturate(1.06);
+    }
+
+    .floating-link:nth-child(1) { background: linear-gradient(135deg, #3f302d 0%, #5a453e 100%); }
+    .floating-link:nth-child(2) { background: linear-gradient(135deg, #8b4a43 0%, #a66a62 100%); }
+    .floating-link:nth-child(3) { background: linear-gradient(135deg, #7a6038 0%, #9a7a50 100%); }
+    .floating-link:nth-child(4) { background: linear-gradient(135deg, #4c3a7d 0%, #6b52a3 100%); }
 
     .bottom-note {
       margin: 18px 0 0;
@@ -594,7 +619,6 @@
 <body>
   <main class="app">
     <section class="hero panel">
-      <div class="eyebrow">NBTI ANIMAL VERSE</div>
       <div class="logo" aria-label="NBTI">
         <span>N</span><span>B</span><span>T</span><span>I</span>
       </div>
