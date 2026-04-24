@@ -424,7 +424,7 @@
         <p class="hero-subtitle">"这一世，我要搞清楚自己在公司食物链里到底是哪一层。"</p>
 
         <div class="hero-meta">
-            <div class="hero-chip">12 道职场情境题</div>
+            <div class="hero-chip">25 道职场情境题</div>
             <div class="hero-chip">16 种社畜人格</div>
             <div class="hero-chip">带雷达图和生存指南</div>
         </div>
@@ -448,7 +448,7 @@
     <section id="quizScreen" class="screen quiz-screen">
         <div class="topbar">
             <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
-            <div id="progressCount" class="progress-count">1 / 12</div>
+            <div id="progressCount" class="progress-count">1 / 25</div>
             <div></div>
         </div>
         <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
@@ -572,14 +572,14 @@ const questions = [
         options:[
             {text: "已经打开文档准备干活了", effect:{work:2}},
             {text: "装死，等别人接话", effect:{work:-1}},
-            {text: "直接回复'好的收到'然后关机走人", effect:{work:-2}}
+            {text: "直接回复“好的收到”然后关机走人", effect:{work:-2}}
         ]
     },
     {
         avatar: "🎤",
         category: "团建社交场",
         hint: "KTV 是检验社交能量的终极考场。",
-        text: "公司团建去 KTV，领导点了你：「小王啊，上来唱一个！」你会：",
+        text: "公司团建去 KTV，领导点了你：“小王啊，上来唱一个！”你会：",
         options:[
             {text: "站起来就吼，麦霸就是我", effect:{social:2}},
             {text: "笑着摆手说我不行，然后缩回角落", effect:{social:-1}},
@@ -590,7 +590,7 @@ const questions = [
         avatar: "🫓",
         category: "画饼耐受度",
         hint: "你对老板画的饼消化能力如何？",
-        text: "老板说「我们是一家人」「年轻人要多吃苦」「这个饼我先画为敬」，你听了之后内心 OS 是：",
+        text: "老板说“我们是一家人”“年轻人要多吃苦”“这个饼我先画为敬”，你听了之后内心 OS 是：",
         options:[
             {text: "嗯！老板说得有道理！", effect:{attitude:2}},
             {text: "面带微笑，心里已经骂了三遍", effect:{attitude:0}},
@@ -603,7 +603,7 @@ const questions = [
         hint: "手机没电这件事，你信几分？",
         text: "对象超过 5 小时没回消息，说自己手机没电了。你的真实想法是：",
         options:[
-            {text: "没电就不可能 5 小时，是不是有什么事瞒着我", effect:{emotion:-2}},
+            {text: "没电不可能 5 小时，是不是有什么事瞒着我", effect:{emotion:-2}},
             {text: "半信半疑，但也不想闹太僵", effect:{emotion:0}},
             {text: "可能真的忘充电了吧，没事儿", effect:{emotion:2}}
         ]
@@ -693,7 +693,183 @@ const questions = [
         options:[
             {text: "朋友的朋友也是我的朋友！热情聊天！", effect:{social:2}},
             {text: "看对方状态，能聊就聊两句", effect:{social:0}},
-            {text: "对「朋友的朋友」天然有距离感，怕影响二人关系", effect:{social:-2}}
+            {text: "对“朋友的朋友”天然有距离感，怕影响二人关系", effect:{social:-2}}
+        ]
+    },
+    {
+        avatar: "📣",
+        category: "晨会发言",
+        hint: "短短一句“大家都说一下吧”最能测出人。",
+        text: "晨会上老板突然说：“每个人都简单同步一下昨天进度。”轮到你时，你通常会：",
+        options:[
+            {text: "条理清晰，顺手把今天计划也讲了", effect:{work:2}},
+            {text: "能说完就行，别追问细节", effect:{work:0}},
+            {text: "大脑瞬间空白，希望网络立刻卡掉", effect:{work:-2}}
+        ]
+    },
+    {
+        avatar: "🧾",
+        category: "报销修罗场",
+        hint: "流程一多，人的灵魂就开始分层。",
+        text: "一张 37 块 5 的打车票来回被退了三次，说你附件命名格式不规范。你会：",
+        options:[
+            {text: "立刻按要求改到他挑不出刺", effect:{action:2}},
+            {text: "嘴上说收到，先缓半小时再改", effect:{action:0}},
+            {text: "突然觉得这 37 块 5 不值得我活着", effect:{action:-2}}
+        ]
+    },
+    {
+        avatar: "🫠",
+        category: "工位人格",
+        hint: "工位是打工人的第二张脸。",
+        text: "你的工位桌面通常更接近哪种状态？",
+        options:[
+            {text: "整整齐齐，数据线都像军训过", effect:{attitude:2}},
+            {text: "能找到东西就行，乱中有序", effect:{attitude:0}},
+            {text: "杯子、纸巾、便签、外卖袋共同构成我的生态系统", effect:{attitude:-2}}
+        ]
+    },
+    {
+        avatar: "🧠",
+        category: "汇报脑补",
+        hint: "有的人在汇报，有的人已经脑补到离职。",
+        text: "领导说“你等会来我办公室一下”，你在走过去的这 20 秒里会：",
+        options:[
+            {text: "快速回忆最近所有项目，准备应对", effect:{emotion:2}},
+            {text: "猜一下大概是什么事，但不至于慌", effect:{emotion:0}},
+            {text: "已经脑补到自己收拾工位、朋友圈发“新的开始”了", effect:{emotion:-2}}
+        ]
+    },
+    {
+        avatar: "🧍",
+        category: "电梯尬聊",
+        hint: "短短 12 层，够一些人死三次。",
+        text: "你和领导单独困在电梯里 40 秒，对方还主动问你“最近怎么样”。你会：",
+        options:[
+            {text: "自然接话，顺手展示一下工作状态", effect:{social:2}},
+            {text: "礼貌回复两句，希望赶紧到楼层", effect:{social:0}},
+            {text: "表面微笑，灵魂已经从天灵盖飞出去了", effect:{social:-2}}
+        ]
+    },
+    {
+        avatar: "📱",
+        category: "已读未回",
+        hint: "有些消息 3 分钟没回，脑内已经完结一整季。",
+        text: "你给很在意的人发了条消息，对方已读但 20 分钟没回。你更像：",
+        options:[
+            {text: "继续做自己的事，等对方忙完再说", effect:{emotion:2}},
+            {text: "会看两眼手机，但还能稳住", effect:{emotion:0}},
+            {text: "开始复盘自己刚刚哪句话是不是有问题", effect:{emotion:-2}}
+        ]
+    },
+    {
+        avatar: "🛎️",
+        category: "审批链",
+        hint: "一个流程能看出你对秩序和自由的真实态度。",
+        text: "一个简单需求要经过 4 个人审批，你会怎么想？",
+        options:[
+            {text: "流程清楚就行，按规矩来最省事", effect:{attitude:2}},
+            {text: "能理解，但还是会忍不住吐槽", effect:{attitude:0}},
+            {text: "这不是流程，这是人类文明倒退", effect:{attitude:-2}}
+        ]
+    },
+    {
+        avatar: "🚀",
+        category: "野心可见度",
+        hint: "有些人嘴上低调，Excel 里已经规划到 2029 年。",
+        text: "当别人问你“你之后想做到什么位置”时，你更可能回答：",
+        options:[
+            {text: "我有目标，而且不止一个", effect:{work:2}},
+            {text: "先把眼前做好，后面再看", effect:{work:0}},
+            {text: "能活着领工资就已经很不错了", effect:{work:-2}}
+        ]
+    },
+    {
+        avatar: "🍻",
+        category: "饭局人格",
+        hint: "桌上一轮敬酒，能暴露很多隐藏属性。",
+        text: "客户饭局上气氛正热，大家都在轮番敬酒。你的状态更像：",
+        options:[
+            {text: "该接话接话，该举杯举杯，场面我能稳住", effect:{social:2}},
+            {text: "正常配合，但只想早点结束", effect:{social:0}},
+            {text: "我愿意原地消失，也不想在这种局里当 NPC", effect:{social:-2}}
+        ]
+    },
+    {
+        avatar: "🪫",
+        category: "下班电量",
+        hint: "有的人下班像放学，有的人像手机剩 1%。",
+        text: "下班之后朋友喊你出去吃饭顺便转转，你通常会：",
+        options:[
+            {text: "去！我还能再聊三个小时", effect:{social:2}},
+            {text: "看今天累不累，随机刷新状态", effect:{social:0}},
+            {text: "谢谢邀请，但我今晚只想跟床锁死", effect:{social:-2}}
+        ]
+    },
+    {
+        avatar: "🧨",
+        category: "背锅现场",
+        hint: "真正的职场性格，常在甩锅那一刻显形。",
+        text: "项目出了问题，明明不是你的锅，但场面已经默认你来接。你会：",
+        options:[
+            {text: "先把事情救回来，再找机会把责任说清", effect:{action:2}},
+            {text: "很不爽，但也不想把场面搞太难看", effect:{action:0}},
+            {text: "我为什么总在演“懂事的人”？今天谁都别活", effect:{action:-2}}
+        ]
+    },
+    {
+        avatar: "💸",
+        category: "工资到账日",
+        hint: "有些人靠工资活，有些人靠到账通知续命。",
+        text: "工资到账的那一刻，你最真实的想法是：",
+        options:[
+            {text: "好，继续搞，下个月争取更高", effect:{work:2}},
+            {text: "先活着吧，至少这个月也没白熬", effect:{work:0}},
+            {text: "这点钱和我的精神损失费比起来像在开玩笑", effect:{work:-2}}
+        ]
+    },
+    {
+        avatar: "🧍‍♀️",
+        category: "边界警报",
+        hint: "电子围栏是否自动开启，全看谁靠近。",
+        text: "同事跟你还没熟，就开始打听你周末去哪、住哪、跟谁吃饭。你会：",
+        options:[
+            {text: "顺势聊聊，反正也没什么不能说", effect:{emotion:2}},
+            {text: "挑能说的说，留一点余地", effect:{emotion:0}},
+            {text: "内心警铃大作：你好越界啊朋友", effect:{emotion:-2}}
+        ]
+    },
+    {
+        avatar: "🪞",
+        category: "真实与体面",
+        hint: "说真话和会做人，有时真的不是一回事。",
+        text: "你明明很不认同某个方案，但全场气氛都在默认通过。你更可能：",
+        options:[
+            {text: "直接提出问题，反正不说更耽误事", effect:{attitude:2}},
+            {text: "看措辞和时机，尽量讲得不那么刺耳", effect:{attitude:0}},
+            {text: "算了，先过吧，我懒得当那个破坏气氛的人", effect:{attitude:-2}}
+        ]
+    },
+    {
+        avatar: "🌙",
+        category: "凌晨消息",
+        hint: "晚上十一点半响起的提示音，总不可能是爱情。",
+        text: "晚上 11:36，工作群突然弹出“大家还在吗”。你的处理方式是：",
+        options:[
+            {text: "我在，先看看又有什么火要灭", effect:{action:2}},
+            {text: "点开瞄一眼，再决定装不装死", effect:{action:0}},
+            {text: "手机倒扣，明早起来我就是全新的我", effect:{action:-2}}
+        ]
+    },
+    {
+        avatar: "📎",
+        category: "转发型人格",
+        hint: "“收到”不是一种态度，是一种生存本能。",
+        text: "领导在群里转发一篇《优秀员工必备的 7 个习惯》，你通常会：",
+        options:[
+            {text: "认真点开，甚至默默记两条", effect:{attitude:2}},
+            {text: "先回收到，至于看不看另说", effect:{attitude:0}},
+            {text: "收藏夹里已经躺着 48 篇这种东西了，再见", effect:{attitude:-2}}
         ]
     }
 ];
@@ -717,6 +893,25 @@ const profiles = {
     "MLLL": { code: "IMSY", breed: "焦虑大师", role: "什么都担心什么都怕", emoji: "😰", tags: ["过度思虑","细节控","危机雷达"], summary: "老板的一个眼神你能解读出三种含义，同事的一声叹息你觉得和自己有关。你的大脑有一个24小时运行的危机预警系统——问题是它几乎从不出错。", love: "你的在意让人感到被重视，但过度焦虑也会消耗关系的能量。", tips: ["区分'可控的'和'不可控的'，只担心前者","写下担忧然后逐一验证——大多数都不会发生","你的敏感是优势，学会与它共存而不是对抗"] },
     "WWWM": { code: "CHAD", breed: "天选之子", role: "运气好到让人嫉妒", emoji: "🌟", tags: ["天生赢家","自带光环","轻而易举"], summary: "工作顺利、人缘好、好像做什么都能成。不是你没有烦恼，而是你有足够的底气和运气去消化它们。你是那种'怎么做到的'人类。", love: "你的光芒很吸引人，但记得照顾身边那些没那么幸运的人。", tips: ["好运是礼物不是权利，保持谦逊","用你的能量去带动和帮助别人","享受当下，但也要为不确定的未来做准备"] },
 };
+
+const TYPE_PATTERNS = [
+    { key: "WWSS", pattern: "HMHMH" },
+    { key: "WWSM", pattern: "HMHHH" },
+    { key: "LLSL", pattern: "HLMHM" },
+    { key: "LLLS", pattern: "LLLLL" },
+    { key: "MLSM", pattern: "MHLMM" },
+    { key: "MMMS", pattern: "MMMMM" },
+    { key: "WWWS", pattern: "HMHLH" },
+    { key: "LLMS", pattern: "MLMHL" },
+    { key: "MMLS", pattern: "MMLLH" },
+    { key: "LLLL", pattern: "LLLLM" },
+    { key: "MMMM", pattern: "MLHHM" },
+    { key: "LLLM", pattern: "MLMML" },
+    { key: "WWMM", pattern: "HMMLH" },
+    { key: "LLWS", pattern: "HLMMH" },
+    { key: "MLLL", pattern: "MLLLM" },
+    { key: "WWWM", pattern: "HHHMH" }
+];
 
 const metricLabels = ["搬砖力", "社交值", "态度分", "情感浓度", "行动派"];
 
@@ -865,6 +1060,16 @@ function goPrev() {
 }
 
 // ==================== SCORING ====================
+function toLevel(value) {
+    if (value <= -4) return "L";
+    if (value >= 4) return "H";
+    return "M";
+}
+
+function levelScore(level) {
+    return { L: 1, M: 2, H: 3 }[level];
+}
+
 function computeResult() {
     const dims = { work:0, social:0, attitude:0, emotion:0, action:0 };
     state.answers.forEach((ai, qi) => {
@@ -872,31 +1077,58 @@ function computeResult() {
         Object.keys(eff).forEach(k => { dims[k] += eff[k]; });
     });
 
-    let resultStr = '';
-    Object.values(dims).forEach(v => {
-        if(v <= -3) resultStr += 'L';
-        else if(v >= 3) resultStr += 'H';
-        else resultStr += 'M';
+    const levelMap = {
+        work: toLevel(dims.work),
+        social: toLevel(dims.social),
+        attitude: toLevel(dims.attitude),
+        emotion: toLevel(dims.emotion),
+        action: toLevel(dims.action)
+    };
+
+    const resultStr = `${levelMap.work}${levelMap.social}${levelMap.attitude}${levelMap.emotion}${levelMap.action}`;
+    const userVector = Object.values(levelMap).map(levelScore);
+
+    const ranked = TYPE_PATTERNS.map((item) => {
+        const vector = item.pattern.split("").map(levelScore);
+        let distance = 0;
+        let exact = 0;
+
+        vector.forEach((value, index) => {
+            const diff = Math.abs(value - userVector[index]);
+            distance += diff;
+            if (diff === 0) exact += 1;
+        });
+
+        return {
+            key: item.key,
+            distance,
+            exact,
+            profile: profiles[item.key]
+        };
+    }).sort((a, b) => {
+        if (a.distance !== b.distance) return a.distance - b.distance;
+        return b.exact - a.exact;
     });
 
-    // Map result string to profile code
-    const resultMap = {
-        "WWSS":"CTRL","WWSM":"BOSS","LLSL":"SLAVE","LLLS":"FUCK",
-        "MLSM":"JOKE-R","MMMS":"NORM","WWWS":"WOLF","LLMS":"CAT-F",
-        "MMLS":"DRAMA","LLLL":"ZOMB","MMMM":"GOD","LLLM":"EDGE",
-        "WWMM":"HUSTL","LLWS":"SOLO","MLLL":"IMSY","WWWM":"CHAD"
-    };
-    const codeKey = resultMap[resultStr] || "NORM";
-
+    const bestMatch = ranked[0] || { key: "MMMS", profile: profiles["MMMS"], distance: 0, exact: 0 };
     const metrics = {
-        work: clamp(Math.round(30 + dims.work * 6), 20, 98),
-        social: clamp(Math.round(30 + dims.social * 6), 20, 98),
-        attitude: clamp(Math.round(30 + dims.attitude * 6), 20, 98),
-        emotion: clamp(Math.round(30 + dims.emotion * 6), 20, 98),
-        action: clamp(Math.round(30 + dims.action * 6), 20, 98),
+        work: clamp(Math.round(50 + dims.work * 4), 20, 98),
+        social: clamp(Math.round(50 + dims.social * 4), 20, 98),
+        attitude: clamp(Math.round(50 + dims.attitude * 4), 20, 98),
+        emotion: clamp(Math.round(50 + dims.emotion * 4), 20, 98),
+        action: clamp(Math.round(50 + dims.action * 4), 20, 98),
     };
 
-    return { resultStr, code: codeKey, profile: profiles[resultStr] || profiles["MMMS"], metrics };
+    return {
+        resultStr,
+        code: bestMatch.profile.code,
+        profileKey: bestMatch.key,
+        profile: bestMatch.profile,
+        metrics,
+        distance: bestMatch.distance,
+        exact: bestMatch.exact,
+        levels: levelMap
+    };
 }
 
 // ==================== RENDER RESULT ====================
@@ -904,11 +1136,11 @@ function renderResult() {
     const res = computeResult();
     const p = res.profile;
 
-    document.getElementById("resultCode").textContent = p.code;
+    document.getElementById("resultCode").textContent = `${p.code} · ${res.resultStr}`;
     document.getElementById("resultBreed").textContent = p.breed;
     document.getElementById("resultRole").textContent = p.role;
     document.getElementById("resultEmoji").textContent = p.emoji;
-    document.getElementById("resultSummary").textContent = p.summary;
+    document.getElementById("resultSummary").textContent = `${p.summary} 这次你的 5 维人格模式是 ${res.resultStr}，命中了 ${res.exact}/5 个核心维度。`;
     document.getElementById("resultLove").textContent = p.love;
 
     document.getElementById("resultTags").innerHTML =
@@ -932,7 +1164,7 @@ function renderResult() {
         </div>
     `).join("");
 
-    const shareText = `【${p.breed}｜${p.role}】\n代码：${p.code}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
+    const shareText = `【${p.breed}｜${p.role}】\n代码：${p.code} · ${res.resultStr}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
     document.getElementById("shareBox").textContent = shareText;
     shareBtn.dataset.shareText = shareText;
 
