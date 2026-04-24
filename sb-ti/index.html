@@ -424,9 +424,9 @@
         <p class="hero-subtitle">"这一世，我要搞清楚自己在公司食物链里到底是哪一层。"</p>
 
         <div class="hero-meta">
-            <div class="hero-chip">25 道职场情境题</div>
-            <div class="hero-chip">16 种社畜人格</div>
-            <div class="hero-chip">带雷达图和生存指南</div>
+            <div class="hero-chip">25+ 道职场情境题</div>
+            <div class="hero-chip">16+3 种社畜人格</div>
+            <div class="hero-chip">含隐藏题、彩蛋人格和雷达图</div>
         </div>
 
         <div class="animal-pattern" aria-hidden="true">
@@ -876,22 +876,22 @@ const questions = [
 
 // ==================== PROFILES ====================
 const profiles = {
-    "WWSS": { code: "CTRL", breed: "控制狂魔", role: "一切尽在掌握的操盘手", emoji: "🎮", tags: ["掌控欲强","结果导向","冷静理性"], summary: "你不是在打工，你是在运营自己。KPI是你的游戏进度条，同事是你的NPC，老板是系统管理员。一切尽在掌控的感觉让你上瘾。", love: "在感情里你习惯主导节奏，但偶尔也要让对方当一次队长。", tips: ["学会放手——不是所有事情都需要你来把控","下属不是工具人，给他们成长空间","休息也是一种战略投资"] },
-    "WWSM": { code: "BOSS", breed: "伪老板", role: "还没当上老板但已经有老板病", emoji: "👔", tags: ["气场两米八","爱画大饼","管理欲过剩"], summary: "明明还是打工人，但你的气场已经溢出了屏幕。开会最爱发言，PPT 必须精美，口头禅是'我觉得我们应该从战略层面考虑这个问题'。", love: "对方可能会觉得你有点强势，但你其实只是想给对方最好的安排。", tips: ["先把自己活明白再去指点江山","少说'我觉得'，多问'你们觉得'","真正的领导力不需要靠音量证明"] },
-    "LLSL": { code: "SLAVE", breed: "牛马本马", role: "默默扛下一切的老实人", emoji: "🐂", tags: ["老黄牛","不会拒绝","靠谱担当"], summary: "公司最靠谱的人就是你。谁的忙你都帮，谁的锅你都背，谁的Deadline你都赶。好人卡集齐了可以召唤神龙。", love: "你是感情里的定海神针，但要小心——付出太多反而让人理所当然。", tips: ["学会说不——这不是自私是自我保护","你的价值不取决于帮了多少人","偶尔让别人失望一下天不会塌"] },
-    "LLLS": { code: "FUCK", breed: "摆烂之王", role: "彻底躺平的快乐咸鱼", emoji: "🐟", tags: ["佛系天花板","快乐至上","反内卷斗士"], summary: "努力不一定成功，但不努力一定很舒服。你的座右铭是'差不多就行了'，人生哲学是'能躺着绝不坐着'。", love: "你的伴侣会觉得和你在一起很放松，但偶尔也希望能看到你多一点上进心。", tips: ["适度摆烂是智慧，彻底摆烂是自毁","找到一件你真正愿意投入的事试试","最低限度的努力也能换来不一样的人生"] },
-    "MLSM": { code: "JOKE-R", breed: "职场小丑", role: "全公司最好笑的人", emoji: "🤡", tags: ["气氛组担当","用幽默防御世界","外向孤独"], summary: "你就是团队的气氛组组长，没有你开不了场的局，没有你接不住的梗。但深夜独处的时候，你也想知道笑完之后还能剩下什么。", love: "你总能让对象开心，但要确保幽默不是你唯一的表达方式。", tips: ["搞笑是你的武器，但不要让它成为你的面具","认真的时候也很迷人，试试展示这一面","不是所有场合都需要你来逗乐"] },
-    "MMMS": { code: "NORM", breed: "标准答案", role: "中规中矩的普通打工人", emoji: "📋", tags: ["稳定输出","不争不抢","靠谱路人"], summary: "你不突出也不落后，不卷也不完全躺平。每天按时上下班，完成分内的事，偶尔吐槽两句但从来不真辞职。你是这个社会运转的中坚力量。", love: "你是最适合过日子的那个人，平淡但踏实。", tips: ["普通不代表平庸，稳定是一种超能力","试着给自己设定一个小目标突破一下舒适区","你的稳扎稳打终会被看见"] },
-    "WWWS": { code: "WOLF", breed: "狼性青年", role: "内卷冠军，永不服输", emoji: "🐺", tags: ["卷王之王","目标驱动","永动机体质"], summary: "你的血液里流淌着咖啡因和野心。别人在摸鱼你在学习，别人在睡觉你在复盘。累吗？当然。但停下来的感觉更可怕。", love: "你的上进心很吸引人，但也别忘了感情需要时间浇灌而不是 KPI 考核。", tips: ["身体是革命的本钱——这句老话是真的","不是所有比赛都值得参加","允许自己偶尔做个普通人"] },
-    "LLMS": { code: "CAT-F", breed: "职场猫咪", role: "高冷摸鱼，看破不说", emoji: "😏", tags: ["看破不说","摸鱼高手","内心戏丰富"], summary: "表面安静如鸡实则内心弹幕不断。你早就看透了公司那些破事，但选择保持微笑然后继续摸鱼。高冷是你的保护色。", love: "你需要一个能读懂你沉默的人，而不只是表面的陪伴。", tips: ["有些想法说出来比憋着更有力量","适当暴露真实的自己会让关系更近","你的洞察力是很宝贵的天赋"] },
-    "MMLS": { code: "DRAMA", breed: "戏精附体", role: "每天都在上演内心大戏", emoji: "🎭", tags: ["脑内剧场","共情能力强","情绪丰富"], summary: "你的大脑是一部 24 小时不间断连续剧制片厂。一件小事能在脑子里演绎出 108 种走向。表面上风平浪静，内心已经演完了一季。", love: "你的伴侣永远不会觉得无聊，但有时也需要一些平静。", tips: ["区分'正在发生的事'和'你想象的事'","写下来或者找人倾诉，别让剧情在脑子里无限循环","你的敏感度是天赋，别让它变成负担"] },
-    "LLLL": { code: "ZOMB", breed: "丧尸模式", role: "上班如行尸走肉", emoji: "🧟", tags: ["灵魂出窍","机械生存","电量不足"], summary: "你已经进化出了自动上班功能——身体在工位上敲键盘，灵魂在某个遥远的地方流浪。同事问你'怎么了'你说'没事'但其实你连问题都没听见。", love: "你可能需要先找回自己的热情才能更好地爱人。", tips: ["先确认这不是职业倦怠或抑郁的信号","给自己放一个真正的假，不带电脑的那种","从小事开始找回一点点兴趣和期待"] },
-    "MMMM": { code: "GOD", breed: "佛系打工", role: "无欲无求，来去自如", emoji: "🧘", tags: ["心如止水","不被定义","情绪稳定器"], summary: "老板画的饼你当早餐吃了，同事的明争暗斗你看热闹，KPI 对你来说只是一个数字。你有一种让周围焦虑人群羡慕的淡定。", love: "你的淡然让人安心，但对方有时也会疑惑你是否真的在乎。", tips: ["佛系不等于无所谓，找到你真正在意的东西","适度的激情会让生活更鲜活","你的平静是可以感染别人的超能力"] },
-    "LLLM": { code: "EDGE", breed: "边缘人", role: "存在感极低的隐身者", emoji: "🫥", tags: ["隐形人设","享受独处","观察者视角"], summary: "你在公司就像背景板上的花纹——客观存在但没人注意。年会抽奖没你名字，群消息@全体成员你觉得不包括你。但这种低存在感其实是你主动选择的结界。", love: "你的低调让人觉得安全，但有时候也需要主动一点表达在乎。", tips: ["边缘也有边缘的力量，观察者往往看得最清楚","适时发出声音，别让自己变成透明人","你的独立是一种稀缺品质"] },
-    "WWMM": { code: "HUSTL", breed: "搞钱机器", role: "只认钱不认人的实干派", emoji: "💰", tags: ["搞钱至上","实用主义","多线程操作"], summary: "情怀？理想？那些不能变现的东西你暂时没空关心。你的驱动力只有一个字：钱。副业比主业认真，理财比恋爱用心。", love: "你的务实让人有安全感，但感情账本不能用 ROI 计算。", tips: ["赚钱是为了生活，不要为了赚钱牺牲生活","偶尔做些'无用'的事情给灵魂充充电","你的人脉和资源比你想象的更有价值"] },
-    "LLWS": { code: "SOLO", breed: "孤狼选手", role: "不合群但很强", emoji: "🐺‍👤", tags: ["独行侠","实力说话","边界感极强"], summary: "团建你不来，聚餐你不参加，群聊你潜水。但交给你的任务永远完成得漂亮。你不需要群体认同来证明自己，独狼的魅力在于独立而非孤立。", love: "你需要一个同样独立的伴侣，彼此尊重对方的领地。", tips: ["适当的合作能让你的能力放大十倍","偶尔的连接不会稀释你的独立性","你的独立很酷，但别让它变成了隔绝"] },
-    "MLLL": { code: "IMSY", breed: "焦虑大师", role: "什么都担心什么都怕", emoji: "😰", tags: ["过度思虑","细节控","危机雷达"], summary: "老板的一个眼神你能解读出三种含义，同事的一声叹息你觉得和自己有关。你的大脑有一个24小时运行的危机预警系统——问题是它几乎从不出错。", love: "你的在意让人感到被重视，但过度焦虑也会消耗关系的能量。", tips: ["区分'可控的'和'不可控的'，只担心前者","写下担忧然后逐一验证——大多数都不会发生","你的敏感是优势，学会与它共存而不是对抗"] },
-    "WWWM": { code: "CHAD", breed: "天选之子", role: "运气好到让人嫉妒", emoji: "🌟", tags: ["天生赢家","自带光环","轻而易举"], summary: "工作顺利、人缘好、好像做什么都能成。不是你没有烦恼，而是你有足够的底气和运气去消化它们。你是那种'怎么做到的'人类。", love: "你的光芒很吸引人，但记得照顾身边那些没那么幸运的人。", tips: ["好运是礼物不是权利，保持谦逊","用你的能量去带动和帮助别人","享受当下，但也要为不确定的未来做准备"] },
+    "WWSS": { code: "CTRL", breed: "控制狂魔", role: "把所有人都当项目在管的顶配操盘手", emoji: "🎮", tags: ["掌控成瘾", "细节暴政", "不信任随机性"], summary: "你不是在上班，你是在扮演一个对全世界进度条负责的人。别人做计划是为了参考，你做计划是为了统治；别人焦虑 deadline，你焦虑的是别人为什么还不按照你预判的节奏动。你最怕的不是累，是失控。", love: "感情里你也很容易不自觉接管全局，像在经营一个双人项目。你不是不温柔，你只是总觉得“让我来更快一点”。", tips: ["不是每个烂结果都等于你没管够，有些事本来就不归你控", "试着容忍别人用笨一点的方式成长，这比你全包更有用", "停止把休息当事故，它其实是系统维护"] },
+    "WWSM": { code: "BOSS", breed: "伪老板", role: "工位还在最外圈，发言已经像董事会", emoji: "👔", tags: ["领导腔", "战略口癖", "管理欲外溢"], summary: "你人还没升上去，气场已经提前升职了。别人汇报工作，你汇报方向；别人提问题，你顺手开始做组织诊断。你最大的特点不是能力一定最强，而是永远有一种“让我来说两句”的天然冲动。", love: "你对关系的热情常常体现在安排、优化、替对方思考，偶尔会让人分不清你是在恋爱还是在带项目。", tips: ["别急着当所有人的老板，先把自己的人生先带明白", "少一点站位输出，多一点真实聆听", "真正的气场不是说得像领导，是别人愿意跟你走"] },
+    "LLSL": { code: "SLAVE", breed: "牛马本马", role: "全公司默认最能扛的那个冤种菩萨", emoji: "🐂", tags: ["接锅圣体", "不会拒绝", "稳定供血"], summary: "你看起来像一个人，实际上像单位的公共资源。谁忙你都能补位，谁崩你都能顶上，最后最先累垮的也是你。你不是没有情绪，只是太习惯先考虑局面，再考虑自己。", love: "你在关系里也很容易变成那个多做一点、忍一忍、算了算了的人。别人觉得你稳，其实你只是太能扛。", tips: ["会拒绝不等于不好相处，恰恰说明你开始尊重自己", "别把“我可以”说得太顺口，不然全世界都会默认你应该", "你的善良需要边界，不然最后只会变成消耗品"] },
+    "LLLS": { code: "FUCK", breed: "摆烂之王", role: "对内卷彻底失去敬意的终极咸鱼", emoji: "🐟", tags: ["快乐优先", "懒得证明", "低耗求生"], summary: "你已经把“差不多得了”修炼成了一种生活哲学。不是你没有能力，是你越来越不想把命拿去换一些也就那样的评价。别人还在热血冲刺，你已经坐在路边边喝奶茶边看透一切。", love: "和你在一起通常不累，因为你不会把关系搞成 KPI 打卡。但对方偶尔也会怀疑，你到底是松弛，还是对什么都提不起劲。", tips: ["摆烂的高级之处不在于躺，而在于你知道什么值得动", "可以不卷，但最好留一件你愿意认真对待的事", "不要把低欲望过成低生命力"] },
+    "MLSM": { code: "JOKE-R", breed: "职场小丑", role: "越会接梗，越没人发现你也会累", emoji: "🤡", tags: ["气氛自救", "拿幽默挡刀", "笑着内耗"], summary: "你是那种场子一冷就会下意识救火的人。别人尴尬会沉默，你尴尬会开玩笑；别人受伤会躲开，你受伤会先把自己讲成段子。你不是天生快乐，只是太会把难受翻译成好笑了。", love: "你很会让人开心，也很难让人真正看见你的脆弱。感情里最大的误会往往是：别人以为你什么都能消化。", tips: ["不是每次都要你来圆场，沉默不会让你失职", "别把“我没事”说得太像真的，你值得被认真接住", "你不是只能负责好笑，认真起来也很迷人"] },
+    "MMMS": { code: "NORM", breed: "标准答案", role: "没有戏剧性，但真的能把日子过下去的人", emoji: "📋", tags: ["稳定发挥", "边界正常", "人间样本"], summary: "你不是故事里最炸裂的角色，但你是现实里最能稳定通关的人。能上班、能下班、能吐槽、能自愈，不会忽然封神，也不至于突然崩盘。你最大的超能力，就是不靠人设活着。", love: "你在关系里通常不搞花活，不发疯，不试探，属于看起来普通但越相处越省心的类型。", tips: ["别因为自己不极端就误以为自己没特点，稳定本身就很稀缺", "可以偶尔主动一点，让别人看见你不是没有锋芒", "中间值不是平庸，是你有能力不被波动牵着走"] },
+    "WWWS": { code: "WOLF", breed: "狼性青年", role: "把人生过成长期冲刺赛的卷王型选手", emoji: "🐺", tags: ["赢面执念", "进度狂热", "休息羞耻"], summary: "你对“普通”有一种近乎本能的抗拒。别人说先这样吧，你脑子里想的是为什么不能再提一点；别人下班了，你开始复盘今天还差哪一步。你是真的能打，但你也真的很难放过自己。", love: "你的野心很有吸引力，但你有时会把关系也活成长期经营项目，爱人会想要陪伴，不只是被你顺手升级。", tips: ["不是每一场竞争都值得你拿命去赢", "允许自己慢一点，不会立刻变废物", "你很强，但别把松一口气误认成堕落"] },
+    "LLMS": { code: "CAT-F", breed: "职场猫咪", role: "表面高冷营业，内心早把全场看穿", emoji: "😏", tags: ["高冷摸鱼", "洞察过剩", "懒得点破"], summary: "你对很多事不是不懂，是太懂了，所以懒得配合表演。会议上你安安静静，心里已经给每个发言配好了字幕；流程里你嘴上说好，灵魂早就跳到别处晒太阳。你不是没本事，你只是越来越不想浪费表情。", love: "你看着淡，其实很挑。你不是谁靠近都行，而是一定要对方先证明自己不是来消耗你的。", tips: ["别让“懒得解释”变成别人永远走不近你的理由", "适度表达比一直端着更能保护你真正想要的关系", "你的冷静很贵，别只拿来旁观"] },
+    "MMLS": { code: "DRAMA", breed: "戏精附体", role: "现实只发生了一成，另外九成在你脑子里加戏", emoji: "🎭", tags: ["脑内连载", "情绪高敏", "细节成灾"], summary: "你的大脑根本不是大脑，是一个昼夜不停机的编剧组。别人一句语气稍微不对，你已经脑补完前因后果、关系转折和 BE 结局。你不是矫情，你只是接收太多、联想太快、情绪到得太满。", love: "爱上你的人会觉得你浓度很高、很有回应，但也会被你的情绪剧情吓到：怎么一句话能在你心里演成整季。", tips: ["先确认眼前发生了什么，再处理脑子里加上的那部分", "你需要出口，不然所有戏都会回流成内耗", "高敏不是问题，失控脑补才是"] },
+    "LLLL": { code: "ZOMB", breed: "丧尸模式", role: "人已到岗，魂还在别的纬度漂着", emoji: "🧟", tags: ["自动上班", "低电量常驻", "麻木过载"], summary: "你已经不是单纯地累了，你是活成了一个会自己打卡的空壳。电脑开着、微信回着、表格填着，但灵魂像被生活偷偷拔过电源。你不一定想摆烂，你只是很久没从日子里感到一点真正的反馈。", love: "你不是不想投入关系，而是现在连照顾自己都很像在完成额外任务。", tips: ["这已经不是简单休息一下能糊弄过去的信号了，要认真照顾自己", "先去找一点最小的活人感，比如睡饱、见太阳、吃顿像样的饭", "不要把长期麻木当成成熟，它很可能只是你撑太久了"] },
+    "MMMM": { code: "GOD", breed: "佛系打工", role: "看得很开，所以很难被拿捏的稳定器", emoji: "🧘", tags: ["低波动", "不争气氛", "情绪免疫"], summary: "你身上有一种很烦人的从容：老板画饼你不激动，同事发疯你不感染，局势再乱你也像在旁边淡定喝水。你不是没感受，你只是很早就明白，很多破事不值得把自己搭进去。", love: "你给人的安全感很强，但有时候也会因为太稳，让对方误以为你是不是根本没那么在乎。", tips: ["佛系的前提不是抽离一切，而是知道自己真正要守的是什么", "适度表达在意，不会破坏你的稳定，反而更像活人", "别让“看得开”慢慢演变成“什么都无所谓”"] },
+    "LLLM": { code: "EDGE", breed: "边缘人", role: "存在感不高，但什么都看在眼里的旁观者", emoji: "🫥", tags: ["隐身熟练", "低存在巡航", "观察型人格"], summary: "你在群里像头像，在办公室像背景，在活动里像临时刷出来的 NPC。不是别人真的看不见你，而是你太习惯把自己放在不被消耗的位置。你不抢戏、不争光，但全场谁在演你其实门儿清。", love: "你在关系里不吵不闹，但也容易因为太收着，让对方总觉得你差一点点参与感。", tips: ["别总把自己调成静音，有些重要关系值得你主动开麦", "低存在感能保护你，也可能错过本该属于你的机会", "你并不透明，只是太久没允许自己占位置"] },
+    "WWMM": { code: "HUSTL", breed: "搞钱机器", role: "情绪可以缓，赚钱必须先到账的实干派", emoji: "💰", tags: ["现金流脑", "务实到底", "ROI人格"], summary: "别人拿工作换成长，你更倾向于拿工作换真金白银。不是你俗，是你太早发现很多漂亮话都不能替你交房租。你对钱的敏感不是拜金，是知道成年人的底气 often 先来自账户余额。", love: "你会用现实行动表达爱，比如买单、规划、兜底，但偶尔也容易把关系理解得过于功能化。", tips: ["赚钱很重要，但别把所有体验都折算成值不值", "有些事虽然不变现，却真的能救回你的精气神", "你当然可以务实，只是别让自己只剩实用"] },
+    "LLWS": { code: "SOLO", breed: "孤狼选手", role: "社交参与度低，但单兵作战能力很顶", emoji: "🐺‍👤", tags: ["独立成瘾", "边界很硬", "不爱凑局"], summary: "你不是社恐，你只是对无效热闹没有任何耐心。团建、饭局、闲聊、场面话，能不参与就不参与；但真正把事交给你，你又常常能一个人干得漂亮。你习惯靠实力自证，而不是靠加入谁。", love: "你需要的是彼此都能喘气的关系，不黏、不查岗、不强行捆绑。对你来说，自由不是附加项，是底线。", tips: ["拒绝无效连接没问题，但别连有效支持也一起挡掉", "真正厉害的人不怕合作，怕的是没边界的消耗", "你可以独，但不必永远一个人扛"] },
+    "MLLL": { code: "IMSY", breed: "焦虑大师", role: "脑内常驻风险评估系统的高敏预警员", emoji: "😰", tags: ["危机雷达", "提前崩溃", "细节过载"], summary: "你的人生像装了一个永不停机的预警插件。别人只看到一条消息，你已经想到后果；别人只是皱了下眉，你已经开始想是不是自己哪里做错。你不是爱多想，你是很难不想。", love: "你的在意很真，也因此更容易被关系里的细节反复消耗。别人一句冷一点的话，对你来说不是一句话，是整晚的情绪工程。", tips: ["先把猜测和事实分开，你的大脑不是每条通知都要立即处理", "给担忧设时限，别让它无限制霸占注意力", "敏感是天赋，但要学会给天赋装减震器"] },
+    "WWWM": { code: "CHAD", breed: "天选之子", role: "状态、运气和脸皮都刚好站在你这边的人", emoji: "🌟", tags: ["自带顺风", "能量充足", "赢面很高"], summary: "你身上有一种让人很难讨厌的轻松感：不是没压力，而是压力到了你这好像总能被处理掉。人缘不差、运气不坏、遇事不怂，很多人努力半天才有的状态，你常常像顺手就拿到了。", love: "你很容易成为关系里的发光体，但也要小心别因为自己习惯了顺，就忽略了对方可能正卡在很难的地方。", tips: ["好运是加成，不是护身符，别把顺利活成理所当然", "多把你的能量分一点给身边的人，你会更有魅力", "继续发光，但记得也给别人留空间"] },
 };
 
 const TYPE_PATTERNS = [
@@ -913,13 +913,128 @@ const TYPE_PATTERNS = [
     { key: "WWWM", pattern: "HHHMH" }
 ];
 
+const hiddenProfiles = {
+    NIGHT: {
+        code: "NIGHT",
+        breed: "夜班幽灵",
+        role: "白天是同事，晚上是工位里的怨气",
+        emoji: "🌚",
+        tags: ["深夜复活", "消息PTSD", "靠困意硬撑"],
+        summary: "你不是在上班，你是在和深夜工作流签生死状。别人晚上十一点收到消息会烦，你会在烦和麻之间切换成一种诡异的平静，因为你已经习惯了。真正可怕的不是加班，是你居然开始对凌晨在线这件事产生了职业自觉。",
+        love: "你需要一个能理解你“不是不回，是刚下班魂还没回来”的人。",
+        tips: ["能晚睡不代表该晚睡，你的命不是工单附件", "尽量给自己留一个真正下线的时间点", "清醒不是靠咖啡撑出来的，是靠边界养出来的"]
+    },
+    MIME: {
+        code: "MIME",
+        breed: "已读木偶",
+        role: "表面情绪稳定，实际被消息牵着线走",
+        emoji: "🪆",
+        tags: ["秒读不回焦虑", "过度解读", "内耗型高手"],
+        summary: "你的情绪系统和通知栏几乎是绑定的。对方一个已读、一个省略号、一个撤回，都足够你脑补出三集都市情感职场悬疑剧。你不一定玻璃心，但你真的很会给自己加戏。",
+        love: "被你爱上的人很难感受不到重视，但也会被你的脑内弹幕震住。",
+        tips: ["不是所有停顿都在表达态度，有些人只是去回另一条消息了", "把“我是不是说错了”先按住 10 分钟再说", "及时表达比反复猜测更能保护关系"]
+    },
+    REB: {
+        code: "REB",
+        breed: "阴阳反骨",
+        role: "礼貌还在，服气没有",
+        emoji: "🗡️",
+        tags: ["礼貌叛逆", "高配吐槽", "表面配合"],
+        summary: "你已经把成年人的反抗练到了高级阶段：不会当场掀桌，但会在每一句“收到”里塞进隐形情绪；不会立刻撂挑子，但内心已经对荒谬流程开了 18 场批判会。你不是难搞，你只是越来越不想装傻了。",
+        love: "你需要的是能听懂你弦外之音的人，而不是只会让你“算了算了”的人。",
+        tips: ["反骨是判断力，不是持续燃烧自己", "真正高级的反抗不是嘴硬，是把主动权拿回来", "别只在心里反击，关键时刻要学会说清楚"]
+    }
+};
+
+const hiddenQuestions = [
+    {
+        id: "nightShift",
+        profileKey: "NIGHT",
+        category: "隐藏题 · 深夜在线",
+        avatar: "🌃",
+        hint: "这一题只有“很懂的人”才会刷出来。",
+        text: "连续第三天晚上 12:17，你还在回工作消息。对面发来一句“辛苦啦，明早再跟进也行”。你心里最真实的反应是：",
+        options: [
+            { text: "没事，我顺手做完。反正我现在也睡不着", effect: { work: 2, action: 2 } },
+            { text: "嘴上回好，手上还是会继续处理完", effect: { work: 1, emotion: -1 } },
+            { text: "谢谢，明早再说。我今天就到这了", effect: { action: -1, emotion: 2 } }
+        ],
+        shouldAsk: ({ rawScores, answers }) => rawScores.action >= 4 && rawScores.work >= 2 && answers[23] === 0
+    },
+    {
+        id: "messagePuppet",
+        profileKey: "MIME",
+        category: "隐藏题 · 已读现场",
+        avatar: "👁️",
+        hint: "能刷到这题的人，通知栏大概率没少折磨你。",
+        text: "你发出一条很在意的消息后，对方反复显示“正在输入中……”，然后又没了。你最像：",
+        options: [
+            { text: "假装无事发生，实际上已经开始写遗书式复盘", effect: { emotion: -2, social: -1 } },
+            { text: "忍住不问，但接下来半小时心思都不在正事上", effect: { emotion: -1, action: -1 } },
+            { text: "爱回不回，我先去活了", effect: { emotion: 2 } }
+        ],
+        shouldAsk: ({ rawScores, answers }) => rawScores.emotion <= -4 && answers[3] === 0 && answers[16] === 2
+    },
+    {
+        id: "politeRebel",
+        profileKey: "REB",
+        category: "隐藏题 · 礼貌反击",
+        avatar: "🫥",
+        hint: "这是献给所有“表面收到、内心骂完”的成年人。",
+        text: "领导又转来一篇《年轻人为什么不能太计较加班》。你盯着屏幕三秒，最终会：",
+        options: [
+            { text: "回“收到”，然后把聊天框关得像封印一样紧", effect: { attitude: -2, action: 0 } },
+            { text: "认真回一段看似礼貌其实刀刀见骨的话", effect: { attitude: 2, action: 2 } },
+            { text: "不回，直接把这事拉进人生黑名单", effect: { attitude: -2, action: -2 } }
+        ],
+        shouldAsk: ({ rawScores, answers }) => rawScores.attitude <= -4 && answers[2] === 2 && answers[24] === 2
+    }
+];
+
 const metricLabels = ["搬砖力", "社交值", "态度分", "情感浓度", "行动派"];
 
 // ==================== STATE ====================
 const state = {
     index: 0,
-    answers: Array(questions.length).fill(null)
+    baseAnswers: Array(questions.length).fill(null),
+    hiddenQuestion: null,
+    hiddenAnswer: null,
+    runtimeQuestions: questions.slice()
 };
+
+function getCurrentAnswers() {
+    const answers = [...state.baseAnswers];
+    if (state.hiddenQuestion) {
+        answers.push(state.hiddenAnswer);
+    }
+    return answers;
+}
+
+function getRawScores(baseAnswers = state.baseAnswers, includeHidden = true) {
+    const dims = { work:0, social:0, attitude:0, emotion:0, action:0 };
+
+    baseAnswers.forEach((ai, qi) => {
+        if (ai === null || ai === undefined) return;
+        const eff = questions[qi].options[ai].effect;
+        Object.keys(eff).forEach(k => { dims[k] += eff[k]; });
+    });
+
+    if (includeHidden && state.hiddenQuestion && state.hiddenAnswer !== null) {
+        const eff = state.hiddenQuestion.options[state.hiddenAnswer].effect;
+        Object.keys(eff).forEach(k => { dims[k] += eff[k]; });
+    }
+
+    return dims;
+}
+
+function decideHiddenQuestion() {
+    const context = {
+        rawScores: getRawScores(state.baseAnswers, false),
+        answers: state.baseAnswers
+    };
+
+    return hiddenQuestions.find((item) => item.shouldAsk(context)) || null;
+}
 
 // ==================== DOM REFS ====================
 const landingScreen = document.getElementById("landingScreen");
@@ -980,14 +1095,20 @@ function switchScreen(target) {
 
 function startQuiz() {
     state.index = 0;
-    state.answers = Array(questions.length).fill(null);
+    state.baseAnswers = Array(questions.length).fill(null);
+    state.hiddenQuestion = null;
+    state.hiddenAnswer = null;
+    state.runtimeQuestions = questions.slice();
     switchScreen("quiz");
     renderQuestion();
 }
 
 function restartQuiz() {
     state.index = 0;
-    state.answers = Array(questions.length).fill(null);
+    state.baseAnswers = Array(questions.length).fill(null);
+    state.hiddenQuestion = null;
+    state.hiddenAnswer = null;
+    state.runtimeQuestions = questions.slice();
     switchScreen("landing");
 }
 
@@ -1004,11 +1125,11 @@ function backToResult() {
 
 // ==================== RENDER QUESTION ====================
 function renderQuestion() {
-    const q = questions[state.index];
-    const selected = state.answers[state.index];
+    const q = state.runtimeQuestions[state.index];
+    const selected = state.index < questions.length ? state.baseAnswers[state.index] : state.hiddenAnswer;
 
-    progressCount.textContent = `${state.index + 1} / ${questions.length}`;
-    progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+    progressCount.textContent = `${state.index + 1} / ${state.runtimeQuestions.length}`;
+    progressFill.style.width = `${((state.index + 1) / state.runtimeQuestions.length) * 100}%`;
     promptAvatar.textContent = q.avatar;
     promptCategory.textContent = q.category;
     promptHint.textContent = q.hint;
@@ -1025,14 +1146,19 @@ function renderQuestion() {
     });
 
     nextBtn.disabled = selected === null;
-    nextBtn.innerHTML = state.index === questions.length - 1
+    nextBtn.innerHTML = state.index === state.runtimeQuestions.length - 1
         ? `查看结果 <span>→</span>`
         : `继续 <span>→</span>`;
     backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
 }
 
 function selectOption(idx) {
-    state.answers[state.index] = idx;
+    if (state.index < questions.length) {
+        state.baseAnswers[state.index] = idx;
+    } else {
+        state.hiddenAnswer = idx;
+    }
+
     [...optionList.children].forEach((node, i) => {
         node.classList.toggle("active", i === idx);
     });
@@ -1040,8 +1166,24 @@ function selectOption(idx) {
 }
 
 function goNext() {
-    if (state.answers[state.index] === null) return;
-    if (state.index < questions.length - 1) {
+    const currentAnswer = state.index < questions.length ? state.baseAnswers[state.index] : state.hiddenAnswer;
+    if (currentAnswer === null) return;
+
+    const isAtBaseEnd = state.index === questions.length - 1;
+    const hasHiddenQuestion = Boolean(state.hiddenQuestion);
+
+    if (isAtBaseEnd && !hasHiddenQuestion) {
+        state.hiddenQuestion = decideHiddenQuestion();
+        if (state.hiddenQuestion) {
+            state.runtimeQuestions = [...questions, state.hiddenQuestion];
+            state.index++;
+            renderQuestion();
+            window.scrollTo({top: 0, behavior: "smooth"});
+            return;
+        }
+    }
+
+    if (state.index < state.runtimeQuestions.length - 1) {
         state.index++;
         renderQuestion();
         window.scrollTo({top: 0, behavior: "smooth"});
@@ -1071,11 +1213,7 @@ function levelScore(level) {
 }
 
 function computeResult() {
-    const dims = { work:0, social:0, attitude:0, emotion:0, action:0 };
-    state.answers.forEach((ai, qi) => {
-        const eff = questions[qi].options[ai].effect;
-        Object.keys(eff).forEach(k => { dims[k] += eff[k]; });
-    });
+    const dims = getRawScores();
 
     const levelMap = {
         work: toLevel(dims.work),
@@ -1111,6 +1249,11 @@ function computeResult() {
     });
 
     const bestMatch = ranked[0] || { key: "MMMS", profile: profiles["MMMS"], distance: 0, exact: 0 };
+    const hiddenTriggered = Boolean(state.hiddenQuestion && state.hiddenAnswer !== null);
+    const hiddenSelectedProfile = hiddenTriggered ? hiddenProfiles[state.hiddenQuestion.profileKey] : null;
+    const hiddenWins = hiddenTriggered && state.hiddenAnswer !== 2;
+    const finalProfile = hiddenWins ? hiddenSelectedProfile : bestMatch.profile;
+    const finalProfileKey = hiddenWins ? state.hiddenQuestion.profileKey : bestMatch.key;
     const metrics = {
         work: clamp(Math.round(50 + dims.work * 4), 20, 98),
         social: clamp(Math.round(50 + dims.social * 4), 20, 98),
@@ -1121,13 +1264,19 @@ function computeResult() {
 
     return {
         resultStr,
-        code: bestMatch.profile.code,
-        profileKey: bestMatch.key,
-        profile: bestMatch.profile,
+        code: finalProfile.code,
+        profileKey: finalProfileKey,
+        profile: finalProfile,
+        baseProfile: bestMatch.profile,
+        baseProfileKey: bestMatch.key,
         metrics,
         distance: bestMatch.distance,
         exact: bestMatch.exact,
-        levels: levelMap
+        levels: levelMap,
+        hiddenTriggered,
+        hiddenWins,
+        hiddenQuestion: state.hiddenQuestion,
+        hiddenProfile: hiddenSelectedProfile
     };
 }
 
@@ -1135,12 +1284,16 @@ function computeResult() {
 function renderResult() {
     const res = computeResult();
     const p = res.profile;
+    const hiddenBadge = res.hiddenWins ? " · 彩蛋人格已触发" : "";
+    const summarySuffix = res.hiddenWins
+        ? ` 你还额外触发了隐藏题「${res.hiddenQuestion.category}」，所以结果从基础人格偏转成了彩蛋人格。`
+        : ` 这次你的 5 维人格模式是 ${res.resultStr}，命中了 ${res.exact}/5 个核心维度。`;
 
-    document.getElementById("resultCode").textContent = `${p.code} · ${res.resultStr}`;
+    document.getElementById("resultCode").textContent = `${p.code} · ${res.resultStr}${hiddenBadge}`;
     document.getElementById("resultBreed").textContent = p.breed;
     document.getElementById("resultRole").textContent = p.role;
     document.getElementById("resultEmoji").textContent = p.emoji;
-    document.getElementById("resultSummary").textContent = `${p.summary} 这次你的 5 维人格模式是 ${res.resultStr}，命中了 ${res.exact}/5 个核心维度。`;
+    document.getElementById("resultSummary").textContent = `${p.summary}${summarySuffix}`;
     document.getElementById("resultLove").textContent = p.love;
 
     document.getElementById("resultTags").innerHTML =
@@ -1164,7 +1317,8 @@ function renderResult() {
         </div>
     `).join("");
 
-    const shareText = `【${p.breed}｜${p.role}】\n代码：${p.code} · ${res.resultStr}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
+    const shareLead = res.hiddenWins ? "我居然刷出了 SbTI 隐藏人格：" : "我的 SbTI 结果是：";
+    const shareText = `${shareLead}\n【${p.breed}｜${p.role}】\n代码：${p.code} · ${res.resultStr}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
     document.getElementById("shareBox").textContent = shareText;
     shareBtn.dataset.shareText = shareText;
 
@@ -1176,15 +1330,20 @@ function renderResult() {
 
 // ==================== RENDER TYPE MAP ====================
 function renderTypeMap() {
-    const currentCode = state.answers.every(a => a !== null) ? computeResult().code : "";
-    typeMapGrid.innerHTML = Object.entries(profiles).map(([key, prof]) => {
+    const currentCode = getCurrentAnswers().every(a => a !== null) ? computeResult().code : "";
+    const mergedProfiles = [
+        ...Object.entries(profiles).map(([key, prof]) => ({ key, prof, hidden: false })),
+        ...Object.entries(hiddenProfiles).map(([key, prof]) => ({ key, prof, hidden: true }))
+    ];
+
+    typeMapGrid.innerHTML = mergedProfiles.map(({ key, prof, hidden }) => {
         const isCurrent = prof.code === currentCode;
         return `
             <article class="mapping-card ${isCurrent ? "active" : ""}">
                 <div class="mapping-card-head">
                     <div class="mapping-code-wrap">
                         <div class="mapping-card-code">${prof.code}</div>
-                        <span class="mapping-current">${isCurrent ? "你的结果" : "类型映射"}</span>
+                        <span class="mapping-current">${isCurrent ? "你的结果" : hidden ? "隐藏人格" : "类型映射"}</span>
                     </div>
                     <div class="mapping-card-emoji">${prof.emoji}</div>
                 </div>
