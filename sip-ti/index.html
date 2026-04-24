@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SipTI - 测你的人格本体是哪杯奶茶和哪种酒</title>
+    <meta name="description" content="SipTI 饮品人格测试：12 道情境题，测出你的奶茶本体、微醺本体和 16 型风味人格。">
+    <style>
+        :root {
+            --bg: #f9f2eb;
+            --card: #ffffff;
+            --text: #3a2a26;
+            --muted: #9a7f75;
+            --line: #eddcd3;
+            --accent: #ff9f7a;
+            --accent-2: #f2c66d;
+            --accent-3: #d96b8a;
+            --black: #4b332e;
+            --shadow: 0 18px 42px rgba(101, 70, 62, 0.12);
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+            --radius-md: 18px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            background: radial-gradient(circle at top, #fff8f2 0%, var(--bg) 42%, #f3e4db 100%);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px 14px 40px;
+        }
+
+        button { font: inherit; }
+        a { color: inherit; text-decoration: none; }
+
+        .app {
+            width: min(100%, 430px);
+            min-height: calc(100dvh - 40px);
+            position: relative;
+        }
+
+        .screen { display: none; animation: fadeIn 0.28s ease; }
+        .screen.active { display: block; }
+        .screen.quiz-screen.active { display: flex; flex-direction: column; }
+        .quiz-screen { min-height: calc(100dvh - 40px); }
+        .quiz-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+        .quiz-footer {
+            position: sticky;
+            bottom: 0;
+            margin-top: auto;
+            padding: 18px 0 calc(env(safe-area-inset-bottom, 0px) + 18px);
+            background: linear-gradient(180deg, rgba(249,242,235,0) 0%, rgba(249,242,235,0.92) 18%, rgba(249,242,235,0.98) 100%);
+            backdrop-filter: blur(8px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            display: inline-flex;
+            gap: 8px;
+            perspective: 800px;
+            margin: 4px 0 18px;
+            font-family: "Courier New", monospace;
+            font-size: clamp(38px, 11vw, 58px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            display: inline-block;
+            min-width: 0.9em;
+            padding: 8px 6px 4px;
+            color: #fff;
+            background: var(--black);
+            box-shadow: 8px 8px 0 rgba(255, 159, 122, 0.36);
+            transform-origin: center bottom;
+            animation: logoBounce 3.8s cubic-bezier(0.35, 0, 0.2, 1) infinite;
+        }
+
+        .logo span:nth-child(2) { animation-delay: 0.12s; }
+        .logo span:nth-child(3) { animation-delay: 0.24s; }
+        .logo span:nth-child(4) { animation-delay: 0.36s; }
+        .logo span:nth-child(5) { animation-delay: 0.48s; }
+
+        @keyframes logoBounce {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            10% { transform: translateY(-4px) rotateX(-10deg); }
+            22% { transform: translateY(0) rotateX(0); }
+        }
+
+        .hero {
+            text-align: center;
+            padding-top: 6px;
+        }
+
+        .sprite-wall {
+            position: relative;
+            overflow: hidden;
+            margin: 12px 0 28px;
+            padding: 10px 0;
+        }
+
+        .sprite-wall::before,
+        .sprite-wall::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 26px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sprite-wall::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--bg) 0%, rgba(249,242,235,0) 100%);
+        }
+
+        .sprite-wall::after {
+            right: 0;
+            background: linear-gradient(270deg, var(--bg) 0%, rgba(249,242,235,0) 100%);
+        }
+
+        .sprite-marquee {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            margin-bottom: 16px;
+            animation: driftLeft 24s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+        }
+
+        .sprite-marquee.reverse {
+            animation-name: driftRight;
+            animation-duration: 26s;
+        }
+
+        .sprite-marquee:last-child { margin-bottom: 0; }
+
+        .sprite {
+            --stack-y: 0px;
+            --tilt: 0deg;
+            --tilt-alt: 0.4deg;
+            flex: 0 0 96px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,249,246,0.94) 100%);
+            border: 2px solid var(--black);
+            border-radius: 24px;
+            padding: 10px 8px 11px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 16px 24px rgba(101,70,62,0.08), 0 8px 0 rgba(242,198,109,0.16);
+            animation: cardBob 4s ease-in-out infinite;
+        }
+
+        .sprite::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: -13px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(75,51,46,0.12);
+            filter: blur(10px);
+            opacity: 0.55;
+            z-index: -1;
+        }
+
+        .sprite:nth-child(4n+1) { --stack-y: -4px; --tilt: -1.3deg; --tilt-alt: 0.2deg; }
+        .sprite:nth-child(4n+2) { --stack-y: 3px; --tilt: 1deg; --tilt-alt: -0.35deg; }
+        .sprite:nth-child(4n+3) { --stack-y: -2px; --tilt: -0.7deg; --tilt-alt: 0.45deg; }
+        .sprite:nth-child(4n+4) { --stack-y: 4px; --tilt: 1.2deg; --tilt-alt: -0.25deg; }
+        .sprite:nth-child(2n) { animation-delay: 0.28s; }
+        .sprite:nth-child(3n) { animation-delay: 0.62s; }
+
+        .sprite-photo {
+            width: 64px;
+            height: 58px;
+            border-radius: 18px;
+            padding: 5px;
+            background: radial-gradient(circle at 50% 22%, #fffdf9 0%, #f7ebe2 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -8px 14px rgba(0,0,0,0.03);
+            display: grid;
+            place-items: center;
+            font-size: 30px;
+        }
+
+        .sprite-name {
+            font-size: 11px;
+            color: #836b64;
+            font-weight: 700;
+            letter-spacing: .02em;
+        }
+
+        @keyframes driftLeft {
+            0%, 12% { transform: translateX(0); }
+            24%, 36% { transform: translateX(-7%); }
+            48%, 60% { transform: translateX(-14%); }
+            72%, 84% { transform: translateX(-21%); }
+            100% { transform: translateX(-28%); }
+        }
+
+        @keyframes driftRight {
+            0%, 12% { transform: translateX(-28%); }
+            24%, 36% { transform: translateX(-21%); }
+            48%, 60% { transform: translateX(-14%); }
+            72%, 84% { transform: translateX(-7%); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes cardBob {
+            0%, 100% { transform: translateY(var(--stack-y)) rotate(var(--tilt)) scale(1); }
+            30% { transform: translateY(calc(var(--stack-y) - 4px)) rotate(var(--tilt-alt)) scale(1.015); }
+            54% { transform: translateY(calc(var(--stack-y) - 1px)) rotate(var(--tilt)) scale(1.005); }
+        }
+
+        .hero-title {
+            margin: 0 auto 12px;
+            font-size: clamp(28px, 7vw, 40px);
+            line-height: 1.18;
+            font-weight: 900;
+            max-width: 11em;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 58%, rgba(255,159,122,0.55) 58%, rgba(255,159,122,0.55) 88%, transparent 88%);
+            padding: 0 4px;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto 18px;
+            max-width: 17em;
+            color: #9a837a;
+            font-size: 17px;
+            line-height: 1.7;
+            font-weight: 700;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .hero-chip {
+            border-radius: 999px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.88);
+            border: 1.5px solid var(--line);
+            color: #7a655e;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .animal-pattern {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: -6px 0 24px;
+        }
+
+        .animal-token {
+            min-width: 46px;
+            height: 46px;
+            padding: 0 12px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.92);
+            border: 1.5px solid var(--line);
+            box-shadow: 0 10px 18px rgba(101,70,62,0.05);
+            font-size: 21px;
+        }
+
+        .primary-btn, .secondary-btn, .ghost-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 999px;
+            min-height: 66px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+        }
+
+        .primary-btn {
+            background: var(--black);
+            color: #fff;
+            box-shadow: var(--shadow);
+            font-size: 18px;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover,
+        .ghost-btn:hover,
+        .icon-btn:hover,
+        .option:hover { transform: translateY(-1px); }
+
+        .primary-btn:disabled {
+            cursor: not-allowed;
+            background: #cacaca;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .bottom-note {
+            margin-top: 22px;
+            color: #9a847d;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.75;
+        }
+
+        .bottom-note a {
+            color: var(--accent-3);
+            font-weight: 800;
+        }
+
+        .topbar {
+            display: grid;
+            grid-template-columns: 52px 1fr 52px;
+            align-items: center;
+            gap: 10px;
+            padding-top: 6px;
+        }
+
+        .icon-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 0;
+            background: rgba(255,255,255,0.84);
+            color: var(--text);
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(101,70,62,0.05);
+            cursor: pointer;
+        }
+
+        .progress-count {
+            text-align: center;
+            color: #aa8b7f;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #eaded6;
+            overflow: hidden;
+            margin: 22px 0 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--black) 0%, var(--accent) 100%);
+            border-radius: inherit;
+            transition: width 0.22s ease;
+        }
+
+        .prompt-row {
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .prompt-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.92);
+            display: grid;
+            place-items: center;
+            border: 1.5px solid #f0e4dc;
+            box-shadow: 0 10px 24px rgba(101,70,62,0.04);
+            font-size: 34px;
+        }
+
+        .prompt-bubble {
+            min-height: 72px;
+            background: rgba(255,255,255,0.78);
+            border-radius: 20px;
+            border: 1.5px solid #f0e4dc;
+            padding: 13px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .prompt-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #7e6860;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(255,159,122,0.18);
+        }
+
+        .prompt-hint {
+            color: #af978d;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .question-title {
+            margin: 0 0 16px;
+            font-size: clamp(25px, 7.4vw, 40px);
+            line-height: 1.22;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .options {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 0;
+            overflow-y: auto;
+            padding: 2px 2px 4px;
+            scrollbar-width: thin;
+        }
+
+        .option {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 38px 1fr;
+            gap: 12px;
+            align-items: start;
+            text-align: left;
+            padding: 16px 16px 16px 14px;
+            border-radius: 20px;
+            border: 2px solid #eaded6;
+            background: rgba(255,255,255,0.94);
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .option.active {
+            background: var(--black);
+            color: #fff;
+            border-color: var(--black);
+            box-shadow: var(--shadow);
+        }
+
+        .option-key {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1;
+            color: #c59886;
+        }
+
+        .option.active .option-key { color: var(--accent-2); }
+
+        .option-text {
+            font-size: 16.5px;
+            line-height: 1.55;
+            font-weight: 800;
+        }
+
+        .result-screen { padding-bottom: 24px; }
+        .mapping-screen { padding-bottom: 30px; }
+
+        .mapping-hero { margin: 10px 0 18px; }
+        .mapping-title {
+            margin: 14px 0 10px;
+            font-size: clamp(28px, 8vw, 38px);
+            line-height: 1.08;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .mapping-subtitle {
+            margin: 0;
+            color: #7e6860;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .mapping-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 24px;
+            border: 1.5px solid #f0e4dc;
+            padding: 18px 18px 20px;
+            box-shadow: 0 12px 28px rgba(101,70,62,0.05);
+        }
+
+        .mapping-card.active {
+            border-color: var(--black);
+            box-shadow: 0 16px 34px rgba(101,70,62,0.08);
+        }
+
+        .mapping-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .mapping-code-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mapping-card-code {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: var(--black);
+            color: #fff;
+            font-family: "Courier New", monospace;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .mapping-current {
+            color: #917b72;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .mapping-card-emoji { font-size: 34px; line-height: 1; }
+
+        .mapping-card-breed {
+            margin: 14px 0 6px;
+            font-size: clamp(24px, 6.4vw, 30px);
+            line-height: 1.12;
+            font-weight: 900;
+        }
+
+        .mapping-card-role {
+            margin: 0;
+            color: #6d5850;
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .mapping-card .tag-list { margin: 14px 0 0; }
+
+        .mapping-pair {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .mapping-pair-card {
+            border-radius: 18px;
+            padding: 12px 12px 14px;
+            background: linear-gradient(180deg, rgba(255,252,248,0.96) 0%, rgba(250,245,241,0.9) 100%);
+            border: 1px solid #f0e4dc;
+        }
+
+        .mapping-pair-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #8f766d;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .mapping-pair-name {
+            margin-top: 8px;
+            font-size: 15px;
+            line-height: 1.4;
+            font-weight: 900;
+        }
+
+        .mapping-pair-note {
+            margin-top: 4px;
+            color: #8c746a;
+            font-size: 12px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.9);
+            border: 1.5px solid #f0e4dc;
+            font-size: 13px;
+            font-weight: 800;
+            color: #745f57;
+        }
+
+        .result-head { margin: 12px 0 14px; }
+
+        .result-code {
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 0.28em;
+            color: var(--accent-3);
+            margin-bottom: 8px;
+        }
+
+        .result-breed {
+            margin: 0;
+            font-size: clamp(30px, 8vw, 44px);
+            line-height: 1.08;
+            font-weight: 900;
+        }
+
+        .result-role {
+            margin: 8px 0 0;
+            font-size: 16px;
+            color: #7a655e;
+            font-weight: 700;
+        }
+
+        .result-hero {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,248,243,0.86) 100%);
+            border: 1.5px solid #f0e4dc;
+            border-radius: 24px;
+            padding: 16px 16px 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-emoji {
+            font-size: 60px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0 14px;
+        }
+
+        .tag {
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #f9eee6;
+            color: #775f58;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .result-summary {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.75;
+            color: #43312c;
+            font-weight: 600;
+        }
+
+        .pair-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .flavor-card {
+            border-radius: 22px;
+            padding: 16px 14px 16px;
+            border: 1.5px solid #f0e4dc;
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 10px 24px rgba(101,70,62,0.04);
+        }
+
+        .flavor-card.tea {
+            background: linear-gradient(180deg, rgba(255,249,242,0.98) 0%, rgba(252,240,230,0.9) 100%);
+        }
+
+        .flavor-card.booze {
+            background: linear-gradient(180deg, rgba(255,245,247,0.98) 0%, rgba(248,233,239,0.9) 100%);
+        }
+
+        .flavor-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #8f766d;
+            font-weight: 800;
+        }
+
+        .flavor-emoji {
+            font-size: 34px;
+            line-height: 1;
+            margin: 12px 0 8px;
+        }
+
+        .flavor-name {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.2;
+            font-weight: 900;
+        }
+
+        .flavor-role {
+            margin: 6px 0 0;
+            color: #785f58;
+            font-size: 13px;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .flavor-note {
+            margin: 10px 0 0;
+            color: #8d746b;
+            font-size: 13px;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.92);
+            border-radius: 22px;
+            border: 1.5px solid #f0e4dc;
+            padding: 16px 16px 18px;
+            box-shadow: 0 10px 24px rgba(101,70,62,0.04);
+        }
+
+        .panel-title {
+            margin: 0 0 12px;
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .radar-wrap { display: flex; justify-content: center; }
+        #radarCanvas { width: min(100%, 310px); aspect-ratio: 1; }
+
+        .metric-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .metric-item {
+            display: grid;
+            grid-template-columns: 86px 1fr 44px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .metric-label,
+        .metric-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: #735f58;
+        }
+
+        .metric-value { text-align: right; }
+
+        .metric-track {
+            height: 12px;
+            border-radius: 999px;
+            background: #f2e6df;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--black) 0%, var(--accent) 100%);
+        }
+
+        .insight-text {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.85;
+            color: #473530;
+            font-weight: 600;
+        }
+
+        .tips {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tips li {
+            display: flex;
+            gap: 10px;
+            font-size: 15px;
+            line-height: 1.75;
+            color: #43312c;
+            font-weight: 600;
+        }
+
+        .tips li::before {
+            content: "✦";
+            color: var(--accent-3);
+            font-weight: 900;
+        }
+
+        .share-box {
+            margin-top: 12px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: var(--black);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .secondary-btn {
+            background: var(--black);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ghost-btn {
+            background: rgba(255,255,255,0.95);
+            color: #111;
+            border: 1.5px solid #e7d6ce;
+            font-size: 16px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(17,17,17,0.94);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 20;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 375px) {
+            .sprite-marquee { gap: 10px; }
+            .sprite { flex-basis: 84px; min-height: 88px; }
+            .sprite-photo { width: 58px; height: 52px; }
+            .prompt-row { grid-template-columns: 62px 1fr; gap: 10px; margin-bottom: 14px; }
+            .prompt-avatar { width: 62px; height: 62px; border-radius: 18px; font-size: 30px; }
+            .prompt-bubble { min-height: 62px; padding: 11px 13px; }
+            .question-title { margin-bottom: 14px; font-size: clamp(23px, 7vw, 34px); }
+            .option { grid-template-columns: 34px 1fr; gap: 10px; padding: 14px 14px 14px 12px; }
+            .option-key { font-size: 22px; }
+            .option-text { font-size: 15.5px; line-height: 1.48; }
+            .pair-grid,
+            .mapping-pair,
+            .action-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <section id="landingScreen" class="screen active hero">
+        <div class="logo" aria-label="SipTI 标题">
+            <span>S</span><span>i</span><span>p</span><span>T</span><span>I</span>
+        </div>
+
+        <div class="sprite-wall" aria-hidden="true">
+            <div id="heroRow1" class="sprite-marquee"></div>
+            <div id="heroRow2" class="sprite-marquee reverse"></div>
+        </div>
+
+        <h1 class="hero-title"><span class="highlight">测你的人格本体是哪杯奶茶，又是哪种酒</span></h1>
+        <p class="hero-subtitle">白天你是几分糖，晚上你有多上头。12 道题，测出你的奶茶本体、微醺本体和风味人格。</p>
+
+        <div class="hero-meta">
+            <div class="hero-chip">12 道风味情境题</div>
+            <div class="hero-chip">16 型饮品人格</div>
+            <div class="hero-chip">双结果：奶茶 + 酒类</div>
+        </div>
+
+        <div class="animal-pattern" aria-hidden="true">
+            <span class="animal-token">🧋</span>
+            <span class="animal-token">🍸</span>
+            <span class="animal-token">🍷</span>
+            <span class="animal-token">🥂</span>
+        </div>
+
+        <button id="startBtn" class="primary-btn" type="button">
+            <span class="btn-icon">▶</span>
+            开始测试
+        </button>
+
+        <p class="bottom-note">适合和朋友互测：看起来最甜的人，未必不是后劲最大的那杯。来小红书找我玩 <a href="https://xhslink.com/m/9ijxa3lmbI8" target="_blank" rel="noopener noreferrer">@禾苏</a></p>
+    </section>
+
+    <section id="quizScreen" class="screen quiz-screen">
+        <div class="topbar">
+            <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
+            <div id="progressCount" class="progress-count">1 / 12</div>
+            <div></div>
+        </div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+        <div class="quiz-main">
+            <div class="prompt-row">
+                <div id="promptAvatar" class="prompt-avatar">🧋</div>
+                <div class="prompt-bubble">
+                    <div class="prompt-category"><span class="dot"></span><span id="promptCategory">饮品人格测试</span></div>
+                    <div id="promptHint" class="prompt-hint">选你第一反应最想点的，不要端着。</div>
+                </div>
+            </div>
+
+            <h2 id="questionTitle" class="question-title">加载中...</h2>
+            <div id="optionList" class="options"></div>
+        </div>
+
+        <div class="quiz-footer">
+            <button id="nextBtn" class="primary-btn" type="button" disabled>继续<span> →</span></button>
+        </div>
+    </section>
+
+    <section id="resultScreen" class="screen result-screen">
+        <div class="result-badge">🧋 你的 SipTI 饮品人格已生成</div>
+
+        <div class="result-head">
+            <div id="resultCode" class="result-code">ENFP</div>
+            <h1 id="resultBreed" class="result-breed">热闹上头型</h1>
+            <p id="resultRole" class="result-role">你是那种一出场就让空气有味道的人</p>
+        </div>
+
+        <div class="result-hero">
+            <div id="resultEmoji" class="result-emoji">✨</div>
+            <div id="resultTags" class="tag-list"></div>
+            <p id="resultSummary" class="result-summary">你看起来像一杯好入口的饮品，但后劲其实比谁都大。</p>
+        </div>
+
+        <div class="pair-grid">
+            <article class="flavor-card tea">
+                <div class="flavor-label">🧋 你的奶茶本体</div>
+                <div id="teaEmoji" class="flavor-emoji">🧋</div>
+                <h3 id="teaName" class="flavor-name">黑糖珍珠奶茶</h3>
+                <p id="teaRole" class="flavor-role">第一口就让人记住的热闹型选手</p>
+                <p id="teaNote" class="flavor-note">你不一定总在最前面，但很容易成为被反复想起的那一杯。</p>
+            </article>
+
+            <article class="flavor-card booze">
+                <div class="flavor-label">🍸 你的微醺本体</div>
+                <div id="alcoholEmoji" class="flavor-emoji">🍸</div>
+                <h3 id="alcoholName" class="flavor-name">蜜桃贝里尼</h3>
+                <p id="alcoholRole" class="flavor-role">看着甜，后劲一点都不小</p>
+                <p id="alcoholNote" class="flavor-note">你是那种“好像很好接近”，结果越聊越上头的人。</p>
+            </article>
+        </div>
+
+        <div class="panel-grid">
+            <div class="panel">
+                <h3 class="panel-title">风味雷达</h3>
+                <div class="radar-wrap"><canvas id="radarCanvas" width="320" height="320"></canvas></div>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title">你的风味结构</h3>
+                <div id="metricList" class="metric-list"></div>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title">你在关系里的味道</h3>
+                <p id="resultLove" class="insight-text"></p>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title">保持好喝的建议</h3>
+                <ul id="resultTips" class="tips"></ul>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title">一键分享文案</h3>
+                <div id="shareBox" class="share-box"></div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button id="typeMapBtn" class="secondary-btn" type="button">查看 16 型图鉴</button>
+            <button id="shareBtn" class="ghost-btn" type="button">分享给朋友</button>
+            <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
+        </div>
+    </section>
+
+    <section id="typeMapScreen" class="screen mapping-screen">
+        <div class="topbar">
+            <button id="typeMapBackBtn" class="icon-btn" type="button" aria-label="返回结果页">←</button>
+            <div class="progress-count">16 型图鉴</div>
+            <div></div>
+        </div>
+
+        <div class="mapping-hero">
+            <div class="result-badge">🍹 SipTI 全类型图鉴</div>
+            <h1 class="mapping-title">16 种风味人格</h1>
+            <p class="mapping-subtitle">每一种人格，都有一杯奶茶本体和一杯微醺本体。</p>
+        </div>
+
+        <div id="typeMapGrid" class="mapping-grid"></div>
+    </section>
+</div>
+
+<div id="toast" class="toast">已复制</div>
+
+<script>
+const heroSpritesRow1 = [
+    { emoji: "🧋", name: "珍珠奶茶" },
+    { emoji: "🍵", name: "茉莉奶绿" },
+    { emoji: "🍓", name: "草莓奶盖" },
+    { emoji: "🥭", name: "杨枝甘露" },
+    { emoji: "🍸", name: "调酒选手" },
+    { emoji: "🥃", name: "威士忌派" }
+];
+
+const heroSpritesRow2 = [
+    { emoji: "🍷", name: "红酒气质" },
+    { emoji: "🥂", name: "起泡香槟" },
+    { emoji: "🍑", name: "蜜桃果酒" },
+    { emoji: "🍇", name: "葡萄轻乳" },
+    { emoji: "🍵", name: "四季春" },
+    { emoji: "🧊", name: "高球系" }
+];
+
+const questions = [
+    {
+        avatar: "🌃",
+        category: "临时邀约",
+        hint: "晚上 9 点收到消息，第一反应最能暴露本性。",
+        text: "周五晚上 9 点，朋友突然喊你“出来坐坐，顺便喝点东西”，你最像：",
+        options: [
+            { text: "去啊，出门前顺手问还有谁在，场子越热闹越好", effect: { ei: 2, sn: 1, ft: 1, jp: -1, social: 3, curiosity: 1, affection: 2, order: -1, drama: 2 } },
+            { text: "先问在哪、喝什么、几点散，确定舒服再考虑", effect: { ei: 0, sn: 0, ft: 0, jp: 2, social: 0, curiosity: 0, affection: 1, order: 2, drama: -1 } },
+            { text: "谢谢但不去了，我今晚只想和自己的床稳定交往", effect: { ei: -2, sn: -1, ft: 0, jp: 1, social: -2, curiosity: -1, affection: 0, order: 1, drama: -1 } }
+        ]
+    },
+    {
+        avatar: "🧾",
+        category: "点单习惯",
+        hint: "你点东西，是看心情、看脑洞，还是看稳定发挥？",
+        text: "站在奶茶店菜单前，新品写着“咸奶油辣芒果乌龙”，你会：",
+        options: [
+            { text: "这也太怪了吧，我必须试试，人生需要刺激", effect: { ei: 1, sn: 2, ft: 1, jp: -2, social: 1, curiosity: 3, affection: 0, order: -2, drama: 2 } },
+            { text: "我先看评价，实在没有把握就回到熟悉选项", effect: { ei: 0, sn: -1, ft: -1, jp: 2, social: 0, curiosity: -1, affection: 0, order: 2, drama: -1 } },
+            { text: "新品可以，但我要自己微调，糖冰配料必须按我规则来", effect: { ei: -1, sn: 1, ft: -1, jp: 2, social: -1, curiosity: 1, affection: 0, order: 3, drama: 0 } }
+        ]
+    },
+    {
+        avatar: "💔",
+        category: "朋友失恋",
+        hint: "你安慰人的方式，就是你情感浓度的形状。",
+        text: "朋友失恋后半夜给你发了一大串消息，你最可能怎么回？",
+        options: [
+            { text: "先共情，边骂对方边陪聊，必要时直接给他点一杯甜的", effect: { ei: 1, sn: 0, ft: 2, jp: -1, social: 1, curiosity: 0, affection: 3, order: -1, drama: 2 } },
+            { text: "先帮他把问题拆开，分析这段关系到底卡在哪", effect: { ei: -1, sn: 1, ft: -2, jp: 1, social: -1, curiosity: 1, affection: 0, order: 1, drama: -1 } },
+            { text: "我会陪着，但不敢说太多，只默默回“我在”", effect: { ei: -2, sn: -1, ft: 2, jp: 0, social: -2, curiosity: -1, affection: 2, order: 0, drama: 0 } }
+        ]
+    },
+    {
+        avatar: "🗓️",
+        category: "出行计划",
+        hint: "旅行像不像酒局，一下就看出你是即兴派还是控场派。",
+        text: "准备和朋友出去玩，你在出发前通常属于哪种状态？",
+        options: [
+            { text: "行程、路线、备选方案都整理好了，最好别有人临时变卦", effect: { ei: -1, sn: -1, ft: -1, jp: 2, social: -1, curiosity: -1, affection: 0, order: 3, drama: -1 } },
+            { text: "有个大概就行，到时候看感觉转场才好玩", effect: { ei: 1, sn: 2, ft: 1, jp: -2, social: 1, curiosity: 2, affection: 1, order: -2, drama: 2 } },
+            { text: "我不想管全局，只要吃的喝的舒服、同行人对味就行", effect: { ei: 0, sn: 0, ft: 2, jp: -1, social: 0, curiosity: 0, affection: 2, order: -1, drama: 0 } }
+        ]
+    },
+    {
+        avatar: "🍷",
+        category: "陌生场合",
+        hint: "第一次进一家陌生店，你会先观察什么？",
+        text: "第一次去一家氛围很特别的酒吧或茶饮店，你最先注意的是：",
+        options: [
+            { text: "人群气氛和谁最值得聊，先看看这场有没有意思", effect: { ei: 2, sn: 1, ft: 1, jp: -1, social: 3, curiosity: 1, affection: 1, order: -1, drama: 1 } },
+            { text: "菜单逻辑、招牌结构和整体设计，我喜欢先研究系统", effect: { ei: -1, sn: 2, ft: -2, jp: 1, social: -1, curiosity: 2, affection: 0, order: 1, drama: -1 } },
+            { text: "灯光、音乐和细节质感，舒服我才会真正放松", effect: { ei: -1, sn: 1, ft: 2, jp: 0, social: -1, curiosity: 1, affection: 1, order: 0, drama: 2 } }
+        ]
+    },
+    {
+        avatar: "📸",
+        category: "分享欲",
+        hint: "发不发朋友圈，很多时候和喝什么同样真实。",
+        text: "当你拿到一杯颜值超高的饮品，你更可能：",
+        options: [
+            { text: "当然先拍，构图文案滤镜一步到位，今天这杯不能白美", effect: { ei: 2, sn: 1, ft: 2, jp: -1, social: 2, curiosity: 1, affection: 1, order: 0, drama: 3 } },
+            { text: "拍两张存着就好，不一定发，留给自己回头看", effect: { ei: -1, sn: 0, ft: 1, jp: 1, social: -1, curiosity: 0, affection: 1, order: 1, drama: 0 } },
+            { text: "我懒得拍，饮品存在的意义就是赶紧喝", effect: { ei: 0, sn: -1, ft: -1, jp: 0, social: 0, curiosity: -1, affection: 0, order: 0, drama: -2 } }
+        ]
+    },
+    {
+        avatar: "💘",
+        category: "暧昧试探",
+        hint: "对“随便”这两个字的处理方式，最容易暴露你。",
+        text: "暧昧对象问你“那我们喝什么都行吗”，你会：",
+        options: [
+            { text: "会回“我都可以，你选的我都想试试”，顺手把球抛回去", effect: { ei: 1, sn: 1, ft: 2, jp: -1, social: 1, curiosity: 1, affection: 3, order: -1, drama: 1 } },
+            { text: "我会认真列出几种选项，减少尴尬并提高成功率", effect: { ei: -1, sn: 0, ft: -1, jp: 2, social: -1, curiosity: 0, affection: 1, order: 2, drama: -1 } },
+            { text: "嘴上说随便，心里已经默默希望对方能读懂我的偏好", effect: { ei: -2, sn: 1, ft: 2, jp: 0, social: -2, curiosity: 1, affection: 2, order: 0, drama: 1 } }
+        ]
+    },
+    {
+        avatar: "☁️",
+        category: "低气压时刻",
+        hint: "情绪低落时，你想被安慰的方式就是你的底色。",
+        text: "当你整个人很累、很想躲开世界时，你最想要的是：",
+        options: [
+            { text: "一杯确定好喝的热饮，什么都别问，让我慢慢回血", effect: { ei: -2, sn: -1, ft: 2, jp: 1, social: -2, curiosity: -1, affection: 2, order: 1, drama: 0 } },
+            { text: "拉个最熟的人出来聊一会，我不想一个人闷着", effect: { ei: 2, sn: 0, ft: 1, jp: -1, social: 2, curiosity: 0, affection: 2, order: -1, drama: 1 } },
+            { text: "给我一点空间，我会自己消化，不想被情绪打断节奏", effect: { ei: -1, sn: 1, ft: -2, jp: 2, social: -1, curiosity: 1, affection: -1, order: 2, drama: -1 } }
+        ]
+    },
+    {
+        avatar: "⏳",
+        category: "排队耐心",
+        hint: "一杯饮品要等 40 分钟，这件事本身就很像人生。",
+        text: "你很想喝的一家店今天大排长龙，你通常会：",
+        options: [
+            { text: "排，既然想喝就等，没必要半路换掉", effect: { ei: -1, sn: -1, ft: 0, jp: 2, social: -1, curiosity: -1, affection: 0, order: 2, drama: 0 } },
+            { text: "算了，附近再找别的，说不定还能碰上更惊喜的", effect: { ei: 1, sn: 2, ft: 1, jp: -2, social: 1, curiosity: 3, affection: 0, order: -2, drama: 1 } },
+            { text: "我会先算时间成本，值不值再说", effect: { ei: -1, sn: 0, ft: -2, jp: 1, social: -1, curiosity: 0, affection: -1, order: 2, drama: -1 } }
+        ]
+    },
+    {
+        avatar: "🎉",
+        category: "局里站位",
+        hint: "真正进入聚会时，你天然会站在哪个位置？",
+        text: "一群人坐下来后，你更像下面哪一类？",
+        options: [
+            { text: "那个会自然带动气氛、接梗转场、不让局掉下去的人", effect: { ei: 2, sn: 1, ft: 1, jp: -1, social: 3, curiosity: 1, affection: 1, order: -1, drama: 2 } },
+            { text: "那个认真听别人说话、记得大家口味和情绪的人", effect: { ei: -1, sn: 0, ft: 2, jp: 1, social: 0, curiosity: 0, affection: 3, order: 1, drama: 0 } },
+            { text: "那个不一定话多，但一开口就有重点的人", effect: { ei: -1, sn: 1, ft: -1, jp: 2, social: -1, curiosity: 1, affection: 0, order: 2, drama: -1 } }
+        ]
+    },
+    {
+        avatar: "🌙",
+        category: "深夜脑回路",
+        hint: "夜里最想点的那杯，通常比白天更像你。",
+        text: "如果现在是深夜 11:48，你突然想给自己点一杯东西，你会更偏向：",
+        options: [
+            { text: "甜一点、软一点、能立刻安抚我的东西", effect: { ei: -1, sn: 0, ft: 2, jp: -1, social: -1, curiosity: 0, affection: 2, order: -1, drama: 1 } },
+            { text: "苦一点、干净一点、最好有点成年人的克制感", effect: { ei: -1, sn: 1, ft: -2, jp: 1, social: -1, curiosity: 1, affection: -1, order: 1, drama: -1 } },
+            { text: "有层次、有新鲜感、喝完能让我觉得今晚没白过", effect: { ei: 1, sn: 2, ft: 1, jp: -2, social: 1, curiosity: 2, affection: 0, order: -2, drama: 2 } }
+        ]
+    },
+    {
+        avatar: "🫶",
+        category: "关系浓度",
+        hint: "真正让你心动的人，大概会喝到你的哪一面？",
+        text: "如果有人说“你给人的感觉像一杯很特别的饮品”，你更希望他理解到的是：",
+        options: [
+            { text: "我很好接近，也很会照顾人，但别把我的温柔当成无限续杯", effect: { ei: 1, sn: 0, ft: 2, jp: 0, social: 1, curiosity: 0, affection: 3, order: 0, drama: 1 } },
+            { text: "我不一定第一口就惊艳，但越相处越能喝出层次", effect: { ei: -2, sn: 1, ft: 1, jp: 1, social: -2, curiosity: 1, affection: 1, order: 1, drama: 0 } },
+            { text: "我不是谁都能懂，但真正懂的人会很上头", effect: { ei: -1, sn: 2, ft: -1, jp: -1, social: -1, curiosity: 2, affection: 0, order: -1, drama: 2 } }
+        ]
+    }
+];
+
+const profiles = {
+    ENFP: {
+        title: "热闹上头型",
+        role: "你是那种一出现，空气都会自动变甜一点的人",
+        emoji: "✨",
+        tags: ["高糖社交", "氛围发电", "先甜后上头"],
+        summary: "你不是靠用力表现自己来吸引人，你是天生自带那种“喝一口就会记住”的存在感。你看起来松弛、好聊、没什么攻击性，但真正熟了之后大家才会发现：你不只是甜，你还有明显后劲。",
+        love: "在关系里你很会制造心动氛围，也很容易让人产生“和你在一起会很好玩”的错觉。真正熟了之后，对方才会知道你并不是浅甜，而是越喝越上头。",
+        tips: ["别总想着让场子舒服，偶尔也要让自己舒服", "你的热情很珍贵，别倒给所有人", "保持灵动的同时，也别忘了给重要的人稳定感"],
+        tea: { emoji: "🧋", name: "黑糖珍珠奶茶", role: "第一口就让人记住的热闹型选手", note: "你很会制造“哇，这杯好有存在感”的瞬间，甜度够，记忆点也够。" },
+        alcohol: { emoji: "🍑", name: "蜜桃贝里尼", role: "看着轻盈，实际很会让人上头", note: "你给人的第一感觉通常毫无威胁，但后劲常常比想象中更大。" }
+    },
+    ENFJ: {
+        title: "氛围照顾型",
+        role: "你是会先记住别人点单偏好，再记住别人情绪的人",
+        emoji: "💞",
+        tags: ["会照顾场", "情绪有温度", "体面又有分寸"],
+        summary: "你的人格像一杯入口顺、温度刚好的饮品。你不是最炸场的那个，却总是最容易让人放松的那个。别人靠热闹建立存在感，你靠让别人觉得“和你待着很舒服”留在关系里。",
+        love: "你在关系里很懂照顾节奏，不会给人太大压力，但也不会让人觉得被敷衍。你是那种会默默把对方喜欢记在心里的人。",
+        tips: ["不要只顾着体谅别人，也要让别人学会体谅你", "关系不需要你一个人维持温度", "你已经很会照顾人了，下一步是学会直接表达需求"],
+        tea: { emoji: "🥭", name: "杨枝甘露轻乳茶", role: "讨喜而不廉价的温柔型存在", note: "甜度和层次都刚刚好，像你一样，会让人很自然地想靠近。" },
+        alcohol: { emoji: "🥂", name: "玫瑰起泡酒", role: "体面、好入口，还带一点庆祝意味", note: "你很适合出现在让人放松的场合里，存在感柔和但绝不寡淡。" }
+    },
+    ENTP: {
+        title: "新鲜挑事型",
+        role: "你的人生很多高光，都来自“试试看会不会更有意思”",
+        emoji: "🌀",
+        tags: ["脑洞过剩", "爱试新口", "不按常规"],
+        summary: "你对无聊这件事的忍耐值很低。你需要新鲜感、转折感、一点危险边缘的乐趣。别人会因为稳定而安心，你会因为变化而活过来。你本质上是一杯不按说明书出牌的饮品。",
+        love: "你很会让关系有火花，也很会让人觉得“跟你在一起不会无聊”。但真正的亲密对你来说，不只是好玩，还要允许你保有自由。",
+        tips: ["有趣不是永远跳走，而是能在重要时刻留下", "别把所有稳定误解成无聊", "你不是不适合深关系，你只是更适合有空间的深关系"],
+        tea: { emoji: "🍇", name: "多肉葡萄轻乳茶", role: "层次很多，偶尔还会突然来点惊喜", note: "你的思路和口味都不喜欢按常规出牌，越复杂你越有感觉。" },
+        alcohol: { emoji: "🍸", name: "长岛冰茶", role: "外表好像只是喝着玩，实际后劲不讲道理", note: "你总能把场面从普通聊到上头，危险和魅力往往一起出现。" }
+    },
+    ENTJ: {
+        title: "高效控场型",
+        role: "你是那种点单都像在做决策的人",
+        emoji: "👑",
+        tags: ["节奏掌控", "效率优先", "不爱浪费情绪"],
+        summary: "你的魅力不在于甜，而在于利落。你给人的感觉像一杯结构干净、逻辑清楚、没有一句废话的饮品。你不是不好相处，只是你天生就更想把局面带向清晰，而不是带向混乱。",
+        love: "你在关系里会不自觉进入“解决问题”模式，靠谱、清醒、有执行力，但有时也容易忽略对方其实只是想被接住，而不是被优化。",
+        tips: ["不是每个场面都需要你接管", "高效很强，但温柔会让你更难替代", "别把脆弱视为掉线，它有时恰恰让关系更稳"],
+        tea: { emoji: "🍵", name: "冷萃厚乳乌龙", role: "清醒骨架里带一点高级奶感", note: "外壳很利落，细看又有层次，像你这种控制力很强的人。" },
+        alcohol: { emoji: "🥃", name: "威士忌高球", role: "干净直接，进入状态很快", note: "你不需要太多装饰，结构本身就足够让人信服。" }
+    },
+    ESFP: {
+        title: "高甜派对型",
+        role: "你像一杯一端上来就会被全桌拍照的饮品",
+        emoji: "🎉",
+        tags: ["显眼包本体", "甜感冲顶", "快乐传播源"],
+        summary: "你不是刻意抢眼，你只是很容易让场子亮起来。你适合热闹、适合漂亮、适合一切会让人嘴角上扬的东西。别人可能会低估你，以为你只是甜，但熟悉你的人都知道，你的情绪感染力是认真的。",
+        love: "你在关系里很会给人即时反馈，也很会制造“被喜欢”的感觉。你不是没有深度，只是你的深度经常裹着高糖外壳。",
+        tips: ["不是每次都要把自己放在最亮的位置", "快乐很强，但也要允许自己安静下来", "你值得被人喜欢，不需要一直靠表现换爱"],
+        tea: { emoji: "🍓", name: "草莓芝士奶盖", role: "一看就想点，拍照和好喝都不耽误", note: "你的魅力本来就很外放，不需要低调，关键是别只剩好看。" },
+        alcohol: { emoji: "🥂", name: "桃红气泡酒", role: "轻松、热闹、很适合把局点亮", note: "你常常是那种让聚会真正有“开始了”感觉的人。" }
+    },
+    ESFJ: {
+        title: "稳甜陪伴型",
+        role: "你给人的安全感，像熟悉店里那杯永远不会出错的常点",
+        emoji: "🤍",
+        tags: ["耐喝陪伴", "关系维护", "甜得很稳"],
+        summary: "你的存在感不是炸出来的，是陪出来的。你擅长让别人觉得被接住、被记得、被轻轻照顾。你的人格里有一种很难替代的稳定甜感，不浮夸，但会让人上瘾。",
+        love: "在关系里你属于愿意付出很多细节的人，会记住对方喜欢什么、不喜欢什么，也很会用行动表达在意。",
+        tips: ["不要把照顾别人变成你的义务", "真正在乎你的人，应该也会主动照顾你的感受", "偶尔把“我都行”换成“我更想要这个”"],
+        tea: { emoji: "🍠", name: "芋圆奶绿", role: "柔和、稳定、喝久了会有依赖感", note: "不是最张扬的那杯，但很容易变成别人固定回购的偏爱。" },
+        alcohol: { emoji: "🍶", name: "梅子酒", role: "入口温和，回味里有情绪", note: "你表面柔和，但内里很有自己的坚持和温度。" }
+    },
+    ESTP: {
+        title: "现场点火型",
+        role: "你不一定是最吵的那个，但一定很会让场子开始发热",
+        emoji: "🔥",
+        tags: ["反应快", "很会玩局", "说来就来"],
+        summary: "你对当下的感知很强，知道什么时候该接梗、什么时候该推进、什么时候该把氛围再往上顶一层。你像那种入口清爽但会突然炸开刺激感的饮品，短时间内就能让人记住你。",
+        love: "你会让关系很有即时的生命力，靠近你的人很难觉得无聊。但如果要长久，对方也需要看见你不表演的那一面。",
+        tips: ["别让“好玩”变成唯一标签", "真正高级的松弛，也包括知道什么时候收力", "你很擅长点燃别人，也别忘了照顾自己燃料够不够"],
+        tea: { emoji: "🍋", name: "爆柠四季春轻乳", role: "清爽开场，刺激感来得很快", note: "你是那种一下就把人从无聊里拽出来的类型。" },
+        alcohol: { emoji: "🌅", name: "龙舌兰日出", role: "颜色先赢，气势也不打折", note: "你不只是适合出现在热闹里，你本身就能把热闹带出来。" }
+    },
+    ESTJ: {
+        title: "标准拿捏型",
+        role: "你不是靠花样取胜，你靠的是稳定、清楚和有章法",
+        emoji: "📋",
+        tags: ["稳定输出", "边界清晰", "不爱失控"],
+        summary: "你像一杯结构完整、风味标准、每次喝都不会跑偏的饮品。你不靠惊喜赢人，你靠可信。你很适合被依赖，也很容易在混乱局面里自动进入收拾残局的状态。",
+        love: "你给关系的安全感很强，但偶尔也会因为太讲秩序，让对方觉得你有点难被撬动。你不是不温柔，只是更习惯先稳住局。",
+        tips: ["别总把自己活成最后一道保险", "秩序感很棒，但关系也需要一些松动和玩笑", "你可以保持靠谱，不必总显得毫无波动"],
+        tea: { emoji: "🍵", name: "茉莉雪顶奶绿", role: "标准漂亮，稳定耐喝，气质干净", note: "你不是最炸裂的那类，但你永远属于让人放心点的那类。" },
+        alcohol: { emoji: "🍷", name: "赤霞珠干红", role: "成熟、有骨架、不会乱来", note: "你有明显的结构感，不需要靠浮夸去证明自己。" }
+    },
+    INFP: {
+        title: "慢热心软型",
+        role: "你像那种喝的时候会突然让人安静下来的饮品",
+        emoji: "🌙",
+        tags: ["柔软回甘", "情绪有雾", "不吵但有后劲"],
+        summary: "你身上有一种很典型的“越靠近越能喝出味道”的特质。你不是第一眼热闹型，但会在某些时刻突然打中人。别人可能觉得你安静，其实你只是把很多情绪和想法都留在回味里。",
+        love: "在关系里你很容易认真，也很容易因为一点点回应就记很久。你不是轻易上头的人，但一旦真的上头，情绪会很深。",
+        tips: ["别总把情绪收进自己身体里反复回甘", "不是所有喜欢都需要你先理解到完美才表达", "你可以柔软，但不要总替别人合理化伤害"],
+        tea: { emoji: "🌼", name: "桂花乌龙奶茶", role: "香气安静，但会悄悄留很久", note: "你不是一眼惊艳型，而是熟了以后特别容易让人念着。" },
+        alcohol: { emoji: "🍑", name: "桂花梅子酒", role: "甜里带一点酸，越晚越有味道", note: "你的情绪不是猛烈撞上来，是一点一点渗进去。" }
+    },
+    INFJ: {
+        title: "清冷治愈型",
+        role: "你像一杯看起来很安静，却有自己完整秩序的饮品",
+        emoji: "🕊️",
+        tags: ["安静有光", "细腻洞察", "克制却治愈"],
+        summary: "你不是那种会主动铺满全场的人，但很多人会在真正接触你之后，突然感觉自己被理解了。你有边界，也有温度；有点清冷，但并不冷淡。你像一杯节制感很强、但一喝就会觉得“这杯很有内容”的饮品。",
+        love: "你在关系里很重视精神连接，宁可少，也希望是真的。你不轻易交付自己，但一旦认定，就会给出很深的关注和包容。",
+        tips: ["不要总把体谅别人放在理解自己前面", "你不是必须永远当那个稳定的人", "真正合适的人，不会只享受你的懂事"],
+        tea: { emoji: "🍵", name: "抹茶鲜奶", role: "表面安静，里面其实很有层次", note: "你身上的克制感和细腻感，很像这种看似简单却很耐品的味道。" },
+        alcohol: { emoji: "🍷", name: "黑皮诺红酒", role: "不喧哗，但越懂的人越会喜欢", note: "你是那种需要慢一点靠近，才会发现后劲的人。" }
+    },
+    INTP: {
+        title: "冷静拆解型",
+        role: "你喝一杯东西的时候，脑子可能已经在分析它为什么是这个结构",
+        emoji: "🧠",
+        tags: ["脑内拆解", "低噪音存在", "逻辑感很强"],
+        summary: "你不是冷，你只是习惯先理解再投入。你对很多东西的兴趣来自“这背后到底怎么构成”，而不是“别人都说它好”。你的人格像一杯不靠高糖取悦人的饮品，有自己的门槛，也有自己的迷人之处。",
+        love: "你不太会靠情绪表达爱，但会用记住细节、给出判断、认真回应的方式靠近。你不是没感觉，只是不习惯立刻把感觉说出口。",
+        tips: ["别总以为别人会自己读懂你的在意", "逻辑很强，但关系偶尔更需要明确表达", "你可以保留思考空间，但别让自己一直停在观察模式"],
+        tea: { emoji: "🍂", name: "焙茶奶盖", role: "香气成熟，入口有点距离感", note: "你不靠甜度取胜，靠的是那种细看才知道厉害的层次。" },
+        alcohol: { emoji: "🍸", name: "金汤力", role: "看似简单，懂的人会知道细节全在里面", note: "你就是那种不花哨，但结构感让人越看越上头的类型。" }
+    },
+    INTJ: {
+        title: "策略留白型",
+        role: "你像一杯不抢戏但绝对不好替代的高完成度饮品",
+        emoji: "♟️",
+        tags: ["克制高级", "留白很多", "越品越强"],
+        summary: "你不需要太多社交糖衣来包装自己，因为你的存在感来自明确的判断力和很强的内在秩序。你像那种第一口会让人觉得“哦，原来是这个方向”，第二口开始就越来越懂的人。",
+        love: "你在关系里不会随便上头，但一旦认定，对方会感受到一种非常稳定、非常难取代的偏爱。你不是爱得热闹的人，但会爱得很深。",
+        tips: ["不是所有人都值得你解释，但重要的人值得更多表达", "你可以保有锋利，也可以学习柔软呈现", "控制力很强的同时，也给自己一点松口气的空间"],
+        tea: { emoji: "🌾", name: "玄米乌龙鲜奶", role: "低调、克制、越喝越有骨架", note: "你不会靠浮夸冲击别人，但会靠质感留下来。" },
+        alcohol: { emoji: "🥃", name: "单一麦芽威士忌", role: "门槛不低，但真正懂的人会很上头", note: "你适合被认真理解，而不是被轻率定义。" }
+    },
+    ISFP: {
+        title: "软糯浪漫型",
+        role: "你像一杯会让人下意识想靠近一点的柔软甜饮",
+        emoji: "🎀",
+        tags: ["软甜有感", "审美在线", "慢慢发亮"],
+        summary: "你不是强行制造存在感的人，但你常常会因为恰到好处的柔软感，让别人很容易对你卸下戒备。你很吃氛围、很看感觉，也很容易被细节打动。你的魅力是让人舒服，而不是让人紧张。",
+        love: "你在关系里需要感觉对、氛围对、细节也对。你很会共鸣，也很会默默在意，是那种会让人忍不住想对你好的人。",
+        tips: ["别因为怕破坏氛围就一直压住真实想法", "柔软不是退让，边界也能长得很漂亮", "把你喜欢的、讨厌的都说清楚，会更轻松"],
+        tea: { emoji: "🍠", name: "芋泥啵啵奶茶", role: "柔软绵密，很容易让人心情变好", note: "你很像这种带着治愈感的浓郁甜口，温柔但不无聊。" },
+        alcohol: { emoji: "🍑", name: "蜜桃果酒", role: "入口甜软，情绪感很强", note: "你不是强刺激路线，但很会让人放下防备。" }
+    },
+    ISFJ: {
+        title: "安稳续杯型",
+        role: "你是那种喝完会让人自然想说“再来一杯”的存在",
+        emoji: "🫖",
+        tags: ["低调耐喝", "细节记忆", "安全感很足"],
+        summary: "你的人格像一杯不需要花里胡哨包装，却会被反复回购的饮品。你不一定永远在热闹中央，但你很容易成为别人默认会信赖、会回头找的人。",
+        love: "你在关系里往往很有耐心，也很能给稳定反馈。你不擅长制造戏剧性，却特别擅长把平常的日子照顾得很舒服。",
+        tips: ["温柔不该是你被消耗的入口", "别总担心表达需求会麻烦别人", "你可以继续靠谱，但不必一直无声地扛"],
+        tea: { emoji: "🫘", name: "红豆奶茶", role: "熟悉、顺口、会让人想起家的那类味道", note: "你的存在往往不是轰动型，是安定型。" },
+        alcohol: { emoji: "🍷", name: "热红酒", role: "温和、慢热、带着被照顾的感觉", note: "你很适合出现在别人最需要被安抚的时刻。" }
+    },
+    ISTP: {
+        title: "清醒手感型",
+        role: "你像一杯看起来很克制，但入口非常有态度的饮品",
+        emoji: "🧊",
+        tags: ["手感派", "懒得多话", "有点酷"],
+        summary: "你不是很爱解释自己的人，也不太喜欢被过度解读。你更相信直接体验、即时反馈和实际效果。你的人格很像那种线条干净、喝起来利落、但细节很讲究的饮品。",
+        love: "你在关系里不太爱说空话，但会用行动和陪伴表达。你有自己的节奏，不黏人，但也不轻浮。真正懂你的人，会很喜欢这种不吵的稳定。",
+        tips: ["别总把真实感受压缩成“还行”", "你很会处理事情，也可以试着处理情绪", "不是所有亲密都会侵占你的空间"],
+        tea: { emoji: "🍃", name: "冻顶乌龙奶绿", role: "清爽、利落、有耐看的骨架", note: "你不需要太多额外修饰，干净本身就是你的风格。" },
+        alcohol: { emoji: "🥃", name: "莫斯科骡子", role: "直接、有劲、喝起来很有存在感", note: "你的魅力常常在于你不装，也不拐弯。" }
+    },
+    ISTJ: {
+        title: "稳定控糖型",
+        role: "你像那杯每次点都知道不会翻车的理性首选",
+        emoji: "📎",
+        tags: ["规律耐喝", "低误差率", "成熟可靠"],
+        summary: "你不太追求花哨和戏剧性，很多时候你要的是准确、稳定、可预期。你不一定显眼，但别人会下意识信任你，因为你给人的感觉就是“这杯不会出错”。",
+        love: "在关系里你不靠高浓度表达取胜，但你会用持续、负责、守时、记得来让对方意识到：你是真的把这段关系放在计划里。",
+        tips: ["不用每次都当那个最稳的人", "适度留一点随性，会让你更可爱也更轻松", "你的可靠感已经足够，不用靠压抑自己来证明"],
+        tea: { emoji: "🍵", name: "四季春轻乳茶", role: "清爽、标准、稳定发挥从不失手", note: "你不是靠刺激取胜，而是靠长期让人放心。" },
+        alcohol: { emoji: "🥃", name: "Old Fashioned", role: "经典、克制、有点硬，但结构很稳", note: "你身上有一种不需要跟风也站得住的老派可靠。" }
+    },
+};
+
+const metricLabels = ["社交浓度", "猎奇值", "回甘值", "掌控感", "上头度"];
+
+const state = {
+    index: 0,
+    answers: Array(questions.length).fill(null)
+};
+
+const landingScreen = document.getElementById("landingScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+const typeMapScreen = document.getElementById("typeMapScreen");
+const progressCount = document.getElementById("progressCount");
+const progressFill = document.getElementById("progressFill");
+const promptAvatar = document.getElementById("promptAvatar");
+const promptCategory = document.getElementById("promptCategory");
+const promptHint = document.getElementById("promptHint");
+const questionTitle = document.getElementById("questionTitle");
+const optionList = document.getElementById("optionList");
+const nextBtn = document.getElementById("nextBtn");
+const backBtn = document.getElementById("backBtn");
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+const shareBtn = document.getElementById("shareBtn");
+const typeMapBtn = document.getElementById("typeMapBtn");
+const typeMapBackBtn = document.getElementById("typeMapBackBtn");
+const typeMapGrid = document.getElementById("typeMapGrid");
+const toast = document.getElementById("toast");
+const heroRow1 = document.getElementById("heroRow1");
+const heroRow2 = document.getElementById("heroRow2");
+
+renderHeroSprites();
+startBtn.addEventListener("click", startQuiz);
+nextBtn.addEventListener("click", goNext);
+backBtn.addEventListener("click", goPrev);
+restartBtn.addEventListener("click", restartQuiz);
+shareBtn.addEventListener("click", copyShareText);
+typeMapBtn.addEventListener("click", openTypeMap);
+typeMapBackBtn.addEventListener("click", backToResult);
+
+function renderHeroSprites() {
+    renderSpriteRow(heroRow1, heroSpritesRow1);
+    renderSpriteRow(heroRow2, heroSpritesRow2);
+}
+
+function renderSpriteRow(container, items) {
+    const doubled = [...items, ...items];
+    container.innerHTML = doubled.map(item => `
+        <div class="sprite">
+            <div class="sprite-photo">${item.emoji}</div>
+            <div class="sprite-name">${item.name}</div>
+        </div>
+    `).join("");
+}
+
+function switchScreen(target) {
+    landingScreen.classList.toggle("active", target === "landing");
+    quizScreen.classList.toggle("active", target === "quiz");
+    resultScreen.classList.toggle("active", target === "result");
+    typeMapScreen.classList.toggle("active", target === "typeMap");
+}
+
+function startQuiz() {
+    state.index = 0;
+    state.answers = Array(questions.length).fill(null);
+    switchScreen("quiz");
+    renderQuestion();
+}
+
+function restartQuiz() {
+    state.index = 0;
+    state.answers = Array(questions.length).fill(null);
+    switchScreen("landing");
+}
+
+function openTypeMap() {
+    renderTypeMap();
+    switchScreen("typeMap");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function backToResult() {
+    switchScreen("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderQuestion() {
+    const q = questions[state.index];
+    const selected = state.answers[state.index];
+
+    progressCount.textContent = `${state.index + 1} / ${questions.length}`;
+    progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+    promptAvatar.textContent = q.avatar;
+    promptCategory.textContent = q.category;
+    promptHint.textContent = q.hint;
+    questionTitle.textContent = q.text;
+    optionList.innerHTML = "";
+
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `option${selected === i ? " active" : ""}`;
+        btn.innerHTML = `<div class="option-key">${String.fromCharCode(65 + i)}</div><div class="option-text">${opt.text}</div>`;
+        btn.addEventListener("click", () => selectOption(i));
+        optionList.appendChild(btn);
+    });
+
+    nextBtn.disabled = selected === null;
+    nextBtn.innerHTML = state.index === questions.length - 1 ? `查看结果 <span>→</span>` : `继续 <span>→</span>`;
+    backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+}
+
+function selectOption(idx) {
+    state.answers[state.index] = idx;
+    [...optionList.children].forEach((node, i) => {
+        node.classList.toggle("active", i === idx);
+    });
+    nextBtn.disabled = false;
+}
+
+function goNext() {
+    if (state.answers[state.index] === null) return;
+    if (state.index < questions.length - 1) {
+        state.index++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+        renderResult();
+        switchScreen("result");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+function goPrev() {
+    if (state.index === 0) return;
+    state.index--;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function pickLetter(value, positiveLetter, negativeLetter) {
+    return value >= 0 ? positiveLetter : negativeLetter;
+}
+
+function computeResult() {
+    const totals = {
+        ei: 0,
+        sn: 0,
+        ft: 0,
+        jp: 0,
+        social: 0,
+        curiosity: 0,
+        affection: 0,
+        order: 0,
+        drama: 0
+    };
+
+    state.answers.forEach((answerIndex, questionIndex) => {
+        const effect = questions[questionIndex].options[answerIndex].effect;
+        Object.keys(effect).forEach(key => {
+            totals[key] += effect[key];
+        });
+    });
+
+    const code = `${pickLetter(totals.ei, "E", "I")}${pickLetter(totals.sn, "N", "S")}${pickLetter(totals.ft, "F", "T")}${pickLetter(totals.jp, "P", "J")}`;
+    const profile = profiles[code] || profiles.ENFP;
+    const metrics = {
+        social: clamp(Math.round(50 + totals.social * 4), 18, 98),
+        curiosity: clamp(Math.round(50 + totals.curiosity * 4), 18, 98),
+        affection: clamp(Math.round(50 + totals.affection * 4), 18, 98),
+        order: clamp(Math.round(50 + totals.order * 4), 18, 98),
+        drama: clamp(Math.round(50 + totals.drama * 4), 18, 98)
+    };
+
+    return { code, profile, metrics };
+}
+
+function renderResult() {
+    const res = computeResult();
+    const p = res.profile;
+
+    document.getElementById("resultCode").textContent = res.code;
+    document.getElementById("resultBreed").textContent = p.title;
+    document.getElementById("resultRole").textContent = p.role;
+    document.getElementById("resultEmoji").textContent = p.emoji;
+    document.getElementById("resultSummary").textContent = `${p.summary} 你的 5 维风味结构已经生成，这次的饮品人格代码是 ${res.code}。`;
+    document.getElementById("resultLove").textContent = p.love;
+    document.getElementById("resultTags").innerHTML = p.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
+    document.getElementById("resultTips").innerHTML = p.tips.map(tip => `<li>${tip}</li>`).join("");
+
+    document.getElementById("teaEmoji").textContent = p.tea.emoji;
+    document.getElementById("teaName").textContent = p.tea.name;
+    document.getElementById("teaRole").textContent = p.tea.role;
+    document.getElementById("teaNote").textContent = p.tea.note;
+
+    document.getElementById("alcoholEmoji").textContent = p.alcohol.emoji;
+    document.getElementById("alcoholName").textContent = p.alcohol.name;
+    document.getElementById("alcoholRole").textContent = p.alcohol.role;
+    document.getElementById("alcoholNote").textContent = p.alcohol.note;
+
+    const metricEntries = [
+        [metricLabels[0], res.metrics.social],
+        [metricLabels[1], res.metrics.curiosity],
+        [metricLabels[2], res.metrics.affection],
+        [metricLabels[3], res.metrics.order],
+        [metricLabels[4], res.metrics.drama]
+    ];
+
+    document.getElementById("metricList").innerHTML = metricEntries.map(([label, value]) => `
+        <div class="metric-item">
+            <div class="metric-label">${label}</div>
+            <div class="metric-track"><div class="metric-fill" style="width:${value}%"></div></div>
+            <div class="metric-value">${value}</div>
+        </div>
+    `).join("");
+
+    const shareText = `我的 SipTI 结果是【${p.title}】\n人格代码：${res.code}\n奶茶本体：${p.tea.name}\n微醺本体：${p.alcohol.name}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sip-ti/`;
+    document.getElementById("shareBox").textContent = shareText;
+    shareBtn.dataset.shareText = shareText;
+
+    drawRadar(
+        [res.metrics.social, res.metrics.curiosity, res.metrics.affection, res.metrics.order, res.metrics.drama],
+        metricLabels
+    );
+}
+
+function renderTypeMap() {
+    const currentCode = state.answers.every(answer => answer !== null) ? computeResult().code : "";
+    typeMapGrid.innerHTML = Object.entries(profiles).map(([code, profile]) => {
+        const isCurrent = currentCode === code;
+        return `
+            <article class="mapping-card ${isCurrent ? "active" : ""}">
+                <div class="mapping-card-head">
+                    <div class="mapping-code-wrap">
+                        <div class="mapping-card-code">${code}</div>
+                        <span class="mapping-current">${isCurrent ? "你的结果" : "风味人格"}</span>
+                    </div>
+                    <div class="mapping-card-emoji">${profile.emoji}</div>
+                </div>
+                <h3 class="mapping-card-breed">${profile.title}</h3>
+                <p class="mapping-card-role">${profile.role}</p>
+                <div class="tag-list">${profile.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+                <div class="mapping-pair">
+                    <div class="mapping-pair-card">
+                        <div class="mapping-pair-label">🧋 奶茶本体</div>
+                        <div class="mapping-pair-name">${profile.tea.name}</div>
+                        <div class="mapping-pair-note">${profile.tea.role}</div>
+                    </div>
+                    <div class="mapping-pair-card">
+                        <div class="mapping-pair-label">🍸 微醺本体</div>
+                        <div class="mapping-pair-name">${profile.alcohol.name}</div>
+                        <div class="mapping-pair-note">${profile.alcohol.role}</div>
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
+
+function drawRadar(values, labels) {
+    const canvas = document.getElementById("radarCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2 + 6;
+    const r = 110;
+    const levels = 4;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    ctx.translate(0.5, 0.5);
+
+    for (let lv = levels; lv >= 1; lv--) {
+        const cr = (r / levels) * lv;
+        ctx.beginPath();
+        labels.forEach((_, i) => {
+            const a = (-Math.PI / 2) + (Math.PI * 2 * i) / labels.length;
+            const x = cx + Math.cos(a) * cr;
+            const y = cy + Math.sin(a) * cr;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = lv % 2 === 0 ? "rgba(255,159,122,0.08)" : "rgba(255,159,122,0.03)";
+        ctx.strokeStyle = "rgba(75,51,46,0.08)";
+        ctx.lineWidth = 1;
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    labels.forEach((label, i) => {
+        const a = (-Math.PI / 2) + (Math.PI * 2 * i) / labels.length;
+        const x = cx + Math.cos(a) * r;
+        const y = cy + Math.sin(a) * r;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = "rgba(75,51,46,0.1)";
+        ctx.stroke();
+
+        const tx = cx + Math.cos(a) * (r + 24);
+        const ty = cy + Math.sin(a) * (r + 24);
+        ctx.fillStyle = "#7c655c";
+        ctx.font = "700 13px Microsoft YaHei";
+        ctx.textAlign = tx < cx - 6 ? "right" : tx > cx + 6 ? "left" : "center";
+        ctx.textBaseline = ty < cy ? "bottom" : "top";
+        ctx.fillText(label, tx, ty);
+    });
+
+    ctx.beginPath();
+    values.forEach((val, i) => {
+        const a = (-Math.PI / 2) + (Math.PI * 2 * i) / values.length;
+        const sr = (val / 100) * r;
+        const x = cx + Math.cos(a) * sr;
+        const y = cy + Math.sin(a) * sr;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = "rgba(217,107,138,0.18)";
+    ctx.strokeStyle = "#d96b8a";
+    ctx.lineWidth = 2.5;
+    ctx.fill();
+    ctx.stroke();
+
+    values.forEach((val, i) => {
+        const a = (-Math.PI / 2) + (Math.PI * 2 * i) / values.length;
+        const sr = (val / 100) * r;
+        const x = cx + Math.cos(a) * sr;
+        const y = cy + Math.sin(a) * sr;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#4b332e";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff9f7a";
+        ctx.fill();
+    });
+
+    ctx.restore();
+}
+
+async function copyShareText() {
+    const text = shareBtn.dataset.shareText || document.getElementById("shareBox").textContent || "";
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast("分享文案已复制，快发给朋友看看！");
+    } catch (e) {
+        showToast("复制失败，请手动长按复制");
+    }
+}
+
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+</script>
+</body>
+</html>

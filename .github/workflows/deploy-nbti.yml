@@ -10,6 +10,7 @@ on:
       - "dog-ti/**"
       - "mou-ti/**"
       - "sb-ti/**"
+      - "sip-ti/**"
       - ".github/workflows/deploy-nbti.yml"
   workflow_dispatch:
 

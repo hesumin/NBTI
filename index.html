@@ -224,6 +224,7 @@
     .mini-card.dog .mini-photo { background: radial-gradient(circle at 50% 20%, #fff7f3 0%, #f3dfd9 100%); }
     .mini-card.cow .mini-photo { background: radial-gradient(circle at 50% 20%, #fffaf2 0%, #ece2d2 100%); }
     .mini-card.sb .mini-photo { background: radial-gradient(circle at 50% 20%, #faf5ff 0%, #ede9fe 100%); }
+    .mini-card.sip .mini-photo { background: radial-gradient(circle at 50% 20%, #fff9f3 0%, #f7e3d7 100%); }
 
     .mini-name {
       font-size: 11px;
@@ -380,6 +381,11 @@
       border: 1px solid rgba(124, 58, 237, 0.12);
     }
 
+    .project-card.sip {
+      background: linear-gradient(135deg, #fff7f1 0%, #f6e3d8 100%);
+      border: 1px solid rgba(184, 100, 75, 0.12);
+    }
+
     .project-top {
       display: flex;
       align-items: center;
@@ -470,6 +476,7 @@
     .project-card.dog .project-btn { background: linear-gradient(135deg, #8b4a43 0%, #a66a62 100%); }
     .project-card.cow .project-btn { background: linear-gradient(135deg, #7a6038 0%, #9a7a50 100%); }
     .project-card.sb .project-btn { background: linear-gradient(135deg, #4c3a7d 0%, #6b52a3 100%); }
+    .project-card.sip .project-btn { background: linear-gradient(135deg, #b8644b 0%, #d88763 100%); }
 
     .why-card,
     .path-card {
@@ -516,7 +523,7 @@
       position: sticky;
       bottom: 14px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 8px;
       margin-top: 18px;
       padding: 12px;
@@ -530,12 +537,12 @@
     .floating-link {
       min-height: 50px;
       border-radius: 16px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 4px;
       color: #fff;
       border: none;
       box-shadow: 0 6px 16px rgba(0,0,0,0.12);
@@ -551,6 +558,7 @@
     .floating-link:nth-child(2) { background: linear-gradient(135deg, #8b4a43 0%, #a66a62 100%); }
     .floating-link:nth-child(3) { background: linear-gradient(135deg, #7a6038 0%, #9a7a50 100%); }
     .floating-link:nth-child(4) { background: linear-gradient(135deg, #4c3a7d 0%, #6b52a3 100%); }
+    .floating-link:nth-child(5) { background: linear-gradient(135deg, #b8644b 0%, #d88763 100%); }
 
     .bottom-note {
       margin: 18px 0 0;
@@ -608,10 +616,13 @@
         margin-right: auto;
       }
 
-        .project-grid,
+        .project-grid {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
         .why-grid,
         .path-grid {
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
         }
     }
   </style>
@@ -639,6 +650,8 @@
           <div class="mini-card cow"><div class="mini-photo">🐂</div><div class="mini-name">牦牛</div></div>
           <div class="mini-card sb"><div class="mini-photo">💼</div><div class="mini-name">社畜</div></div>
           <div class="mini-card sb"><div class="mini-photo">🧟</div><div class="mini-name">丧尸模式</div></div>
+          <div class="mini-card sip"><div class="mini-photo">🧋</div><div class="mini-name">SipTI</div></div>
+          <div class="mini-card sip"><div class="mini-photo">🍸</div><div class="mini-name">微醺本体</div></div>
         </div>
         <div class="marquee-row reverse">
           <div class="mini-card dog"><div class="mini-photo">🐕</div><div class="mini-name">柴犬</div></div>
@@ -653,6 +666,8 @@
           <div class="mini-card cat"><div class="mini-photo">😼</div><div class="mini-name">豹猫</div></div>
           <div class="mini-card dog"><div class="mini-photo">🐩</div><div class="mini-name">贵宾</div></div>
           <div class="mini-card sb"><div class="mini-photo">🤡</div><div class="mini-name">职场小丑</div></div>
+          <div class="mini-card sip"><div class="mini-photo">🍷</div><div class="mini-name">红酒人格</div></div>
+          <div class="mini-card sip"><div class="mini-photo">🥂</div><div class="mini-name">起泡人格</div></div>
           <div class="mini-card cow"><div class="mini-photo">🌾</div><div class="mini-name">利木赞</div></div>
           <div class="mini-card cat"><div class="mini-photo">🎀</div><div class="mini-name">布偶</div></div>
         </div>
@@ -662,7 +677,7 @@
       <p class="hero-subtitle">先别做人类了，这次直接选本体。猫系、狗系、牛系、社畜四条支线都能单独开测，挑一个最像你现在状态的，测完顺手去认领你的人格。</p>
 
       <div class="hero-meta">
-        <div class="hero-chip">4 条人格支线</div>
+        <div class="hero-chip">5 条人格支线</div>
         <div class="hero-chip">每套 12 题 × 16 结果</div>
         <div class="hero-chip">测完可直接晒结果</div>
       </div>
@@ -678,7 +693,7 @@
 
     <section id="species" class="section panel">
       <h2 class="section-title">刷到这里，先认领你的动物人格</h2>
-      <p class="section-desc">三条支线都能直接开测：有情境题、人格结果、图鉴页，也有适合拿去发朋友圈和小红书的分享感。别纠结，先选最像你的那一只。</p>
+      <p class="section-desc">现在五条支线都能直接开测：有情境题、人格结果、图鉴页，也有适合拿去发朋友圈和小红书的分享感。别纠结，先选最像你的那一只。</p>
 
 
       <div class="project-grid">
@@ -757,6 +772,25 @@
           <a class="project-btn" href="./sb-ti/">去认领社畜设 <span>→</span></a>
 
         </article>
+
+        <article class="project-card sip">
+          <div class="project-top">
+            <div>
+              <div class="project-code">NBTI / SIP LINE</div>
+              <h3 class="project-name">SipTI</h3>
+              <p class="project-role">白天奶茶、晚上微醺的饮品人格支线</p>
+            </div>
+            <div class="project-mark">🧋</div>
+          </div>
+          <p class="project-copy">适合爱喝奶茶也爱用酒类比喻人格的人。12道风味情境题，最后会同时给出你的奶茶本体和酒类本体，适合拿去和朋友互测、互相指定“你绝对是这杯”。</p>
+          <div class="tag-row">
+            <span class="tag">奶茶本体 + 微醺本体</span>
+            <span class="tag">12 道风味题</span>
+            <span class="tag">16 种饮品格</span>
+          </div>
+          <a class="project-btn" href="./sip-ti/">去认领饮品设 <span>→</span></a>
+
+        </article>
       </div>
     </section>
 
@@ -811,10 +845,11 @@
     </section>
 
     <nav class="floating-bar" aria-label="快捷入口">
-      <a class="floating-link" href="./cat-ti/">🐱 猫系开测</a>
-      <a class="floating-link" href="./dog-ti/">🐶 狗系开测</a>
+      <a class="floating-link" href="./cat-ti/">🐱 猫系</a>
+      <a class="floating-link" href="./dog-ti/">🐶 狗系</a>
       <a class="floating-link" href="./mou-ti/">🐮 牛系</a>
-      <a class="floating-link" href="./sb-ti/">💼 社畜系</a>
+      <a class="floating-link" href="./sb-ti/">💼 社畜</a>
+      <a class="floating-link" href="./sip-ti/">🧋 饮品</a>
     </nav>
 
   </main>
