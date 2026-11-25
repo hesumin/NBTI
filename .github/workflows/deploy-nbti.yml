@@ -53,13 +53,11 @@ jobs:
           esac
 
       - name: Deploy NBTI
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: nb-ti
-          directory: .
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          command: pages deploy . --project-name=nb-ti --branch=main
 
 

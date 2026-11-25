@@ -28,11 +28,9 @@ jobs:
           npx wrangler@4 pages project create sip-ti --production-branch main || echo "sip-ti project already exists"
 
       - name: Deploy SipTI
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: sip-ti
-          directory: ./sip-ti
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          command: pages deploy ./sip-ti --project-name=sip-ti --branch=main

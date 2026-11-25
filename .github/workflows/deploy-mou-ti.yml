@@ -21,11 +21,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy MouTI
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: mou-ti
-          directory: ./mou-ti
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          command: pages deploy ./mou-ti --project-name=mou-ti --branch=main
