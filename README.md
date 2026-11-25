@@ -1,6 +1,6 @@
 # NBTI
 
-把 CatTI、DogTI、MouTI 和 SbTI 放进同一个仓库后的统一项目。
+把 CatTI、DogTI、MouTI、SbTI 和 SipTI 放进同一个仓库后的统一项目。
 
 ## 项目结构
 
@@ -14,13 +14,16 @@ NBTI/
 │  └─ index.html
 ├─ sb-ti/
 │  └─ index.html
+├─ sip-ti/
+│  └─ index.html
 ├─ index.html
 └─ .github/workflows/
    ├─ deploy-nbti.yml
    ├─ deploy-cat-ti.yml
    ├─ deploy-dog-ti.yml
    ├─ deploy-mou-ti.yml
-   └─ deploy-sb-ti.yml
+   ├─ deploy-sb-ti.yml
+   └─ deploy-sip-ti.yml
 
 ```
 
@@ -29,20 +32,21 @@ NBTI/
 
 以后统一走这条链路：
 
-1. 先在本地修改对应子目录的 `index.html`（cat-ti / dog-ti / mou-ti / sb-ti）
+1. 先在本地修改对应子目录的 `index.html`（cat-ti / dog-ti / mou-ti / sb-ti / sip-ti）
 2. 提交并推送到 GitHub 仓库 `https://github.com/hesumin/NBTI`
 3. 由 GitHub Actions 自动把对应目录发布到 Cloudflare Pages
 
 
 ## 已落地的自动部署方式
 
-仓库内已经增加五个工作流：
+仓库内已经增加六个工作流：
 
 - `.github/workflows/deploy-nbti.yml`
 - `.github/workflows/deploy-cat-ti.yml`
 - `.github/workflows/deploy-dog-ti.yml`
 - `.github/workflows/deploy-mou-ti.yml`
 - `.github/workflows/deploy-sb-ti.yml`
+- `.github/workflows/deploy-sip-ti.yml`
 
 触发逻辑：
 
@@ -53,6 +57,7 @@ NBTI/
 - 修改 `mou-ti/**` 并推送到 `main` → 自动部署 `mou-ti`
 - 修改 `dog-ti/**` 并推送到 `main` → 自动部署 `dog-ti`
 - 修改 `sb-ti/**` 并推送到 `main` → 自动部署 `sb-ti`
+- 修改 `sip-ti/**` 并推送到 `main` → 自动部署 `sip-ti`
 - 也支持在 GitHub Actions 页面手动触发
 
 
@@ -99,6 +104,12 @@ NBTI/
 - Deploy directory: `./sb-ti`
 - Branch: `main`
 
+### SipTI
+- Project name: `sip-ti`
+- Deploy directory: `./sip-ti`
+- Branch: `main`
+- 首次运行会在 GitHub Actions 中自动尝试创建 `sip-ti` 的 Cloudflare Pages 项目
+
 
 ## 页面入口
 
@@ -107,5 +118,6 @@ NBTI/
 - MouTI: `mou-ti/index.html`
 - DogTI: `dog-ti/index.html`
 - SbTI: `sb-ti/index.html`
+- SipTI: `sip-ti/index.html`
 
 
