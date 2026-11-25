@@ -46,13 +46,6 @@
 
         .quiz-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
-        .quiz-footer {
-            position: sticky; bottom: 0; margin-top: auto;
-            padding: 18px 0 calc(env(safe-area-inset-bottom, 0px) + 18px);
-            background: linear-gradient(180deg, rgba(242,239,245,0) 0%, rgba(242,239,245,0.9) 18%, rgba(242,239,245,0.98) 100%);
-            backdrop-filter: blur(8px);
-        }
-
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
         /* ===== LOGO ===== */
@@ -424,12 +417,100 @@
             .result-breed{font-size:clamp(28px,7.8vw,38px)}
             .action-row{grid-template-columns:1fr}
         }
+    
+        /* ===== 交互 v2：返回、自动下一题、左右切题 ===== */
+        .hero-nav {
+            text-align: left;
+            margin: 0 0 8px;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #4a4a4a;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.18s ease;
+        }
+
+        .home-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .result-more {
+            margin: 18px 0 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .result-more a {
+            display: inline-block;
+            padding: 10px 6px;
+        }
+
+        .icon-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .icon-btn:disabled:hover {
+            transform: none;
+        }
+
+        .quiz-screen {
+            overflow-x: clip;
+        }
+
+        .quiz-main {
+            touch-action: pan-y;
+        }
+
+        .quiz-main.slide-next {
+            animation: quizSlideNext 0.26s ease;
+        }
+
+        .quiz-main.slide-prev {
+            animation: quizSlidePrev 0.26s ease;
+        }
+
+        .quiz-tip {
+            margin: 16px 0 6px;
+            text-align: center;
+            color: #a8a29a;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @keyframes quizSlideNext {
+            from { opacity: 0; transform: translateX(36px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes quizSlidePrev {
+            from { opacity: 0; transform: translateX(-36px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quiz-main.slide-next,
+            .quiz-main.slide-prev {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="app">
     <!-- ===== LANDING SCREEN ===== -->
     <section id="landingScreen" class="screen active hero">
+            <div class="hero-nav"><a class="home-link" href="https://nb-ti.pages.dev/">← NBTI 首页</a></div>
         <div class="logo" aria-label="SbTI 标题">
             <span>S</span><span>b</span><span>T</span><span>I</span>
         </div>
@@ -466,9 +547,9 @@
     <!-- ===== QUIZ SCREEN ===== -->
     <section id="quizScreen" class="screen quiz-screen">
         <div class="topbar">
-            <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
+            <button id="backBtn" class="icon-btn" type="button" aria-label="上一题（第一题时返回）">←</button>
             <div id="progressCount" class="progress-count">1 / 25</div>
-            <div></div>
+            <button id="fwdBtn" class="icon-btn" type="button" aria-label="下一题" disabled>→</button>
         </div>
         <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
 
@@ -483,12 +564,7 @@
 
             <h2 id="questionTitle" class="question-title">加载中...</h2>
             <div id="optionList" class="options"></div>
-        </div>
-
-        <div class="quiz-footer">
-            <button id="nextBtn" class="primary-btn" type="button" disabled>
-                继续<span> →</span>
-            </button>
+                <p class="quiz-tip">点选项自动进入下一题 · 左右滑动或点 ← → 可查看前后题</p>
         </div>
     </section>
 
@@ -497,7 +573,7 @@
         <div class="result-badge">💼 你的 SbTI 社畜档案已生成</div>
 
         <div class="result-head">
-            <div id="resultCode" class="result-code">CTRL</div>
+            <div id="resultCode" class="result-code">ESTJ</div>
             <h1 id="resultBreed" class="result-breed">控制狂魔</h1>
             <p id="resultRole" class="result-role">一切尽在掌握的操盘手</p>
         </div>
@@ -540,6 +616,7 @@
             <button id="shareBtn" class="ghost-btn" type="button">分享给朋友</button>
             <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
         </div>
+            <p class="result-more"><a href="https://nb-ti.pages.dev/#species">← 回 NBTI 首页，换个本体再测</a></p>
     </section>
 
     <!-- ===== TYPE MAP SCREEN ===== -->
@@ -553,7 +630,7 @@
         <div class="mapping-hero">
             <div class="result-badge">💼 SbTI 全类型图鉴</div>
             <h1 class="mapping-title">16 种社畜映射</h1>
-            <p class="mapping-subtitle">按类型代码查看社畜品种、角色标题和标签。</p>
+            <p class="mapping-subtitle">按 MBTI 类型查看社畜品种、角色标题和标签。</p>
         </div>
 
         <div id="typeMapGrid" class="mapping-grid"></div>
@@ -895,22 +972,22 @@ const questions = [
 
 // ==================== PROFILES ====================
 const profiles = {
-    "WWSS": { code: "CTRL", breed: "控制狂魔", role: "把所有人都当项目在管的顶配操盘手", emoji: "🎮", tags: ["掌控成瘾", "细节暴政", "不信任随机性"], summary: "你不是在上班，你是在扮演一个对全世界进度条负责的人。别人做计划是为了参考，你做计划是为了统治；别人焦虑 deadline，你焦虑的是别人为什么还不按照你预判的节奏动。你最怕的不是累，是失控。", love: "感情里你也很容易不自觉接管全局，像在经营一个双人项目。你不是不温柔，你只是总觉得“让我来更快一点”。", tips: ["不是每个烂结果都等于你没管够，有些事本来就不归你控", "试着容忍别人用笨一点的方式成长，这比你全包更有用", "停止把休息当事故，它其实是系统维护"] },
-    "WWSM": { code: "BOSS", breed: "伪老板", role: "工位还在最外圈，发言已经像董事会", emoji: "👔", tags: ["领导腔", "战略口癖", "管理欲外溢"], summary: "你人还没升上去，气场已经提前升职了。别人汇报工作，你汇报方向；别人提问题，你顺手开始做组织诊断。你最大的特点不是能力一定最强，而是永远有一种“让我来说两句”的天然冲动。", love: "你对关系的热情常常体现在安排、优化、替对方思考，偶尔会让人分不清你是在恋爱还是在带项目。", tips: ["别急着当所有人的老板，先把自己的人生先带明白", "少一点站位输出，多一点真实聆听", "真正的气场不是说得像领导，是别人愿意跟你走"] },
-    "LLSL": { code: "SLAVE", breed: "牛马本马", role: "全公司默认最能扛的那个冤种菩萨", emoji: "🐂", tags: ["接锅圣体", "不会拒绝", "稳定供血"], summary: "你看起来像一个人，实际上像单位的公共资源。谁忙你都能补位，谁崩你都能顶上，最后最先累垮的也是你。你不是没有情绪，只是太习惯先考虑局面，再考虑自己。", love: "你在关系里也很容易变成那个多做一点、忍一忍、算了算了的人。别人觉得你稳，其实你只是太能扛。", tips: ["会拒绝不等于不好相处，恰恰说明你开始尊重自己", "别把“我可以”说得太顺口，不然全世界都会默认你应该", "你的善良需要边界，不然最后只会变成消耗品"] },
-    "LLLS": { code: "FUCK", breed: "摆烂之王", role: "对内卷彻底失去敬意的终极咸鱼", emoji: "🐟", tags: ["快乐优先", "懒得证明", "低耗求生"], summary: "你已经把“差不多得了”修炼成了一种生活哲学。不是你没有能力，是你越来越不想把命拿去换一些也就那样的评价。别人还在热血冲刺，你已经坐在路边边喝奶茶边看透一切。", love: "和你在一起通常不累，因为你不会把关系搞成 KPI 打卡。但对方偶尔也会怀疑，你到底是松弛，还是对什么都提不起劲。", tips: ["摆烂的高级之处不在于躺，而在于你知道什么值得动", "可以不卷，但最好留一件你愿意认真对待的事", "不要把低欲望过成低生命力"] },
-    "MLSM": { code: "JOKE-R", breed: "职场小丑", role: "越会接梗，越没人发现你也会累", emoji: "🤡", tags: ["气氛自救", "拿幽默挡刀", "笑着内耗"], summary: "你是那种场子一冷就会下意识救火的人。别人尴尬会沉默，你尴尬会开玩笑；别人受伤会躲开，你受伤会先把自己讲成段子。你不是天生快乐，只是太会把难受翻译成好笑了。", love: "你很会让人开心，也很难让人真正看见你的脆弱。感情里最大的误会往往是：别人以为你什么都能消化。", tips: ["不是每次都要你来圆场，沉默不会让你失职", "别把“我没事”说得太像真的，你值得被认真接住", "你不是只能负责好笑，认真起来也很迷人"] },
-    "MMMS": { code: "NORM", breed: "标准答案", role: "没有戏剧性，但真的能把日子过下去的人", emoji: "📋", tags: ["稳定发挥", "边界正常", "人间样本"], summary: "你不是故事里最炸裂的角色，但你是现实里最能稳定通关的人。能上班、能下班、能吐槽、能自愈，不会忽然封神，也不至于突然崩盘。你最大的超能力，就是不靠人设活着。", love: "你在关系里通常不搞花活，不发疯，不试探，属于看起来普通但越相处越省心的类型。", tips: ["别因为自己不极端就误以为自己没特点，稳定本身就很稀缺", "可以偶尔主动一点，让别人看见你不是没有锋芒", "中间值不是平庸，是你有能力不被波动牵着走"] },
-    "WWWS": { code: "WOLF", breed: "狼性青年", role: "把人生过成长期冲刺赛的卷王型选手", emoji: "🐺", tags: ["赢面执念", "进度狂热", "休息羞耻"], summary: "你对“普通”有一种近乎本能的抗拒。别人说先这样吧，你脑子里想的是为什么不能再提一点；别人下班了，你开始复盘今天还差哪一步。你是真的能打，但你也真的很难放过自己。", love: "你的野心很有吸引力，但你有时会把关系也活成长期经营项目，爱人会想要陪伴，不只是被你顺手升级。", tips: ["不是每一场竞争都值得你拿命去赢", "允许自己慢一点，不会立刻变废物", "你很强，但别把松一口气误认成堕落"] },
-    "LLMS": { code: "CAT-F", breed: "职场猫咪", role: "表面高冷营业，内心早把全场看穿", emoji: "😏", tags: ["高冷摸鱼", "洞察过剩", "懒得点破"], summary: "你对很多事不是不懂，是太懂了，所以懒得配合表演。会议上你安安静静，心里已经给每个发言配好了字幕；流程里你嘴上说好，灵魂早就跳到别处晒太阳。你不是没本事，你只是越来越不想浪费表情。", love: "你看着淡，其实很挑。你不是谁靠近都行，而是一定要对方先证明自己不是来消耗你的。", tips: ["别让“懒得解释”变成别人永远走不近你的理由", "适度表达比一直端着更能保护你真正想要的关系", "你的冷静很贵，别只拿来旁观"] },
-    "MMLS": { code: "DRAMA", breed: "戏精附体", role: "现实只发生了一成，另外九成在你脑子里加戏", emoji: "🎭", tags: ["脑内连载", "情绪高敏", "细节成灾"], summary: "你的大脑根本不是大脑，是一个昼夜不停机的编剧组。别人一句语气稍微不对，你已经脑补完前因后果、关系转折和 BE 结局。你不是矫情，你只是接收太多、联想太快、情绪到得太满。", love: "爱上你的人会觉得你浓度很高、很有回应，但也会被你的情绪剧情吓到：怎么一句话能在你心里演成整季。", tips: ["先确认眼前发生了什么，再处理脑子里加上的那部分", "你需要出口，不然所有戏都会回流成内耗", "高敏不是问题，失控脑补才是"] },
-    "LLLL": { code: "ZOMB", breed: "丧尸模式", role: "人已到岗，魂还在别的纬度漂着", emoji: "🧟", tags: ["自动上班", "低电量常驻", "麻木过载"], summary: "你已经不是单纯地累了，你是活成了一个会自己打卡的空壳。电脑开着、微信回着、表格填着，但灵魂像被生活偷偷拔过电源。你不一定想摆烂，你只是很久没从日子里感到一点真正的反馈。", love: "你不是不想投入关系，而是现在连照顾自己都很像在完成额外任务。", tips: ["这已经不是简单休息一下能糊弄过去的信号了，要认真照顾自己", "先去找一点最小的活人感，比如睡饱、见太阳、吃顿像样的饭", "不要把长期麻木当成成熟，它很可能只是你撑太久了"] },
-    "MMMM": { code: "GOD", breed: "佛系打工", role: "看得很开，所以很难被拿捏的稳定器", emoji: "🧘", tags: ["低波动", "不争气氛", "情绪免疫"], summary: "你身上有一种很烦人的从容：老板画饼你不激动，同事发疯你不感染，局势再乱你也像在旁边淡定喝水。你不是没感受，你只是很早就明白，很多破事不值得把自己搭进去。", love: "你给人的安全感很强，但有时候也会因为太稳，让对方误以为你是不是根本没那么在乎。", tips: ["佛系的前提不是抽离一切，而是知道自己真正要守的是什么", "适度表达在意，不会破坏你的稳定，反而更像活人", "别让“看得开”慢慢演变成“什么都无所谓”"] },
-    "LLLM": { code: "EDGE", breed: "边缘人", role: "存在感不高，但什么都看在眼里的旁观者", emoji: "🫥", tags: ["隐身熟练", "低存在巡航", "观察型人格"], summary: "你在群里像头像，在办公室像背景，在活动里像临时刷出来的 NPC。不是别人真的看不见你，而是你太习惯把自己放在不被消耗的位置。你不抢戏、不争光，但全场谁在演你其实门儿清。", love: "你在关系里不吵不闹，但也容易因为太收着，让对方总觉得你差一点点参与感。", tips: ["别总把自己调成静音，有些重要关系值得你主动开麦", "低存在感能保护你，也可能错过本该属于你的机会", "你并不透明，只是太久没允许自己占位置"] },
-    "WWMM": { code: "HUSTL", breed: "搞钱机器", role: "情绪可以缓，赚钱必须先到账的实干派", emoji: "💰", tags: ["现金流脑", "务实到底", "ROI人格"], summary: "别人拿工作换成长，你更倾向于拿工作换真金白银。不是你俗，是你太早发现很多漂亮话都不能替你交房租。你对钱的敏感不是拜金，是知道成年人的底气 often 先来自账户余额。", love: "你会用现实行动表达爱，比如买单、规划、兜底，但偶尔也容易把关系理解得过于功能化。", tips: ["赚钱很重要，但别把所有体验都折算成值不值", "有些事虽然不变现，却真的能救回你的精气神", "你当然可以务实，只是别让自己只剩实用"] },
-    "LLWS": { code: "SOLO", breed: "孤狼选手", role: "社交参与度低，但单兵作战能力很顶", emoji: "🐺‍👤", tags: ["独立成瘾", "边界很硬", "不爱凑局"], summary: "你不是社恐，你只是对无效热闹没有任何耐心。团建、饭局、闲聊、场面话，能不参与就不参与；但真正把事交给你，你又常常能一个人干得漂亮。你习惯靠实力自证，而不是靠加入谁。", love: "你需要的是彼此都能喘气的关系，不黏、不查岗、不强行捆绑。对你来说，自由不是附加项，是底线。", tips: ["拒绝无效连接没问题，但别连有效支持也一起挡掉", "真正厉害的人不怕合作，怕的是没边界的消耗", "你可以独，但不必永远一个人扛"] },
-    "MLLL": { code: "IMSY", breed: "焦虑大师", role: "脑内常驻风险评估系统的高敏预警员", emoji: "😰", tags: ["危机雷达", "提前崩溃", "细节过载"], summary: "你的人生像装了一个永不停机的预警插件。别人只看到一条消息，你已经想到后果；别人只是皱了下眉，你已经开始想是不是自己哪里做错。你不是爱多想，你是很难不想。", love: "你的在意很真，也因此更容易被关系里的细节反复消耗。别人一句冷一点的话，对你来说不是一句话，是整晚的情绪工程。", tips: ["先把猜测和事实分开，你的大脑不是每条通知都要立即处理", "给担忧设时限，别让它无限制霸占注意力", "敏感是天赋，但要学会给天赋装减震器"] },
-    "WWWM": { code: "CHAD", breed: "天选之子", role: "状态、运气和脸皮都刚好站在你这边的人", emoji: "🌟", tags: ["自带顺风", "能量充足", "赢面很高"], summary: "你身上有一种让人很难讨厌的轻松感：不是没压力，而是压力到了你这好像总能被处理掉。人缘不差、运气不坏、遇事不怂，很多人努力半天才有的状态，你常常像顺手就拿到了。", love: "你很容易成为关系里的发光体，但也要小心别因为自己习惯了顺，就忽略了对方可能正卡在很难的地方。", tips: ["好运是加成，不是护身符，别把顺利活成理所当然", "多把你的能量分一点给身边的人，你会更有魅力", "继续发光，但记得也给别人留空间"] },
+    "WWSS": { mbti: "ESTJ", breed: "控制狂魔", role: "把所有人都当项目在管的顶配操盘手", emoji: "🎮", tags: ["掌控成瘾", "细节暴政", "不信任随机性"], summary: "你不是在上班，你是在扮演一个对全世界进度条负责的人。别人做计划是为了参考，你做计划是为了统治；别人焦虑 deadline，你焦虑的是别人为什么还不按照你预判的节奏动。你最怕的不是累，是失控。", love: "感情里你也很容易不自觉接管全局，像在经营一个双人项目。你不是不温柔，你只是总觉得“让我来更快一点”。", tips: ["不是每个烂结果都等于你没管够，有些事本来就不归你控", "试着容忍别人用笨一点的方式成长，这比你全包更有用", "停止把休息当事故，它其实是系统维护"] },
+    "WWSM": { mbti: "ENTJ", breed: "伪老板", role: "工位还在最外圈，发言已经像董事会", emoji: "👔", tags: ["领导腔", "战略口癖", "管理欲外溢"], summary: "你人还没升上去，气场已经提前升职了。别人汇报工作，你汇报方向；别人提问题，你顺手开始做组织诊断。你最大的特点不是能力一定最强，而是永远有一种“让我来说两句”的天然冲动。", love: "你对关系的热情常常体现在安排、优化、替对方思考，偶尔会让人分不清你是在恋爱还是在带项目。", tips: ["别急着当所有人的老板，先把自己的人生先带明白", "少一点站位输出，多一点真实聆听", "真正的气场不是说得像领导，是别人愿意跟你走"] },
+    "LLSL": { mbti: "ESFJ", breed: "牛马本马", role: "全公司默认最能扛的那个冤种菩萨", emoji: "🐂", tags: ["接锅圣体", "不会拒绝", "稳定供血"], summary: "你看起来像一个人，实际上像单位的公共资源。谁忙你都能补位，谁崩你都能顶上，最后最先累垮的也是你。你不是没有情绪，只是太习惯先考虑局面，再考虑自己。", love: "你在关系里也很容易变成那个多做一点、忍一忍、算了算了的人。别人觉得你稳，其实你只是太能扛。", tips: ["会拒绝不等于不好相处，恰恰说明你开始尊重自己", "别把“我可以”说得太顺口，不然全世界都会默认你应该", "你的善良需要边界，不然最后只会变成消耗品"] },
+    "LLLS": { mbti: "ISTP", breed: "摆烂之王", role: "对内卷彻底失去敬意的终极咸鱼", emoji: "🐟", tags: ["快乐优先", "懒得证明", "低耗求生"], summary: "你已经把“差不多得了”修炼成了一种生活哲学。不是你没有能力，是你越来越不想把命拿去换一些也就那样的评价。别人还在热血冲刺，你已经坐在路边边喝奶茶边看透一切。", love: "和你在一起通常不累，因为你不会把关系搞成 KPI 打卡。但对方偶尔也会怀疑，你到底是松弛，还是对什么都提不起劲。", tips: ["摆烂的高级之处不在于躺，而在于你知道什么值得动", "可以不卷，但最好留一件你愿意认真对待的事", "不要把低欲望过成低生命力"] },
+    "MLSM": { mbti: "ENFJ", breed: "职场小丑", role: "越会接梗，越没人发现你也会累", emoji: "🤡", tags: ["气氛自救", "拿幽默挡刀", "笑着内耗"], summary: "你是那种场子一冷就会下意识救火的人。别人尴尬会沉默，你尴尬会开玩笑；别人受伤会躲开，你受伤会先把自己讲成段子。你不是天生快乐，只是太会把难受翻译成好笑了。", love: "你很会让人开心，也很难让人真正看见你的脆弱。感情里最大的误会往往是：别人以为你什么都能消化。", tips: ["不是每次都要你来圆场，沉默不会让你失职", "别把“我没事”说得太像真的，你值得被认真接住", "你不是只能负责好笑，认真起来也很迷人"] },
+    "MMMS": { mbti: "ISTJ", breed: "标准答案", role: "没有戏剧性，但真的能把日子过下去的人", emoji: "📋", tags: ["稳定发挥", "边界正常", "人间样本"], summary: "你不是故事里最炸裂的角色，但你是现实里最能稳定通关的人。能上班、能下班、能吐槽、能自愈，不会忽然封神，也不至于突然崩盘。你最大的超能力，就是不靠人设活着。", love: "你在关系里通常不搞花活，不发疯，不试探，属于看起来普通但越相处越省心的类型。", tips: ["别因为自己不极端就误以为自己没特点，稳定本身就很稀缺", "可以偶尔主动一点，让别人看见你不是没有锋芒", "中间值不是平庸，是你有能力不被波动牵着走"] },
+    "WWWS": { mbti: "ESTP", breed: "狼性青年", role: "把人生过成长期冲刺赛的卷王型选手", emoji: "🐺", tags: ["赢面执念", "进度狂热", "休息羞耻"], summary: "你对“普通”有一种近乎本能的抗拒。别人说先这样吧，你脑子里想的是为什么不能再提一点；别人下班了，你开始复盘今天还差哪一步。你是真的能打，但你也真的很难放过自己。", love: "你的野心很有吸引力，但你有时会把关系也活成长期经营项目，爱人会想要陪伴，不只是被你顺手升级。", tips: ["不是每一场竞争都值得你拿命去赢", "允许自己慢一点，不会立刻变废物", "你很强，但别把松一口气误认成堕落"] },
+    "LLMS": { mbti: "INTP", breed: "职场猫咪", role: "表面高冷营业，内心早把全场看穿", emoji: "😏", tags: ["高冷摸鱼", "洞察过剩", "懒得点破"], summary: "你对很多事不是不懂，是太懂了，所以懒得配合表演。会议上你安安静静，心里已经给每个发言配好了字幕；流程里你嘴上说好，灵魂早就跳到别处晒太阳。你不是没本事，你只是越来越不想浪费表情。", love: "你看着淡，其实很挑。你不是谁靠近都行，而是一定要对方先证明自己不是来消耗你的。", tips: ["别让“懒得解释”变成别人永远走不近你的理由", "适度表达比一直端着更能保护你真正想要的关系", "你的冷静很贵，别只拿来旁观"] },
+    "MMLS": { mbti: "ENFP", breed: "戏精附体", role: "现实只发生了一成，另外九成在你脑子里加戏", emoji: "🎭", tags: ["脑内连载", "情绪高敏", "细节成灾"], summary: "你的大脑根本不是大脑，是一个昼夜不停机的编剧组。别人一句语气稍微不对，你已经脑补完前因后果、关系转折和 BE 结局。你不是矫情，你只是接收太多、联想太快、情绪到得太满。", love: "爱上你的人会觉得你浓度很高、很有回应，但也会被你的情绪剧情吓到：怎么一句话能在你心里演成整季。", tips: ["先确认眼前发生了什么，再处理脑子里加上的那部分", "你需要出口，不然所有戏都会回流成内耗", "高敏不是问题，失控脑补才是"] },
+    "LLLL": { mbti: "ISFP", breed: "丧尸模式", role: "人已到岗，魂还在别的纬度漂着", emoji: "🧟", tags: ["自动上班", "低电量常驻", "麻木过载"], summary: "你已经不是单纯地累了，你是活成了一个会自己打卡的空壳。电脑开着、微信回着、表格填着，但灵魂像被生活偷偷拔过电源。你不一定想摆烂，你只是很久没从日子里感到一点真正的反馈。", love: "你不是不想投入关系，而是现在连照顾自己都很像在完成额外任务。", tips: ["这已经不是简单休息一下能糊弄过去的信号了，要认真照顾自己", "先去找一点最小的活人感，比如睡饱、见太阳、吃顿像样的饭", "不要把长期麻木当成成熟，它很可能只是你撑太久了"] },
+    "MMMM": { mbti: "INFP", breed: "佛系打工", role: "看得很开，所以很难被拿捏的稳定器", emoji: "🧘", tags: ["低波动", "不争气氛", "情绪免疫"], summary: "你身上有一种很烦人的从容：老板画饼你不激动，同事发疯你不感染，局势再乱你也像在旁边淡定喝水。你不是没感受，你只是很早就明白，很多破事不值得把自己搭进去。", love: "你给人的安全感很强，但有时候也会因为太稳，让对方误以为你是不是根本没那么在乎。", tips: ["佛系的前提不是抽离一切，而是知道自己真正要守的是什么", "适度表达在意，不会破坏你的稳定，反而更像活人", "别让“看得开”慢慢演变成“什么都无所谓”"] },
+    "LLLM": { mbti: "ISFJ", breed: "边缘人", role: "存在感不高，但什么都看在眼里的旁观者", emoji: "🫥", tags: ["隐身熟练", "低存在巡航", "观察型人格"], summary: "你在群里像头像，在办公室像背景，在活动里像临时刷出来的 NPC。不是别人真的看不见你，而是你太习惯把自己放在不被消耗的位置。你不抢戏、不争光，但全场谁在演你其实门儿清。", love: "你在关系里不吵不闹，但也容易因为太收着，让对方总觉得你差一点点参与感。", tips: ["别总把自己调成静音，有些重要关系值得你主动开麦", "低存在感能保护你，也可能错过本该属于你的机会", "你并不透明，只是太久没允许自己占位置"] },
+    "WWMM": { mbti: "ENTP", breed: "搞钱机器", role: "情绪可以缓，赚钱必须先到账的实干派", emoji: "💰", tags: ["现金流脑", "务实到底", "ROI人格"], summary: "别人拿工作换成长，你更倾向于拿工作换真金白银。不是你俗，是你太早发现很多漂亮话都不能替你交房租。你对钱的敏感不是拜金，是知道成年人的底气 often 先来自账户余额。", love: "你会用现实行动表达爱，比如买单、规划、兜底，但偶尔也容易把关系理解得过于功能化。", tips: ["赚钱很重要，但别把所有体验都折算成值不值", "有些事虽然不变现，却真的能救回你的精气神", "你当然可以务实，只是别让自己只剩实用"] },
+    "LLWS": { mbti: "INTJ", breed: "孤狼选手", role: "社交参与度低，但单兵作战能力很顶", emoji: "🐺‍👤", tags: ["独立成瘾", "边界很硬", "不爱凑局"], summary: "你不是社恐，你只是对无效热闹没有任何耐心。团建、饭局、闲聊、场面话，能不参与就不参与；但真正把事交给你，你又常常能一个人干得漂亮。你习惯靠实力自证，而不是靠加入谁。", love: "你需要的是彼此都能喘气的关系，不黏、不查岗、不强行捆绑。对你来说，自由不是附加项，是底线。", tips: ["拒绝无效连接没问题，但别连有效支持也一起挡掉", "真正厉害的人不怕合作，怕的是没边界的消耗", "你可以独，但不必永远一个人扛"] },
+    "MLLL": { mbti: "INFJ", breed: "焦虑大师", role: "脑内常驻风险评估系统的高敏预警员", emoji: "😰", tags: ["危机雷达", "提前崩溃", "细节过载"], summary: "你的人生像装了一个永不停机的预警插件。别人只看到一条消息，你已经想到后果；别人只是皱了下眉，你已经开始想是不是自己哪里做错。你不是爱多想，你是很难不想。", love: "你的在意很真，也因此更容易被关系里的细节反复消耗。别人一句冷一点的话，对你来说不是一句话，是整晚的情绪工程。", tips: ["先把猜测和事实分开，你的大脑不是每条通知都要立即处理", "给担忧设时限，别让它无限制霸占注意力", "敏感是天赋，但要学会给天赋装减震器"] },
+    "WWWM": { mbti: "ESFP", breed: "天选之子", role: "状态、运气和脸皮都刚好站在你这边的人", emoji: "🌟", tags: ["自带顺风", "能量充足", "赢面很高"], summary: "你身上有一种让人很难讨厌的轻松感：不是没压力，而是压力到了你这好像总能被处理掉。人缘不差、运气不坏、遇事不怂，很多人努力半天才有的状态，你常常像顺手就拿到了。", love: "你很容易成为关系里的发光体，但也要小心别因为自己习惯了顺，就忽略了对方可能正卡在很难的地方。", tips: ["好运是加成，不是护身符，别把顺利活成理所当然", "多把你的能量分一点给身边的人，你会更有魅力", "继续发光，但记得也给别人留空间"] },
 };
 
 const TYPE_PATTERNS = [
@@ -934,7 +1011,6 @@ const TYPE_PATTERNS = [
 
 const hiddenProfiles = {
     NIGHT: {
-        code: "NIGHT",
         breed: "夜班幽灵",
         role: "白天是同事，晚上是工位里的怨气",
         emoji: "🌚",
@@ -944,7 +1020,6 @@ const hiddenProfiles = {
         tips: ["能晚睡不代表该晚睡，你的命不是工单附件", "尽量给自己留一个真正下线的时间点", "清醒不是靠咖啡撑出来的，是靠边界养出来的"]
     },
     MIME: {
-        code: "MIME",
         breed: "已读木偶",
         role: "表面情绪稳定，实际被消息牵着线走",
         emoji: "🪆",
@@ -954,7 +1029,6 @@ const hiddenProfiles = {
         tips: ["不是所有停顿都在表达态度，有些人只是去回另一条消息了", "把“我是不是说错了”先按住 10 分钟再说", "及时表达比反复猜测更能保护关系"]
     },
     REB: {
-        code: "REB",
         breed: "阴阳反骨",
         role: "礼貌还在，服气没有",
         emoji: "🗡️",
@@ -1067,7 +1141,7 @@ const promptCategory = document.getElementById("promptCategory");
 const promptHint = document.getElementById("promptHint");
 const questionTitle = document.getElementById("questionTitle");
 const optionList = document.getElementById("optionList");
-const nextBtn = document.getElementById("nextBtn");
+const fwdBtn = document.getElementById("fwdBtn");
 const backBtn = document.getElementById("backBtn");
 const startBtn = document.getElementById("startBtn");
 const restartBtn = document.getElementById("restartBtn");
@@ -1082,7 +1156,7 @@ const heroRow2 = document.getElementById("heroRow2");
 // ==================== INIT ====================
 renderHeroSprites();
 startBtn.addEventListener("click", startQuiz);
-nextBtn.addEventListener("click", goNext);
+fwdBtn.addEventListener("click", goNext);
 backBtn.addEventListener("click", goPrev);
 restartBtn.addEventListener("click", restartQuiz);
 shareBtn.addEventListener("click", copyShareText);
@@ -1112,38 +1186,86 @@ function switchScreen(target) {
     typeMapScreen.classList.toggle("active", target === "typeMap");
 }
 
-function startQuiz() {
+const AUTO_NEXT_DELAY = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 240;
+const quizMain = quizScreen.querySelector(".quiz-main");
+let advanceTimer = null;
+
+function clearAdvance() {
+    if (advanceTimer) {
+        clearTimeout(advanceTimer);
+        advanceTimer = null;
+    }
+}
+
+function isQuizComplete() {
+    return getCurrentAnswers().every((answer) => answer !== null);
+}
+
+function resetQuiz() {
     state.index = 0;
     state.baseAnswers = Array(questions.length).fill(null);
     state.hiddenQuestion = null;
     state.hiddenAnswer = null;
     state.runtimeQuestions = questions.slice();
-    switchScreen("quiz");
-    renderQuestion();
+}
+
+function navigate(target, push) {
+    clearAdvance();
+    if ((target === "result" || target === "typeMap") && !isQuizComplete()) {
+        target = "landing";
+    }
+    if (target === "quiz") renderQuestion();
+    if (target === "result") renderResult();
+    if (target === "typeMap") renderTypeMap();
+    switchScreen(target);
+    if (push) {
+        try {
+            history.pushState({ screen: target }, "");
+        } catch (error) {
+            /* file:// 等环境下忽略 */
+        }
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.addEventListener("popstate", (event) => {
+    navigate((event.state && event.state.screen) || "landing", false);
+});
+
+try {
+    history.replaceState({ screen: "landing" }, "");
+} catch (error) {
+    /* ignore */
+}
+
+if (location.hash === "#start") {
+    startQuiz();
+}
+
+function startQuiz() {
+    if (isQuizComplete()) resetQuiz();
+    navigate("quiz", true);
 }
 
 function restartQuiz() {
-    state.index = 0;
-    state.baseAnswers = Array(questions.length).fill(null);
-    state.hiddenQuestion = null;
-    state.hiddenAnswer = null;
-    state.runtimeQuestions = questions.slice();
-    switchScreen("landing");
+    resetQuiz();
+    navigate("quiz", true);
 }
 
 function openTypeMap() {
-    renderTypeMap();
-    switchScreen("typeMap");
-    window.scrollTo({top: 0, behavior: "smooth"});
+    navigate("typeMap", true);
 }
 
 function backToResult() {
-    switchScreen("result");
-    window.scrollTo({top: 0, behavior: "smooth"});
+    if (history.state && history.state.screen === "typeMap") {
+        history.back();
+    } else {
+        navigate("result", false);
+    }
 }
 
 // ==================== RENDER QUESTION ====================
-function renderQuestion() {
+function renderQuestion(direction) {
     const q = state.runtimeQuestions[state.index];
     const selected = state.index < questions.length ? state.baseAnswers[state.index] : state.hiddenAnswer;
 
@@ -1164,14 +1286,17 @@ function renderQuestion() {
         optionList.appendChild(btn);
     });
 
-    nextBtn.disabled = selected === null;
-    nextBtn.innerHTML = state.index === state.runtimeQuestions.length - 1
-        ? `查看结果 <span>→</span>`
-        : `继续 <span>→</span>`;
-    backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+    fwdBtn.disabled = selected === null;
+    backBtn.title = state.index === 0 ? "返回" : "上一题";
+    if (direction) {
+        quizMain.classList.remove("slide-next", "slide-prev");
+        void quizMain.offsetWidth;
+        quizMain.classList.add(direction === "next" ? "slide-next" : "slide-prev");
+    }
 }
 
 function selectOption(idx) {
+    clearAdvance();
     if (state.index < questions.length) {
         state.baseAnswers[state.index] = idx;
     } else {
@@ -1181,10 +1306,15 @@ function selectOption(idx) {
     [...optionList.children].forEach((node, i) => {
         node.classList.toggle("active", i === idx);
     });
-    nextBtn.disabled = false;
+    fwdBtn.disabled = false;
+    advanceTimer = setTimeout(() => {
+        advanceTimer = null;
+        goNext();
+    }, AUTO_NEXT_DELAY);
 }
 
 function goNext() {
+    clearAdvance();
     const currentAnswer = state.index < questions.length ? state.baseAnswers[state.index] : state.hiddenAnswer;
     if (currentAnswer === null) return;
 
@@ -1196,7 +1326,7 @@ function goNext() {
         if (state.hiddenQuestion) {
             state.runtimeQuestions = [...questions, state.hiddenQuestion];
             state.index++;
-            renderQuestion();
+            renderQuestion("next");
             window.scrollTo({top: 0, behavior: "smooth"});
             return;
         }
@@ -1204,21 +1334,64 @@ function goNext() {
 
     if (state.index < state.runtimeQuestions.length - 1) {
         state.index++;
-        renderQuestion();
+        renderQuestion("next");
         window.scrollTo({top: 0, behavior: "smooth"});
     } else {
-        renderResult();
-        switchScreen("result");
-        window.scrollTo({top: 0, behavior: "smooth"});
+        navigate("result", true);
     }
 }
 
 function goPrev() {
-    if (state.index === 0) return;
+    clearAdvance();
+    if (state.index === 0) {
+        history.back();
+        return;
+    }
     state.index--;
-    renderQuestion();
+    renderQuestion("prev");
     window.scrollTo({top: 0, behavior: "smooth"});
 }
+
+let touchStart = null;
+
+quizScreen.addEventListener("touchstart", (event) => {
+    if (event.touches.length !== 1) {
+        touchStart = null;
+        return;
+    }
+    const touch = event.touches[0];
+    touchStart = { x: touch.clientX, y: touch.clientY };
+}, { passive: true });
+
+quizScreen.addEventListener("touchend", (event) => {
+    if (!touchStart) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - touchStart.x;
+    const dy = touch.clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) {
+        if (!fwdBtn.disabled) goNext();
+    } else if (state.index > 0) {
+        goPrev();
+    }
+}, { passive: true });
+
+document.addEventListener("keydown", (event) => {
+    if (!quizScreen.classList.contains("active")) return;
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.key === "ArrowRight") {
+        if (!fwdBtn.disabled) goNext();
+    } else if (event.key === "ArrowLeft") {
+        if (state.index > 0) goPrev();
+    } else {
+        const count = optionList.children.length;
+        const byNumber = Number(event.key) - 1;
+        const byLetter = event.key.length === 1 ? event.key.toLowerCase().charCodeAt(0) - 97 : -1;
+        const index = byNumber >= 0 && byNumber < count ? byNumber : byLetter;
+        if (index >= 0 && index < count) selectOption(index);
+    }
+});
 
 // ==================== SCORING ====================
 function toLevel(value) {
@@ -1283,7 +1456,7 @@ function computeResult() {
 
     return {
         resultStr,
-        code: finalProfile.code,
+        code: finalProfile.mbti || "隐藏人格",
         profileKey: finalProfileKey,
         profile: finalProfile,
         baseProfile: bestMatch.profile,
@@ -1306,9 +1479,9 @@ function renderResult() {
     const hiddenBadge = res.hiddenWins ? " · 彩蛋人格已触发" : "";
     const summarySuffix = res.hiddenWins
         ? ` 你还额外触发了隐藏题「${res.hiddenQuestion.category}」，所以结果从基础人格偏转成了彩蛋人格。`
-        : ` 这次你的 5 维人格模式是 ${res.resultStr}，命中了 ${res.exact}/5 个核心维度。`;
+        : ` 这次你命中了 ${res.exact}/5 个核心维度。`;
 
-    document.getElementById("resultCode").textContent = `${p.code} · ${res.resultStr}${hiddenBadge}`;
+    document.getElementById("resultCode").textContent = `${res.code}${hiddenBadge}`;
     document.getElementById("resultBreed").textContent = p.breed;
     document.getElementById("resultRole").textContent = p.role;
     document.getElementById("resultEmoji").textContent = p.emoji;
@@ -1337,7 +1510,7 @@ function renderResult() {
     `).join("");
 
     const shareLead = res.hiddenWins ? "我居然刷出了 SbTI 隐藏人格：" : "我的 SbTI 结果是：";
-    const shareText = `${shareLead}\n【${p.breed}｜${p.role}】\n代码：${p.code} · ${res.resultStr}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
+    const shareText = `${shareLead}\n【${p.breed}｜${p.role}】\n代码：${res.code}\n标签：${p.tags.join(" / ")}\n${p.summary}\n\n测试链接：https://nb-ti.pages.dev/sb-ti/`;
     document.getElementById("shareBox").textContent = shareText;
     shareBtn.dataset.shareText = shareText;
 
@@ -1349,19 +1522,19 @@ function renderResult() {
 
 // ==================== RENDER TYPE MAP ====================
 function renderTypeMap() {
-    const currentCode = getCurrentAnswers().every(a => a !== null) ? computeResult().code : "";
+    const currentKey = getCurrentAnswers().every(a => a !== null) ? computeResult().profileKey : "";
     const mergedProfiles = [
         ...Object.entries(profiles).map(([key, prof]) => ({ key, prof, hidden: false })),
         ...Object.entries(hiddenProfiles).map(([key, prof]) => ({ key, prof, hidden: true }))
     ];
 
     typeMapGrid.innerHTML = mergedProfiles.map(({ key, prof, hidden }) => {
-        const isCurrent = prof.code === currentCode;
+        const isCurrent = key === currentKey;
         return `
             <article class="mapping-card ${isCurrent ? "active" : ""}">
                 <div class="mapping-card-head">
                     <div class="mapping-code-wrap">
-                        <div class="mapping-card-code">${prof.code}</div>
+                        <div class="mapping-card-code">${prof.mbti || "隐藏人格"}</div>
                         <span class="mapping-current">${isCurrent ? "你的结果" : hidden ? "隐藏人格" : "类型映射"}</span>
                     </div>
                     <div class="mapping-card-emoji">${prof.emoji}</div>

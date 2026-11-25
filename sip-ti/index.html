@@ -53,15 +53,6 @@
         .quiz-screen { min-height: calc(100dvh - 40px); }
         .quiz-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
-        .quiz-footer {
-            position: sticky;
-            bottom: 0;
-            margin-top: auto;
-            padding: 18px 0 calc(env(safe-area-inset-bottom, 0px) + 18px);
-            background: linear-gradient(180deg, rgba(249,242,235,0) 0%, rgba(249,242,235,0.92) 18%, rgba(249,242,235,0.98) 100%);
-            backdrop-filter: blur(8px);
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1068,11 +1059,99 @@
                 grid-template-columns: 1fr;
             }
         }
+    
+        /* ===== 交互 v2：返回、自动下一题、左右切题 ===== */
+        .hero-nav {
+            text-align: left;
+            margin: 0 0 8px;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #4a4a4a;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.18s ease;
+        }
+
+        .home-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .result-more {
+            margin: 18px 0 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .result-more a {
+            display: inline-block;
+            padding: 10px 6px;
+        }
+
+        .icon-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .icon-btn:disabled:hover {
+            transform: none;
+        }
+
+        .quiz-screen {
+            overflow-x: clip;
+        }
+
+        .quiz-main {
+            touch-action: pan-y;
+        }
+
+        .quiz-main.slide-next {
+            animation: quizSlideNext 0.26s ease;
+        }
+
+        .quiz-main.slide-prev {
+            animation: quizSlidePrev 0.26s ease;
+        }
+
+        .quiz-tip {
+            margin: 16px 0 6px;
+            text-align: center;
+            color: #a8a29a;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @keyframes quizSlideNext {
+            from { opacity: 0; transform: translateX(36px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes quizSlidePrev {
+            from { opacity: 0; transform: translateX(-36px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quiz-main.slide-next,
+            .quiz-main.slide-prev {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="app">
     <section id="landingScreen" class="screen active hero">
+            <div class="hero-nav"><a class="home-link" href="https://nb-ti.pages.dev/">← NBTI 首页</a></div>
         <div class="logo" aria-label="SipTI 标题">
             <span>S</span><span>i</span><span>p</span><span>T</span><span>I</span>
         </div>
@@ -1108,9 +1187,9 @@
 
     <section id="quizScreen" class="screen quiz-screen">
         <div class="topbar">
-            <button id="backBtn" class="icon-btn" type="button" aria-label="返回上一题">←</button>
+            <button id="backBtn" class="icon-btn" type="button" aria-label="上一题（第一题时返回）">←</button>
             <div id="progressCount" class="progress-count">1 / 12</div>
-            <div></div>
+            <button id="fwdBtn" class="icon-btn" type="button" aria-label="下一题" disabled>→</button>
         </div>
         <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
 
@@ -1125,10 +1204,7 @@
 
             <h2 id="questionTitle" class="question-title">加载中...</h2>
             <div id="optionList" class="options"></div>
-        </div>
-
-        <div class="quiz-footer">
-            <button id="nextBtn" class="primary-btn" type="button" disabled>继续<span> →</span></button>
+                <p class="quiz-tip">点选项自动进入下一题 · 左右滑动或点 ← → 可查看前后题</p>
         </div>
     </section>
 
@@ -1197,6 +1273,7 @@
             <button id="shareBtn" class="ghost-btn" type="button">分享给朋友</button>
             <button id="restartBtn" class="ghost-btn" type="button">再测一次</button>
         </div>
+            <p class="result-more"><a href="https://nb-ti.pages.dev/#species">← 回 NBTI 首页，换个本体再测</a></p>
     </section>
 
     <section id="typeMapScreen" class="screen mapping-screen">
@@ -1569,7 +1646,7 @@ const promptCategory = document.getElementById("promptCategory");
 const promptHint = document.getElementById("promptHint");
 const questionTitle = document.getElementById("questionTitle");
 const optionList = document.getElementById("optionList");
-const nextBtn = document.getElementById("nextBtn");
+const fwdBtn = document.getElementById("fwdBtn");
 const backBtn = document.getElementById("backBtn");
 const startBtn = document.getElementById("startBtn");
 const restartBtn = document.getElementById("restartBtn");
@@ -1583,7 +1660,7 @@ const heroRow2 = document.getElementById("heroRow2");
 
 renderHeroSprites();
 startBtn.addEventListener("click", startQuiz);
-nextBtn.addEventListener("click", goNext);
+fwdBtn.addEventListener("click", goNext);
 backBtn.addEventListener("click", goPrev);
 restartBtn.addEventListener("click", restartQuiz);
 shareBtn.addEventListener("click", copyShareText);
@@ -1612,83 +1689,186 @@ function switchScreen(target) {
     typeMapScreen.classList.toggle("active", target === "typeMap");
 }
 
-function startQuiz() {
+const AUTO_NEXT_DELAY = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 240;
+const quizMain = quizScreen.querySelector(".quiz-main");
+let advanceTimer = null;
+
+function clearAdvance() {
+    if (advanceTimer) {
+        clearTimeout(advanceTimer);
+        advanceTimer = null;
+    }
+}
+
+function isQuizComplete() {
+    return state.answers.every((answer) => answer !== null);
+}
+
+function resetQuiz() {
     state.index = 0;
     state.answers = Array(questions.length).fill(null);
-    switchScreen("quiz");
-    renderQuestion();
+}
+
+function navigate(target, push) {
+    clearAdvance();
+    if ((target === "result" || target === "typeMap") && !isQuizComplete()) {
+        target = "landing";
+    }
+    if (target === "quiz") renderQuestion();
+    if (target === "result") renderResult();
+    if (target === "typeMap") renderTypeMap();
+    switchScreen(target);
+    if (push) {
+        try {
+            history.pushState({ screen: target }, "");
+        } catch (error) {
+            /* file:// 等环境下忽略 */
+        }
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.addEventListener("popstate", (event) => {
+    navigate((event.state && event.state.screen) || "landing", false);
+});
+
+try {
+    history.replaceState({ screen: "landing" }, "");
+} catch (error) {
+    /* ignore */
+}
+
+if (location.hash === "#start") {
+    startQuiz();
+}
+
+function startQuiz() {
+    if (isQuizComplete()) resetQuiz();
+    navigate("quiz", true);
 }
 
 function restartQuiz() {
-    state.index = 0;
-    state.answers = Array(questions.length).fill(null);
-    switchScreen("landing");
+    resetQuiz();
+    navigate("quiz", true);
 }
 
 function openTypeMap() {
-    renderTypeMap();
-    switchScreen("typeMap");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate("typeMap", true);
 }
 
 function backToResult() {
-    switchScreen("result");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (history.state && history.state.screen === "typeMap") {
+        history.back();
+    } else {
+        navigate("result", false);
+    }
 }
 
-function renderQuestion() {
-    const q = questions[state.index];
+function renderQuestion(direction) {
+    const question = questions[state.index];
     const selected = state.answers[state.index];
-
     progressCount.textContent = `${state.index + 1} / ${questions.length}`;
     progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
-    promptAvatar.textContent = q.avatar;
-    promptCategory.textContent = q.category;
-    promptHint.textContent = q.hint;
-    questionTitle.textContent = q.text;
+    promptAvatar.textContent = question.avatar;
+    promptCategory.textContent = question.category;
+    promptHint.textContent = question.hint;
+    questionTitle.textContent = question.text;
     optionList.innerHTML = "";
 
-    q.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = `option${selected === i ? " active" : ""}`;
-        btn.innerHTML = `<div class="option-key">${String.fromCharCode(65 + i)}</div><div class="option-text">${opt.text}</div>`;
-        btn.addEventListener("click", () => selectOption(i));
-        optionList.appendChild(btn);
+    question.options.forEach((option, optionIndex) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `option${selected === optionIndex ? " active" : ""}`;
+        button.innerHTML = `<div class="option-key">${String.fromCharCode(65 + optionIndex)}</div><div class="option-text">${option.text}</div>`;
+        button.addEventListener("click", () => selectOption(optionIndex));
+        optionList.appendChild(button);
     });
 
-    nextBtn.disabled = selected === null;
-    nextBtn.innerHTML = state.index === questions.length - 1 ? `查看结果 <span>→</span>` : `继续 <span>→</span>`;
-    backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+    fwdBtn.disabled = selected === null;
+    backBtn.title = state.index === 0 ? "返回" : "上一题";
+    if (direction) {
+        quizMain.classList.remove("slide-next", "slide-prev");
+        void quizMain.offsetWidth;
+        quizMain.classList.add(direction === "next" ? "slide-next" : "slide-prev");
+    }
 }
 
-function selectOption(idx) {
-    state.answers[state.index] = idx;
-    [...optionList.children].forEach((node, i) => {
-        node.classList.toggle("active", i === idx);
+function selectOption(optionIndex) {
+    clearAdvance();
+    state.answers[state.index] = optionIndex;
+    [...optionList.children].forEach((node, idx) => {
+        node.classList.toggle("active", idx === optionIndex);
     });
-    nextBtn.disabled = false;
+    fwdBtn.disabled = false;
+    advanceTimer = setTimeout(() => {
+        advanceTimer = null;
+        goNext();
+    }, AUTO_NEXT_DELAY);
 }
 
 function goNext() {
+    clearAdvance();
     if (state.answers[state.index] === null) return;
     if (state.index < questions.length - 1) {
-        state.index++;
-        renderQuestion();
+        state.index += 1;
+        renderQuestion("next");
         window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-        renderResult();
-        switchScreen("result");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        navigate("result", true);
     }
 }
 
 function goPrev() {
-    if (state.index === 0) return;
-    state.index--;
-    renderQuestion();
+    clearAdvance();
+    if (state.index === 0) {
+        history.back();
+        return;
+    }
+    state.index -= 1;
+    renderQuestion("prev");
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+let touchStart = null;
+
+quizScreen.addEventListener("touchstart", (event) => {
+    if (event.touches.length !== 1) {
+        touchStart = null;
+        return;
+    }
+    const touch = event.touches[0];
+    touchStart = { x: touch.clientX, y: touch.clientY };
+}, { passive: true });
+
+quizScreen.addEventListener("touchend", (event) => {
+    if (!touchStart) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - touchStart.x;
+    const dy = touch.clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) {
+        if (!fwdBtn.disabled) goNext();
+    } else if (state.index > 0) {
+        goPrev();
+    }
+}, { passive: true });
+
+document.addEventListener("keydown", (event) => {
+    if (!quizScreen.classList.contains("active")) return;
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.key === "ArrowRight") {
+        if (!fwdBtn.disabled) goNext();
+    } else if (event.key === "ArrowLeft") {
+        if (state.index > 0) goPrev();
+    } else {
+        const count = optionList.children.length;
+        const byNumber = Number(event.key) - 1;
+        const byLetter = event.key.length === 1 ? event.key.toLowerCase().charCodeAt(0) - 97 : -1;
+        const index = byNumber >= 0 && byNumber < count ? byNumber : byLetter;
+        if (index >= 0 && index < count) selectOption(index);
+    }
+});
 
 function pickLetter(value, positiveLetter, negativeLetter) {
     return value >= 0 ? positiveLetter : negativeLetter;
