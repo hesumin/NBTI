@@ -28,7 +28,7 @@ jobs:
           npx wrangler@4 pages project create dog-ti --production-branch main || echo "dog-ti project already exists"
 
       - name: Deploy DogTI
-        uses: cloudflare/pages-action@1
+        uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

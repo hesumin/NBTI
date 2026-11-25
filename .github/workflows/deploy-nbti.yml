@@ -53,7 +53,7 @@ jobs:
           esac
 
       - name: Deploy NBTI
-        uses: cloudflare/pages-action@1
+        uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
